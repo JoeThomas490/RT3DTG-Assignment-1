@@ -58,9 +58,14 @@ void Aeroplane::SetWorldPosition(float fX, float fY, float fZ)
 	UpdateMatrices();
 }
 
-XMMATRIX Aeroplane::GetTurretWorldMatrix()
+XMMATRIX Aeroplane::GetGunWorldMatrix()
 {
-	return m_mTurretWorldMatrix;
+	return m_mGunWorldMatrix;
+}
+
+XMMATRIX Aeroplane::GetGunLocalMatrix()
+{
+	return m_mGunLocalMatrix;
 }
 
 void Aeroplane::UpdateMatrices(void)
@@ -105,8 +110,11 @@ void Aeroplane::UpdateMatrices(void)
 
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4GunOff));
 	XMMATRIX gunMatrix = mRotX * mRotY * mRotZ * mTrans;
-	//-----
 
+	m_mGunLocalMatrix = gunMatrix;
+
+	//-----
+	//Calculate all world matrices
 	m_mWorldMatrix = planeParentMat;
 	m_mPropWorldMatrix = propMatrix * planeParentMat;
 	m_mTurretWorldMatrix = turretMatrix * planeParentMat;
@@ -114,10 +122,12 @@ void Aeroplane::UpdateMatrices(void)
 
 	//Also calculate mPlaneCameraRot which ignores rotations in Z and X for the camera to parent to
 	mPlaneCameraRot = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
+
 	//Calculate camera rotation like you would the others
 	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.x));
 	mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.y));
 	mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.z));
+
 	//Calculate camera translation
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4CamOff));
 
@@ -129,7 +139,16 @@ void Aeroplane::UpdateMatrices(void)
 	XMMatrixDecompose(&scale, &rotation, &position, m_mCamWorldMatrix);
 	m_vCamWorldPos = position;
 
-	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_mWorldMatrix);
+	//TODO : Extract straight from world matrix
+	if (m_canMove)
+	{
+		m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_mWorldMatrix);
+	}
+	else
+	{
+		m_vForwardVector = XMVectorSet(0, 0, 0, 0);
+	}
+
 
 }
 
@@ -139,7 +158,7 @@ void Aeroplane::Update(bool bPlayerControl)
 	{
 		UpdatePlaneMovement();
 		ResetMovementToZero();
-		
+
 
 	} // End of if player control
 

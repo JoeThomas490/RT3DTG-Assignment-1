@@ -14,7 +14,7 @@
 
 __declspec(align(16)) class Aeroplane
 {
-  public:
+public:
 	Aeroplane(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
 	~Aeroplane(void);
 
@@ -25,9 +25,12 @@ __declspec(align(16)) class Aeroplane
 
 	void SetWorldPosition(float fX, float fY, float fZ);
 
-	XMMATRIX GetTurretWorldMatrix();
+	XMMATRIX GetGunWorldMatrix();
+	XMMATRIX GetGunLocalMatrix();
 
-  private:
+	bool m_canMove = true;
+
+private:
 	void UpdateMatrices(void);
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
@@ -59,6 +62,7 @@ __declspec(align(16)) class Aeroplane
 	XMFLOAT4 m_v4GunRot; // Local rotation angles
 	XMFLOAT4 m_v4GunOff; // Local offset
 	XMMATRIX m_mGunWorldMatrix; // Gun's world transformation matrix
+	XMMATRIX m_mGunLocalMatrix; // Gun's world transformation matrix
 
 	XMFLOAT4 m_v4CamRot; // Local rotation angles
 	XMFLOAT4 m_v4CamOff; // Local offset
@@ -68,7 +72,7 @@ __declspec(align(16)) class Aeroplane
 
 	bool m_bGunCam;
 
-  public:
+public:
 	float GetXPosition(void) { return m_v4Pos.x; }
 	float GetYPosition(void) { return m_v4Pos.y; }
 	float GetZPosition(void) { return m_v4Pos.z; }
@@ -80,6 +84,13 @@ __declspec(align(16)) class Aeroplane
 		return v4Pos;
 	}
 	XMFLOAT4 GetPosition(void) { return m_v4Pos; }
+
+	XMFLOAT4 GetForwardVector() 
+	{
+		XMFLOAT4 v4Forward;
+		XMStoreFloat4(&v4Forward, XMVector4Normalize(m_vForwardVector));
+		return v4Forward;
+	}
 	void SetGunCamera(bool value) { m_bGunCam = value; }
 
 
@@ -88,7 +99,7 @@ __declspec(align(16)) class Aeroplane
 		return _mm_malloc(i, 16);
 	}
 
-	void operator delete(void* p)
+		void operator delete(void* p)
 	{
 		_mm_free(p);
 	}

@@ -5,7 +5,7 @@
 __declspec(align(16)) class Bullet
 {
 public:
-	Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, float fSpeed);
+	Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed);
 	~Bullet();
 
 
@@ -34,13 +34,23 @@ private:
 
 	static bool s_bResourcesReady;
 
+	bool m_bIsVisible;
+
 	XMFLOAT4 m_v4Rot;
 	XMFLOAT4 m_v4Pos;
 
-	XMVECTOR m_vForwardVector;
+	XMFLOAT4 bulletStartPosm_v4BulletOff; // Local offset
+
+	XMFLOAT4 m_v4ForwardVector;
 
 	float m_fMovementSpeed;
 
 	XMMATRIX m_mWorldMatrix;
+
+
+public:
+
+	bool GetIsVisible() { return m_bIsVisible; };
+	void SetIsVisibile(bool b) { m_bIsVisible = b; };
 };
 

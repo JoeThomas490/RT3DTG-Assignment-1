@@ -28,7 +28,7 @@ bool Application::HandleStart()
 	m_pAeroplane->LoadResources();
 
 
-	m_pBullet = new Bullet(XMFLOAT4(0,0,0,0), XMFLOAT4(0,0,0,0), 0.0f);
+	m_pBullet = new Bullet(XMFLOAT4(0,0,0,0), XMFLOAT4(0,0,0,0), XMVectorSet(0,0,0,0), XMFLOAT4(0, 0, 0, 0), 0.0f);
 	Bullet::LoadResources();
 
 
@@ -79,6 +79,11 @@ void Application::HandleUpdate()
 
 	static bool dbC = false;
 
+	if (this->IsKeyPressed('S'))
+	{
+		m_pAeroplane->m_canMove = !m_pAeroplane->m_canMove;
+	}
+
 	if(this->IsKeyPressed('C'))
 	{
 		if(!dbC)
@@ -109,30 +114,40 @@ void Application::HandleUpdate()
 		dbW = false;
 	}
 
-	if (this->IsKeyPressed('U') && m_cameraState == CAMERA_GUN)
+
+	if (this->IsKeyPressed('U'))
 	{
 		if (m_pBullet != nullptr)
 		{
 			delete m_pBullet;
 		}
 
-		XMMATRIX mGunWorldMatrix = m_pAeroplane->GetTurretWorldMatrix();
-		XMVECTOR mGunScale, mGunRotation, mGunTranslation;
+		XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
+		XMMATRIX mGunLocalMatrix = m_pAeroplane->GetGunLocalMatrix();
 
-		XMMatrixDecompose(&mGunScale, &mGunRotation, &mGunTranslation, mGunWorldMatrix);
+		XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
 
-		XMFLOAT4 mFGunTranslation, mFGunRotation;
+		XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
 
-		XMStoreFloat4(&mFGunTranslation, mGunTranslation);
-		XMStoreFloat4(&mFGunRotation, mGunRotation);
+		//XMFLOAT4 mPlaneForwardVector = XMFLOAT4(0, 0, 0, 0);
 
-		m_pBullet = new Bullet(mFGunTranslation, mFGunRotation, 0.0f);
+		//Set the initial offset
+		XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.0f, 2.0f, 1.0f);
+		XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
+
+		//Store positions and rotations from matrix
+		XMFLOAT4 mPos, mRot;
+		XMStoreFloat4(&mPos, bulletWorldPos);
+
+		//Pass position and rotation
+		m_pBullet = new Bullet(mPos, mRot, mGunForwardVector, mPlaneForwardVector, 2.0f);
 	}
+
+	m_pBullet->Update();
+
 
 	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
-
-	m_pBullet->Update();
 }
 
 //////////////////////////////////////////////////////////////////////
