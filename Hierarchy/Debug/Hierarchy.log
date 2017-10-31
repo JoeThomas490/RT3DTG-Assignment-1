@@ -1,0 +1,3 @@
+﻿  Application.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(149): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe
