@@ -70,47 +70,22 @@ XMMATRIX Aeroplane::GetGunLocalMatrix()
 
 void Aeroplane::UpdateMatrices(void)
 {
-	XMMATRIX mRotX, mRotY, mRotZ, mTrans;
 	XMMATRIX mPlaneCameraRot, mForwardMatrix;
 
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4Rot.z));
-
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
-
-	XMMATRIX planeParentMat = mRotZ * mRotX * mRotY * mTrans;
+	//Calculate plane local matrix
+	XMMATRIX planeParentMat = CreateLocalMatrix(m_v4Rot, m_v4Pos);
 	//------
 
-
 	//Calculate propeller local matrix
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4PropRot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4PropRot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4PropRot.z));
-
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4PropOff));
-
-	XMMATRIX propMatrix = mRotX * mRotY * mRotZ * mTrans;
+	XMMATRIX propMatrix = CreateLocalMatrix(m_v4PropRot, m_v4PropOff);
 	//-----
 
 	//Calculate turret local matrix
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4TurretRot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4TurretRot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4TurretRot.z));
-
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4TurretOff));
-
-	XMMATRIX turretMatrix = mRotX * mRotY * mRotZ * mTrans;
+	XMMATRIX turretMatrix = CreateLocalMatrix(m_v4TurretRot, m_v4TurretOff);
 	//-----
 
 	//Calculate gun local matrix
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4GunRot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4GunRot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4GunRot.z));
-
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4GunOff));
-	XMMATRIX gunMatrix = mRotX * mRotY * mRotZ * mTrans;
-
+	XMMATRIX gunMatrix = CreateLocalMatrix(m_v4GunRot, m_v4GunOff);
 	m_mGunLocalMatrix = gunMatrix;
 
 	//-----
@@ -123,16 +98,8 @@ void Aeroplane::UpdateMatrices(void)
 	//Also calculate mPlaneCameraRot which ignores rotations in Z and X for the camera to parent to
 	mPlaneCameraRot = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
 
-	//Calculate camera rotation like you would the others
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.x));
-	mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.y));
-	mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4CamRot.z));
-
-	//Calculate camera translation
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4CamOff));
-
 	//Calculate camWorld Matrix
-	m_mCamWorldMatrix = mRotX * mRotY * mRotZ * mTrans;
+	m_mCamWorldMatrix = CreateLocalMatrix(m_v4CamRot, m_v4CamOff);
 	m_mCamWorldMatrix *= (!m_bGunCam) ? mPlaneCameraRot * XMMatrixTranslation(m_v4Pos.x, m_v4Pos.y, m_v4Pos.z) : m_mGunWorldMatrix;
 
 	XMVECTOR scale, rotation, position;
@@ -280,6 +247,19 @@ void Aeroplane::ResetMovementToZero()
 			}
 		}
 	}
+}
+
+XMMATRIX Aeroplane::CreateLocalMatrix(const XMFLOAT4& mRotation, const XMFLOAT4& mOffset)
+{
+	XMMATRIX mRotX, mRotY, mRotZ, mTrans;
+
+	mRotX = XMMatrixRotationX(XMConvertToRadians(mRotation.x));
+	mRotY = XMMatrixRotationY(XMConvertToRadians(mRotation.y));
+	mRotZ = XMMatrixRotationZ(XMConvertToRadians(mRotation.z));
+
+	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&mOffset));
+
+	return mRotZ * mRotX * mRotY * mTrans;
 }
 
 void Aeroplane::LoadResources(void)

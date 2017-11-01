@@ -34,6 +34,7 @@ private:
 	void UpdateMatrices(void);
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
+	XMMATRIX CreateLocalMatrix(const XMFLOAT4& mRotation, const XMFLOAT4& mOffset);
 
 	static CommonMesh* s_pPlaneMesh; // Only one plane mesh for all instances
 	static CommonMesh* s_pPropMesh; // Only one propellor mesh for all instances
@@ -88,7 +89,7 @@ public:
 	XMFLOAT4 GetForwardVector() 
 	{
 		XMFLOAT4 v4Forward;
-		XMStoreFloat4(&v4Forward, XMVector4Normalize(m_vForwardVector));
+		XMStoreFloat4(&v4Forward, XMVector3Normalize(m_vForwardVector));
 		return v4Forward;
 	}
 	void SetGunCamera(bool value) { m_bGunCam = value; }

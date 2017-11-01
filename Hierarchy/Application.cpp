@@ -115,7 +115,12 @@ void Application::HandleUpdate()
 	}
 
 
-	if (this->IsKeyPressed('U'))
+	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
+
+
+
+	//If space bar is pressed
+	if (this->IsKeyPressed(32))
 	{
 		if (m_pBullet != nullptr)
 		{
@@ -132,7 +137,7 @@ void Application::HandleUpdate()
 		//XMFLOAT4 mPlaneForwardVector = XMFLOAT4(0, 0, 0, 0);
 
 		//Set the initial offset
-		XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.0f, 2.0f, 1.0f);
+		XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.0f, 0.8f, 1.0f);
 		XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
 
 		//Store positions and rotations from matrix
@@ -144,10 +149,6 @@ void Application::HandleUpdate()
 	}
 
 	m_pBullet->Update();
-
-
-	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
-
 }
 
 //////////////////////////////////////////////////////////////////////
