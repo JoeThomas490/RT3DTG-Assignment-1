@@ -6,7 +6,10 @@
 
 #include "App.h"
 #include "D3DHelpers.h"
+
 #include <D3DX10math.h>
+
+class CommonFont;
 
 #include <DirectXMath.h>
 using namespace DirectX;

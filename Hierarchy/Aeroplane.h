@@ -27,6 +27,7 @@ public:
 
 	XMMATRIX GetGunWorldMatrix();
 	XMMATRIX GetGunLocalMatrix();
+	XMMATRIX GetGunWorldRotationMatrix();
 
 	bool m_canMove = true;
 
@@ -63,7 +64,8 @@ private:
 	XMFLOAT4 m_v4GunRot; // Local rotation angles
 	XMFLOAT4 m_v4GunOff; // Local offset
 	XMMATRIX m_mGunWorldMatrix; // Gun's world transformation matrix
-	XMMATRIX m_mGunLocalMatrix; // Gun's world transformation matrix
+	XMMATRIX m_mGunLocalMatrix; // Gun's local transformation matrix
+	XMMATRIX m_mGunLocalRotation; //Gun's local rotation matrix
 
 	XMFLOAT4 m_v4CamRot; // Local rotation angles
 	XMFLOAT4 m_v4CamOff; // Local offset

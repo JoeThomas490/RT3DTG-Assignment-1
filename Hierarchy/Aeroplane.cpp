@@ -68,6 +68,11 @@ XMMATRIX Aeroplane::GetGunLocalMatrix()
 	return m_mGunLocalMatrix;
 }
 
+XMMATRIX Aeroplane::GetGunWorldRotationMatrix()
+{
+	return m_mGunLocalRotation;
+}
+
 void Aeroplane::UpdateMatrices(void)
 {
 	XMMATRIX mPlaneCameraRot, mForwardMatrix;
@@ -86,7 +91,13 @@ void Aeroplane::UpdateMatrices(void)
 
 	//Calculate gun local matrix
 	XMMATRIX gunMatrix = CreateLocalMatrix(m_v4GunRot, m_v4GunOff);
+	XMMATRIX mRotX, mRotY, mRotZ, mTrans;
+
+	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4GunRot.x));
+	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4GunRot.y));
+	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4GunRot.z));
 	m_mGunLocalMatrix = gunMatrix;
+	m_mGunLocalRotation = mRotX * mRotY * mRotZ;
 
 	//-----
 	//Calculate all world matrices

@@ -18,6 +18,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <time.h>
+
 #include "D3DHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -203,6 +205,8 @@ void App::Render()
 
 void App::Update()
 {
+	const float start_time = static_cast<float>(clock());	
+	
 	this->HandleUpdate();
 
 	// ...anything else?
@@ -504,7 +508,7 @@ static bool DoMessages()
 
 	while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 	{
-		BOOL good = GetMessage(&msg, NULL, 0, 0);
+		BOOL good = GetMessage(&msg, NULL, 0, 0); 
 		if (good == 0 || good == -1)
 			return false;
 
@@ -567,6 +571,7 @@ int Run(App *pApp)
 
 	while (DoMessages())
 	{
+
 		// Wait until the next 60th-of-a-second boundary has
 		// arrived (or been and gone).
 		LARGE_INTEGER now;

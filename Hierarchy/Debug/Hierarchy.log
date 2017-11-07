@@ -1,4 +1,4 @@
-﻿  Aeroplane.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(49): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(143): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+﻿  Bullet.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\bullet.cpp(22): warning C4100: 'mPlaneForwardVector': unreferenced formal parameter
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\bullet.cpp(47): warning C4100: 'mRot': unreferenced formal parameter
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

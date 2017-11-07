@@ -3,6 +3,7 @@
 
 #include "CommonApp.h"
 #include "D3DHelpers.h"
+#include "CommonFont.h"
 
 #include <stddef.h>
 #include <stdio.h>

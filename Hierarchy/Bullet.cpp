@@ -6,6 +6,19 @@ CommonMesh* Bullet::s_pBulletMesh = nullptr;
 
 bool Bullet::s_bResourcesReady = false;
 
+Bullet::Bullet()
+{
+	m_mWorldMatrix = XMMatrixIdentity();
+
+	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4ForwardVector = XMFLOAT4(0, 0, 0, 0);
+
+	m_fMovementSpeed = 0;
+
+	m_bIsReadyToUpdate = false;
+}
+
 Bullet::Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed)
 {
 
@@ -15,7 +28,34 @@ Bullet::Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT
 	m_v4Rot = mRot;
 
 	//Set bullet's forward vector
-	mGunForwardVector += XMLoadFloat4(&mPlaneForwardVector);
+	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
+	//mGunForwardVector *= XMLoadFloat4(&mPlaneForwardVector);
+	//mGunForwardVector = XMVector3Normalize(mGunForwardVector);
+
+	XMStoreFloat4(&m_v4ForwardVector, mGunForwardVector);
+
+	//Set movement speed
+	m_fMovementSpeed = fSpeed;
+
+	//Set the bullet to start off invisible
+	m_bIsVisible = true;
+
+	m_bIsReadyToUpdate = false;
+
+}
+
+void Bullet::ResetBullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed)
+{
+	//Initialise world matrix
+	m_mWorldMatrix = XMMatrixIdentity();
+	m_v4Pos = mPos;
+	//m_v4Rot = mRot;
+
+	//m_mRotation = mRot;
+
+	//Set bullet's forward vector
+	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
+	mGunForwardVector += (XMLoadFloat4(&mPlaneForwardVector));
 	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
 
 	XMStoreFloat4(&m_v4ForwardVector, mGunForwardVector);
@@ -26,12 +66,7 @@ Bullet::Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT
 	//Set the bullet to start off invisible
 	m_bIsVisible = true;
 
-
-}
-
-
-Bullet::~Bullet()
-{
+	m_bIsReadyToUpdate = false;
 }
 
 void Bullet::LoadResources()
@@ -50,12 +85,28 @@ void Bullet::ReleaseResources()
 
 void Bullet::Update()
 {
-	m_v4Pos.x += m_v4ForwardVector.x;
-	m_v4Pos.y += m_v4ForwardVector.y;
-	m_v4Pos.z += m_v4ForwardVector.z;
+	if (m_bIsVisible)
+	{
+		m_fLifeTime++;
+		if (m_fLifeTime > 150)
+		{
+			m_fLifeTime = 0;
+			m_bIsVisible = false;
+		}
 
+		if (m_bIsReadyToUpdate)
+		{
+			m_v4Pos.x += m_v4ForwardVector.x;
+			m_v4Pos.y += m_v4ForwardVector.y;
+			m_v4Pos.z += m_v4ForwardVector.z;
+		}
+		else
+		{
+			m_bIsReadyToUpdate = true;
+		}
 
-	UpdateMatrices();
+		UpdateMatrices();
+	}
 }
 
 void Bullet::Draw()
@@ -71,9 +122,9 @@ void Bullet::UpdateMatrices()
 {
 	XMMATRIX mTrans, mScale, mRotX, mRotY, mRotZ;
 
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.y));
-	mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.z));
+	//mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
+	//mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.y));
+	//mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.z));
 
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 	mScale = XMMatrixScaling(0.1f, 0.1f, 0.1f);

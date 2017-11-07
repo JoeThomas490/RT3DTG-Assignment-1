@@ -4,6 +4,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <assert.h>
+#include <string>
 
 #include <stdio.h>
 #include <windows.h>
@@ -11,6 +12,8 @@
 
 #include "CommonApp.h"
 #include "CommonMesh.h"
+
+
 
 class Aeroplane;
 class HeightMap;
@@ -23,7 +26,7 @@ class Application : public CommonApp
 {
   public:
 	static Application* s_pApp;
-
+	
   protected:
 	bool HandleStart();
 	void HandleStop();
@@ -41,6 +44,7 @@ class Application : public CommonApp
 	HeightMap* m_pHeightMap;
 
 	Bullet* m_pBullet;
+
 };
 
 #endif

@@ -10,6 +10,10 @@ const int CAMERA_PLANE = 1;
 const int CAMERA_GUN = 2;
 const int CAMERA_MAX = 3;
 
+const int MAX_BULLETS = 50;
+
+Bullet m_arrBullets[50];
+
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -25,17 +29,18 @@ bool Application::HandleStart()
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
 	m_pAeroplane = new Aeroplane(0.0f, 3.5f, 0.0f, 105.0f);
 
+
 	m_pAeroplane->LoadResources();
 
 
-	m_pBullet = new Bullet(XMFLOAT4(0,0,0,0), XMFLOAT4(0,0,0,0), XMVectorSet(0,0,0,0), XMFLOAT4(0, 0, 0, 0), 0.0f);
+	m_pBullet = new Bullet(XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), XMVectorSet(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 0.0f);
+	//m_pBullet = new Bullet[MAX_BULLETS];
 	Bullet::LoadResources();
-
 
 	m_cameraZ = 50.0f;
 	m_rotationAngle = 0.f;
 
-	if(!this->CommonApp::HandleStart())
+	if (!this->CommonApp::HandleStart())
 		return false;
 
 	this->SetRasterizerState(false, m_bWireframe);
@@ -66,29 +71,42 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
+
 	m_rotationAngle += .01f;
 
-	if(m_cameraState == CAMERA_MAP)
+	if (m_cameraState == CAMERA_MAP)
 	{
-		if(this->IsKeyPressed('Q'))
+		if (this->IsKeyPressed('Q'))
 			m_cameraZ -= 2.0f;
 
-		if(this->IsKeyPressed('A'))
+		if (this->IsKeyPressed('A'))
 			m_cameraZ += 2.0f;
+	}
+
+
+	static bool dbS = false;
+
+	if (this->IsKeyPressed('S'))
+	{
+		if (!dbS)
+		{
+			m_pAeroplane->m_canMove = !m_pAeroplane->m_canMove;
+
+			dbS = true;
+		}
+	}
+	else
+	{
+		dbS = false;
 	}
 
 	static bool dbC = false;
 
-	if (this->IsKeyPressed('S'))
+	if (this->IsKeyPressed('C'))
 	{
-		m_pAeroplane->m_canMove = !m_pAeroplane->m_canMove;
-	}
-
-	if(this->IsKeyPressed('C'))
-	{
-		if(!dbC)
+		if (!dbC)
 		{
-			if(++m_cameraState == CAMERA_MAX)
+			if (++m_cameraState == CAMERA_MAX)
 				m_cameraState = CAMERA_MAP;
 
 			dbC = true;
@@ -100,9 +118,9 @@ void Application::HandleUpdate()
 	}
 
 	static bool dbW = false;
-	if(this->IsKeyPressed('W'))
+	if (this->IsKeyPressed('W'))
 	{
-		if(!dbW)
+		if (!dbW)
 		{
 			m_bWireframe = !m_bWireframe;
 			this->SetRasterizerState(false, m_bWireframe);
@@ -118,37 +136,60 @@ void Application::HandleUpdate()
 	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 
+	static bool dbSpace = false;
 
 	//If space bar is pressed
 	if (this->IsKeyPressed(32))
 	{
-		if (m_pBullet != nullptr)
+		if (!dbSpace)
 		{
-			delete m_pBullet;
+			dbSpace = true;
+
+			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
+			XMMATRIX mGunLocalMatrix = m_pAeroplane->GetGunLocalMatrix();
+
+			XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
+
+			XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
+
+			//Set the initial offset
+			XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.2f, 1.5f, 1.0f);
+			XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
+
+			//Store positions and rotations from matrix
+			XMFLOAT4 mPos, mRot;
+			XMStoreFloat4(&mPos, bulletWorldPos);
+
+			XMVECTOR localScal, localRot, localTrans;
+			XMMatrixDecompose(&localScal, &localRot, &localTrans, mGunWorldMatrix);
+
+
+			XMStoreFloat4(&mRot, localRot);
+
+			int freeIndex = 0;
+			while (freeIndex < MAX_BULLETS)
+			{
+				if (!m_arrBullets[freeIndex].GetIsVisible())
+				{
+					break;
+				}
+				freeIndex++;
+			}
+			//Pass position and rotation
+
+			m_arrBullets[freeIndex].ResetBullet(mPos, mRot, mGunForwardVector, mPlaneForwardVector, 1.0f);
 		}
-
-		XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
-		XMMATRIX mGunLocalMatrix = m_pAeroplane->GetGunLocalMatrix();
-
-		XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
-
-		XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
-
-		//XMFLOAT4 mPlaneForwardVector = XMFLOAT4(0, 0, 0, 0);
-
-		//Set the initial offset
-		XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.0f, 0.8f, 1.0f);
-		XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
-
-		//Store positions and rotations from matrix
-		XMFLOAT4 mPos, mRot;
-		XMStoreFloat4(&mPos, bulletWorldPos);
-
-		//Pass position and rotation
-		m_pBullet = new Bullet(mPos, mRot, mGunForwardVector, mPlaneForwardVector, 2.0f);
+	}
+	else
+	{
+		dbSpace = false;
 	}
 
-	m_pBullet->Update();
+
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		m_arrBullets[i].Update();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -159,22 +200,22 @@ void Application::HandleRender()
 	XMFLOAT3 vUpVector(0.0f, 1.0f, 0.0f);
 	XMFLOAT3 vCamera, vLookat;
 
-	switch(m_cameraState)
+	switch (m_cameraState)
 	{
-		case CAMERA_MAP:
-			vCamera = XMFLOAT3(sin(m_rotationAngle) * m_cameraZ, m_cameraZ / 4, cos(m_rotationAngle) * m_cameraZ);
-			vLookat = XMFLOAT3(0.0f, 4.0f, 0.0f);
-			break;
-		case CAMERA_PLANE:
-			m_pAeroplane->SetGunCamera(false);
-			vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
-			vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
-			break;
-		case CAMERA_GUN:
-			m_pAeroplane->SetGunCamera(true);
-			vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
-			vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
-			break;
+	case CAMERA_MAP:
+		vCamera = XMFLOAT3(sin(m_rotationAngle) * m_cameraZ, m_cameraZ / 4, cos(m_rotationAngle) * m_cameraZ);
+		vLookat = XMFLOAT3(0.0f, 4.0f, 0.0f);
+		break;
+	case CAMERA_PLANE:
+		m_pAeroplane->SetGunCamera(false);
+		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
+		break;
+	case CAMERA_GUN:
+		m_pAeroplane->SetGunCamera(true);
+		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
+		break;
 	}
 
 	XMMATRIX matView;
@@ -198,7 +239,14 @@ void Application::HandleRender()
 
 	m_pHeightMap->Draw();
 	m_pAeroplane->Draw();
-	m_pBullet->Draw();
+
+
+	//m_pBullet->Draw();
+
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		m_arrBullets[i].Draw();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
