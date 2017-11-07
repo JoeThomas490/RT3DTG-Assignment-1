@@ -28,8 +28,6 @@ public:
 	void Update();
 	void Draw();
 
-
-
 	void* operator new(size_t i)
 	{
 		return _mm_malloc(i, 16);
