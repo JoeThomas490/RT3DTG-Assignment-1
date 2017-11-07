@@ -2,6 +2,17 @@
 
 #include "Application.h"
 
+/*
+BULLET.H
+Class holding all the data relavent to the bullet. Handles the spawning, visibility
+, lifetime and movement of each bullet
+
+
+TODO
+- Change to a dynamically allocated array (See Application.h and Application.cpp)
+- Modify the rotation of the bullet based on the rotation of the gun barrel (Modified in Application.cpp)
+*/
+
 __declspec(align(16)) class Bullet
 {
 public:
