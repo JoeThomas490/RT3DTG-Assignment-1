@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Heightmap.h"
 #include "Aeroplane.h"
+#include "AeroplaneTest.h"
 #include "Bullet.h"
 
 Application* Application::s_pApp = NULL;
@@ -29,7 +30,8 @@ bool Application::HandleStart()
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
 	m_pAeroplane = new Aeroplane(0.0f, 3.5f, 0.0f, 105.0f);
 
-
+	m_pAeroplaneTest = new AeroplaneTest(0.0f, 6.5f, 0.0f, 105.0f);
+	m_pAeroplaneTest->LoadResources();
 	m_pAeroplane->LoadResources();
 
 
@@ -56,8 +58,12 @@ bool Application::HandleStart()
 void Application::HandleStop()
 {
 	delete m_pHeightMap;
+
 	Aeroplane::ReleaseResources();
 	delete m_pAeroplane;
+
+	AeroplaneTest::ReleaseResources();
+	delete m_pAeroplaneTest;
 
 	Bullet::ReleaseResources();
 	delete m_pBullet;
@@ -135,6 +141,8 @@ void Application::HandleUpdate()
 
 	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
+	m_pAeroplaneTest->Update(m_cameraState != CAMERA_MAP);
+
 
 	static bool dbSpace = false;
 
@@ -146,7 +154,6 @@ void Application::HandleUpdate()
 			dbSpace = true;
 
 			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
-			XMMATRIX mGunLocalMatrix = m_pAeroplane->GetGunLocalMatrix();
 
 			XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
 
@@ -157,14 +164,12 @@ void Application::HandleUpdate()
 			XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
 
 			//Store positions and rotations from matrix
-			XMFLOAT4 mPos, mRot;
+			XMFLOAT4 mPos;
 			XMStoreFloat4(&mPos, bulletWorldPos);
 
-			XMVECTOR localScal, localRot, localTrans;
-			XMMatrixDecompose(&localScal, &localRot, &localTrans, mGunWorldMatrix);
+			//Get guns local rotation
+			XMFLOAT4 mRot = m_pAeroplane->GetGunRotation();
 
-
-			XMStoreFloat4(&mRot, localRot);
 
 			int freeIndex = 0;
 			while (freeIndex < MAX_BULLETS)
@@ -238,8 +243,9 @@ void Application::HandleRender()
 	this->SetWorldMatrix(matWorld);
 
 	m_pHeightMap->Draw();
-	m_pAeroplane->Draw();
 
+	m_pAeroplane->Draw();
+	m_pAeroplaneTest->Draw();
 
 	//m_pBullet->Draw();
 

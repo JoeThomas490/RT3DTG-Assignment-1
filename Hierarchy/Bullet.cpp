@@ -29,8 +29,8 @@ Bullet::Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT
 
 	//Set bullet's forward vector
 	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
-	//mGunForwardVector *= XMLoadFloat4(&mPlaneForwardVector);
-	//mGunForwardVector = XMVector3Normalize(mGunForwardVector);
+	mGunForwardVector += XMLoadFloat4(&mPlaneForwardVector);
+	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
 
 	XMStoreFloat4(&m_v4ForwardVector, mGunForwardVector);
 
@@ -49,7 +49,7 @@ void Bullet::ResetBullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVecto
 	//Initialise world matrix
 	m_mWorldMatrix = XMMatrixIdentity();
 	m_v4Pos = mPos;
-	//m_v4Rot = mRot;
+	m_v4Rot = mRot;
 
 	//m_mRotation = mRot;
 
@@ -122,14 +122,14 @@ void Bullet::UpdateMatrices()
 {
 	XMMATRIX mTrans, mScale, mRotX, mRotY, mRotZ;
 
-	//mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	//mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.y));
-	//mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.z));
+	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
+	mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.y));
+	mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.z));
 
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 	mScale = XMMatrixScaling(0.1f, 0.1f, 0.1f);
 
 
-	m_mWorldMatrix = mScale * mTrans;
+	m_mWorldMatrix = mRotX * mRotY * mRotZ * mScale * mTrans;
 
 }

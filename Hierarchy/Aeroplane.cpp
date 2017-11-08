@@ -133,32 +133,32 @@ void Aeroplane::UpdateMatrices(void)
 void Aeroplane::Update(bool bPlayerControl)
 {
 	if (bPlayerControl)
-	{
+	{/*
 		UpdatePlaneMovement();
 		ResetMovementToZero();
-
+*/
 
 	} // End of if player control
 
 	// Apply a forward thrust and limit to a maximum speed of 1
-	m_fSpeed += 0.001f;
+	//m_fSpeed += 0.001f;
 
-	if (m_fSpeed > 1)
-		m_fSpeed = 1;
+	//if (m_fSpeed > 1)
+	//	m_fSpeed = 1;
 
-	// Rotate propeller and turret
-	m_v4PropRot.z += 100 * m_fSpeed;
-	m_v4TurretRot.y += 0.1f;
+	//// Rotate propeller and turret
+	//m_v4PropRot.z += 100 * m_fSpeed;
+	//m_v4TurretRot.y += 0.1f;
 
-	// Tilt gun up and down as turret rotates
-	m_v4GunRot.x = (sin((float)XMConvertToRadians(m_v4TurretRot.y * 4.0f)) * 10.0f) - 10.0f;
+	//// Tilt gun up and down as turret rotates
+	//m_v4GunRot.x = (sin((float)XMConvertToRadians(m_v4TurretRot.y * 4.0f)) * 10.0f) - 10.0f;
 
 	UpdateMatrices();
 
 	// Move Forward
-	XMVECTOR vCurrPos = XMLoadFloat4(&m_v4Pos);
-	vCurrPos += m_vForwardVector * m_fSpeed;
-	XMStoreFloat4(&m_v4Pos, vCurrPos);
+	//XMVECTOR vCurrPos = XMLoadFloat4(&m_v4Pos);
+	//vCurrPos += m_vForwardVector * m_fSpeed;
+	//XMStoreFloat4(&m_v4Pos, vCurrPos);
 }
 
 void Aeroplane::UpdatePlaneMovement()

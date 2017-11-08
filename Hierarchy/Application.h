@@ -16,6 +16,7 @@
 
 
 class Aeroplane;
+class AeroplaneTest;
 class HeightMap;
 class Bullet;
 
@@ -32,6 +33,7 @@ class Application : public CommonApp
 	void HandleStop();
 	void HandleUpdate();
 	void HandleRender();
+	void UpdateBullets();
 
   private:
 	float m_rotationAngle;
@@ -41,6 +43,10 @@ class Application : public CommonApp
 	int m_cameraState;
 
 	Aeroplane* m_pAeroplane;
+
+	AeroplaneTest* m_pAeroplaneTest;
+	
+
 	HeightMap* m_pHeightMap;
 
 	Bullet* m_pBullet;

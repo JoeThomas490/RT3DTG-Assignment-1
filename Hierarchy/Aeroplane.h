@@ -88,6 +88,8 @@ public:
 	}
 	XMFLOAT4 GetPosition(void) { return m_v4Pos; }
 
+	XMFLOAT4 GetGunRotation() { return m_v4TurretRot; }
+
 	XMFLOAT4 GetForwardVector() 
 	{
 		XMFLOAT4 v4Forward;

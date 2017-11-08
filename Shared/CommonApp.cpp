@@ -828,7 +828,7 @@ void CommonApp::DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *
 	{
 		// Strictly speaking, this isn't necessary. It makes use of render
 		// targets a bit simpler though.
-
+		
 		ID3D11ShaderResourceView *apTextureViews[1] = {
 			NULL,
 		};
