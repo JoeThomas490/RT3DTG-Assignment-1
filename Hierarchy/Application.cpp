@@ -139,7 +139,7 @@ void Application::HandleUpdate()
 	}
 
 
-	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
+	//m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	m_pAeroplaneTest->Update(m_cameraState != CAMERA_MAP);
 
@@ -153,11 +153,11 @@ void Application::HandleUpdate()
 		{
 			dbSpace = true;
 
-			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
+			XMMATRIX mGunWorldMatrix = m_pAeroplaneTest->GetGunWorldMatrix();
 
 			XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
 
-			XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
+			XMFLOAT4 mPlaneForwardVector = m_pAeroplaneTest->GetForwardVector();
 
 			//Set the initial offset
 			XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.2f, 1.5f, 1.0f);
@@ -213,13 +213,13 @@ void Application::HandleRender()
 		break;
 	case CAMERA_PLANE:
 		m_pAeroplane->SetGunCamera(false);
-		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
-		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
+		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
 		break;
 	case CAMERA_GUN:
 		m_pAeroplane->SetGunCamera(true);
-		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
-		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
+		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
 		break;
 	}
 
@@ -246,8 +246,6 @@ void Application::HandleRender()
 
 	m_pAeroplane->Draw();
 	m_pAeroplaneTest->Draw();
-
-	//m_pBullet->Draw();
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{

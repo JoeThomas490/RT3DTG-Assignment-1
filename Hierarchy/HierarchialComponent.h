@@ -12,6 +12,7 @@ public:
 
 	void SetWorldMatrix(XMMATRIX* mWorldMatrix);
 
+
 	void SetLocalRotation(float fX, float fY, float fZ);
 	void SetLocalPosition(float fX, float fY, float fZ);
 
@@ -28,6 +29,7 @@ private:
 	XMFLOAT4 m_v4Pos;
 	XMFLOAT4 m_vForwardVector;
 
+
 public:
 
 	XMMATRIX GetLocalMatrix() { return m_mLocalMatrix; };
@@ -35,6 +37,16 @@ public:
 
 	XMFLOAT4 GetLocalPosition() { return m_v4Pos; };
 	XMFLOAT4 GetLocalRotation() { return m_v4Rot; };
+
+	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
+
+	void SetPositionX(float f) { m_v4Pos.x = f; };
+	void SetPositionY(float f) { m_v4Pos.y = f; };
+	void SetPositionZ(float f) { m_v4Pos.z = f; };
+
+	void SetRotationX(float f) { m_v4Rot.x = f; };
+	void SetRotationY(float f) { m_v4Rot.y = f; };
+	void SetRotationZ(float f) { m_v4Rot.z = f; };
 
 	void* operator new(size_t i)
 	{

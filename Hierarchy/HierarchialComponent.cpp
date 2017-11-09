@@ -31,6 +31,7 @@ void HierarchialComponent::SetWorldMatrix(XMMATRIX* mWorldMatrix)
 	m_mWorldMatrix = *mWorldMatrix;
 }
 
+
 void HierarchialComponent::SetLocalRotation(float fX, float fY, float fZ)
 {
 	m_v4Rot = XMFLOAT4(fX, fY, fZ, 0.0f);

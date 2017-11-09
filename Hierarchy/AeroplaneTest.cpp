@@ -15,6 +15,11 @@ AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
 	m_vCamWorldPos = XMVectorZero();
 	m_vForwardVector = XMVectorZero();
 
+	AddComponent(&m_hHullComponent, -1);
+	AddComponent(&m_hPropComponent, 0);
+	AddComponent(&m_hTurretComponent, 0);
+	AddComponent(&m_hGunComponent, 2);
+
 	m_hHullComponent.SetLocalPosition(fX, fY, fZ);
 	m_hHullComponent.SetLocalRotation(0.0f, fRotY, 0.0f);
 
@@ -49,8 +54,8 @@ void AeroplaneTest::Update(bool bPlayerControl)
 {
 	if (bPlayerControl)
 	{
-		//UpdatePlaneMovement();
-		//ResetMovementToZero();
+		UpdatePlaneMovement();
+		ResetMovementToZero();
 
 
 	} // End of if player control
@@ -62,18 +67,22 @@ void AeroplaneTest::Update(bool bPlayerControl)
 		m_fSpeed = 1;
 
 	// Rotate propeller and turret
-	//m_v4PropRot.z += 100 * m_fSpeed;
-	//m_v4TurretRot.y += 0.1f;
+
+	m_hPropComponent.SetRotationZ(m_hPropComponent.GetLocalRotation().z + 100 * m_fSpeed);
+	m_hTurretComponent.SetRotationY(m_hTurretComponent.GetLocalRotation().y + 0.1f);
 
 	// Tilt gun up and down as turret rotates
-	//m_v4GunRot.x = (sin((float)XMConvertToRadians(m_v4TurretRot.y * 4.0f)) * 10.0f) - 10.0f;
+	m_hGunComponent.SetRotationX(sin((float)XMConvertToRadians(m_hTurretComponent.GetLocalRotation().y * 4.0f)) * 10.0f - 10.0f);
 
 	UpdateMatrices();
 
 	// Move Forward
-	//XMVECTOR vCurrPos = XMLoadFloat4(&m_v4Pos);
-	//vCurrPos += m_vForwardVector * m_fSpeed;
-	//XMStoreFloat4(&m_v4Pos, vCurrPos);
+	XMFLOAT4 planePosition;
+	XMVECTOR vCurrPos = XMLoadFloat4(&m_hHullComponent.GetLocalPosition());
+	vCurrPos += m_vForwardVector * m_fSpeed;
+	XMStoreFloat4(&planePosition, vCurrPos);
+
+	m_hHullComponent.SetLocalPosition(planePosition);
 }
 
 void AeroplaneTest::Draw()
@@ -90,26 +99,12 @@ void AeroplaneTest::UpdateMatrices()
 
 	UpdateCameraMatrix();
 
-	m_hHullComponent.UpdateLocalMatrix();
-	m_hPropComponent.UpdateLocalMatrix();
-	m_hGunComponent.UpdateLocalMatrix();
-	m_hTurretComponent.UpdateLocalMatrix();
-
-	XMMATRIX mHullWorldMatrix = m_hHullComponent.GetLocalMatrix();
-	m_hHullComponent.SetWorldMatrix(&mHullWorldMatrix);
-
-	XMMATRIX mPropWorldMatrix = m_hPropComponent.GetLocalMatrix() * m_hHullComponent.GetWorldMatrix();
-	m_hPropComponent.SetWorldMatrix(&mPropWorldMatrix);
-
-	XMMATRIX mTurretWorldMatrix = m_hTurretComponent.GetLocalMatrix() * m_hHullComponent.GetWorldMatrix();
-	m_hTurretComponent.SetWorldMatrix(&mTurretWorldMatrix);
-
-	XMMATRIX mGunWorldMatrix = m_hGunComponent.GetLocalMatrix() * m_hTurretComponent.GetWorldMatrix();
-	m_hGunComponent.SetWorldMatrix(&mGunWorldMatrix);
+	UpdateHierarchy();
 
 	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_hHullComponent.GetWorldMatrix());
 }
 
+//TODO Cleanup by creating a camera component and adding to hierarchy
 void AeroplaneTest::UpdateCameraMatrix()
 {
 	XMMATRIX mPlaneCameraRot;
@@ -123,7 +118,7 @@ void AeroplaneTest::UpdateCameraMatrix()
 
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4CamOff));
 
-	////Calculate camWorld Matrix
+	//Calculate camWorld Matrix
 	m_mCamWorldMatrix = mRotX * mRotY * mRotZ * mTrans;
 
 	m_mCamWorldMatrix *= (!m_bGunCam) ? mPlaneCameraRot * XMMatrixTranslation(m_hHullComponent.GetLocalPosition().x, m_hHullComponent.GetLocalPosition().y, m_hHullComponent.GetLocalPosition().z) : m_hGunComponent.GetWorldMatrix();
@@ -131,4 +126,120 @@ void AeroplaneTest::UpdateCameraMatrix()
 	XMVECTOR scale, rotation, position;
 	XMMatrixDecompose(&scale, &rotation, &position, m_mCamWorldMatrix);
 	m_vCamWorldPos = position;
+}
+
+void AeroplaneTest::UpdatePlaneMovement()
+{
+	float rotX = m_hHullComponent.GetLocalRotation().x;
+	// Step 1: Make the plane pitch upwards when you press "Q" and return to level when released
+	// Maximum pitch = 60 degrees
+	if (Application::s_pApp->IsKeyPressed('Q'))
+	{
+		//if (m_fSpeed > 0.5f)
+		{
+			rotX -= 3.0f;
+			if (rotX < -60.0f)
+			{
+				rotX = -60.0f;
+			}
+		}
+
+	}
+
+	// Step 2: Make the plane pitch downwards when you press "A" and return to level when released
+	// You can also impose a take off speed of 0.5 if you like
+	// Minimum pitch = -60 degrees
+	if (Application::s_pApp->IsKeyPressed('A'))
+	{
+		//if (m_fSpeed > 0.5f)
+		{
+			rotX += 3.0f;
+			if (rotX > 60.0f)
+			{
+				rotX = 60.0f;
+			}
+		}
+	}
+	m_hHullComponent.SetRotationX(rotX);
+
+	float rotY = m_hHullComponent.GetLocalRotation().y;
+	float rotZ = m_hHullComponent.GetLocalRotation().z;
+	// Step 3: Make the plane yaw and roll left when you press "O" and return to level when released
+	// Maximum roll = 20 degrees
+	if (Application::s_pApp->IsKeyPressed('O'))
+	{
+
+		rotZ += 1.5f;
+		rotY -= 1.5f;
+
+		if (rotZ > 20)
+		{
+			rotZ = 20.0f;
+		}
+	}
+	// Step 4: Make the plane yaw and roll right when you press "P" and return to level when released
+	// Minimum roll = -20 degrees
+
+	if (Application::s_pApp->IsKeyPressed('P'))
+	{
+		rotZ -= 1.5f;
+		rotY += 1.5f;
+
+		if (rotZ < -20)
+		{
+			rotZ = -20.0f;
+		}
+	}
+
+	m_hHullComponent.SetRotationY(rotY);
+	m_hHullComponent.SetRotationZ(rotZ);
+}
+
+void AeroplaneTest::ResetMovementToZero()
+{
+
+	float rotX = m_hHullComponent.GetLocalRotation().x;
+	float rotZ = m_hHullComponent.GetLocalRotation().z;
+	if (!Application::s_pApp->IsKeyPressed('P') && !Application::s_pApp->IsKeyPressed('O'))
+	{
+		if (rotZ > 0)
+		{
+			rotZ -= 4.0f;
+			if (rotZ < 0)
+			{
+				rotZ = 0;
+			}
+		}
+		if (rotZ < 0)
+		{
+			rotZ += 4.0f;
+			if (rotZ > 0)
+			{
+				rotZ = 0;
+			}
+		}
+	}
+
+	if (!Application::s_pApp->IsKeyPressed('A') && !Application::s_pApp->IsKeyPressed('Q'))
+	{
+		if (rotX > 0)
+		{
+			rotX -= 2.5f;
+			if (rotX < 0)
+			{
+				rotX = 0;
+			}
+		}
+		if (rotX < 0)
+		{
+			rotX += 2.5f;
+			if (rotX > 0)
+			{
+				rotX = 0;
+			}
+		}
+	}
+
+	m_hHullComponent.SetRotationX(rotX);
+	m_hHullComponent.SetRotationZ(rotZ);
 }
