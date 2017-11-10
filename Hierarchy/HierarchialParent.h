@@ -29,5 +29,7 @@ private:
 	XMFLOAT4 m_v4LocalPos;
 	XMFLOAT4 m_v4LocalRot;
 
+	XMFLOAT4 m_v4LocalScale;
+
 };
 

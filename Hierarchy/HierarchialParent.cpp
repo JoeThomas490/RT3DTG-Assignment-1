@@ -45,6 +45,7 @@ void HierarchialParent::CalculateLocalMatrices()
 void HierarchialParent::CalculateWorldMatrices()
 {
 	int currentComponentInd = 0;
+
 	//Loop through each component
 	for (auto &component : m_pHierarchyComponents)
 	{

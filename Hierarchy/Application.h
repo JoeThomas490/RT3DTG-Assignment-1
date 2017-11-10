@@ -19,6 +19,7 @@ class Aeroplane;
 class AeroplaneTest;
 class HeightMap;
 class Bullet;
+class Robot;
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -33,7 +34,6 @@ class Application : public CommonApp
 	void HandleStop();
 	void HandleUpdate();
 	void HandleRender();
-	void UpdateBullets();
 
   private:
 	float m_rotationAngle;
@@ -50,6 +50,8 @@ class Application : public CommonApp
 	HeightMap* m_pHeightMap;
 
 	Bullet* m_pBullet;
+
+	Robot* m_pRobot;
 
 };
 

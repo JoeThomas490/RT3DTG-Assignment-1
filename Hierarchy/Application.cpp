@@ -3,13 +3,15 @@
 #include "Aeroplane.h"
 #include "AeroplaneTest.h"
 #include "Bullet.h"
+#include "Robot.h"
 
 Application* Application::s_pApp = NULL;
 
 const int CAMERA_MAP = 0;
 const int CAMERA_PLANE = 1;
 const int CAMERA_GUN = 2;
-const int CAMERA_MAX = 3;
+const int CAMERA_ROBOT = 3;
+const int CAMERA_MAX = 4;
 
 const int MAX_BULLETS = 50;
 
@@ -32,7 +34,9 @@ bool Application::HandleStart()
 
 	m_pAeroplaneTest = new AeroplaneTest(0.0f, 6.5f, 0.0f, 105.0f);
 	m_pAeroplaneTest->LoadResources();
-	m_pAeroplane->LoadResources();
+
+	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
+	m_pRobot->LoadResources();
 
 
 	m_pBullet = new Bullet(XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), XMVectorSet(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 0.0f);
@@ -69,6 +73,10 @@ void Application::HandleStop()
 	delete m_pBullet;
 	m_pBullet = nullptr;
 
+	Robot::ReleaseResources();
+	delete m_pRobot;
+	m_pRobot = nullptr;
+
 	this->CommonApp::HandleStop();
 }
 
@@ -77,7 +85,7 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-
+	m_pRobot->Update();
 	m_rotationAngle += .01f;
 
 	if (m_cameraState == CAMERA_MAP)
@@ -221,6 +229,11 @@ void Application::HandleRender()
 		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
 		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
 		break;
+	case CAMERA_ROBOT:
+		m_pAeroplaneTest->SetGunCamera(false);
+		vCamera = XMFLOAT3(sin(12.1f) * m_cameraZ, m_cameraZ / 4, cos(12.1f) * m_cameraZ);
+		vLookat = XMFLOAT3(0.0f, 5.0f, -20.0f);
+		break;
 	}
 
 	XMMATRIX matView;
@@ -244,8 +257,10 @@ void Application::HandleRender()
 
 	m_pHeightMap->Draw();
 
-	m_pAeroplane->Draw();
+	//m_pAeroplane->Draw();
 	m_pAeroplaneTest->Draw();
+
+	m_pRobot->Draw();
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{

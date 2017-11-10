@@ -92,6 +92,7 @@
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HierarchialComponent.cpp" />
     <ClCompile Include="HierarchialParent.cpp" />
+    <ClCompile Include="Robot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.vcxproj">
@@ -106,6 +107,7 @@
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HierarchialComponent.h" />
     <ClInclude Include="HierarchialParent.h" />
+    <ClInclude Include="Robot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
