@@ -97,9 +97,8 @@ void AeroplaneTest::UpdateMatrices()
 {
 	XMMATRIX mPlaneCameraRot, mForwardMatrix;
 
-	UpdateCameraMatrix();
-
 	UpdateHierarchy();
+	UpdateCameraMatrix();
 
 	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_hHullComponent.GetWorldMatrix());
 }

@@ -1,6 +1,4 @@
-﻿  Aeroplane.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(50): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
-  AeroplaneTest.cpp
+﻿  AeroplaneTest.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplanetest.cpp(81): warning C4238: nonstandard extension used: class rvalue used as lvalue
   Application.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(50): warning C4324: 'Aeroplane': structure was padded due to alignment specifier

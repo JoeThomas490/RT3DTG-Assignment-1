@@ -71,6 +71,8 @@ public :
 		return v4Forward;
 	}
 
+	void SetGunCamera(bool value) { m_bGunCam = value; }
+
 	void* operator new(size_t i)
 	{
 		return _mm_malloc(i, 16);

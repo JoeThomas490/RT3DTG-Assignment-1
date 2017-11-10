@@ -212,12 +212,12 @@ void Application::HandleRender()
 		vLookat = XMFLOAT3(0.0f, 4.0f, 0.0f);
 		break;
 	case CAMERA_PLANE:
-		m_pAeroplane->SetGunCamera(false);
+		m_pAeroplaneTest->SetGunCamera(false);
 		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
 		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
 		break;
 	case CAMERA_GUN:
-		m_pAeroplane->SetGunCamera(true);
+		m_pAeroplaneTest->SetGunCamera(true);
 		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
 		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
 		break;
