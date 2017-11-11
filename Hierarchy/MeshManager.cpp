@@ -9,6 +9,14 @@ MeshManager::MeshManager()
 	s_pMeshManager = this;
 }
 
+MeshManager::~MeshManager()
+{
+	for (std::map<string, CommonMesh*>::iterator it = m_mMeshes.begin(); it != m_mMeshes.end(); it++)
+	{
+		delete it->second;
+	}
+}
+
 CommonMesh * MeshManager::LoadResources(char* fileName, string tag)
 {
 	//If it can't be found in the map

@@ -16,7 +16,7 @@ public:
 
 public:
 	MeshManager();
-	~MeshManager() = default;
+	~MeshManager();
 
 	CommonMesh* LoadResources(char* fileName, string tag);
 	CommonMesh* GetMeshFromTag(string tag);
