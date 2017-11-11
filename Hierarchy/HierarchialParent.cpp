@@ -28,10 +28,10 @@ void HierarchialParent::UpdateHierarchy()
 
 void HierarchialParent::DrawHierarchy()
 {
-	//for (auto &component : m_pHierarchyComponents)
-	//{
-	//	component->Draw();
-	//}
+	for (int i = 0; i < m_pHierarchyComponents.size(); i++)
+	{
+		m_pHierarchyComponents[i]->Draw();
+	}
 }
 
 void HierarchialParent::CalculateLocalMatrices()

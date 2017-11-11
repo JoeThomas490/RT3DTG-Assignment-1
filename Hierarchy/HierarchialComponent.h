@@ -16,7 +16,7 @@ public:
 	void SetLocalRotation(float fX, float fY, float fZ);
 	void SetLocalPosition(float fX, float fY, float fZ);
 
-	void Draw(CommonMesh* mesh);
+	void Draw();
 
 	XMMATRIX UpdateLocalMatrix();
 
@@ -28,6 +28,10 @@ private:
 	XMFLOAT4 m_v4Rot;
 	XMFLOAT4 m_v4Pos;
 	XMFLOAT4 m_vForwardVector;
+
+	CommonMesh* m_mMesh;
+
+	bool m_bIsDrawable;
 
 
 public:
@@ -47,6 +51,8 @@ public:
 	void SetRotationX(float f) { m_v4Rot.x = f; };
 	void SetRotationY(float f) { m_v4Rot.y = f; };
 	void SetRotationZ(float f) { m_v4Rot.z = f; };
+
+	void SetMesh(CommonMesh* mesh) { m_mMesh = mesh; m_bIsDrawable = true; };
 
 	void* operator new(size_t i)
 	{

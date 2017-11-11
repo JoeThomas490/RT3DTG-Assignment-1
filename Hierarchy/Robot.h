@@ -5,22 +5,22 @@
 #include "HierarchialParent.h"
 #include "HierarchialComponent.h"
 
+#include "MeshManager.h"
+
 __declspec(align(16))class Robot : public HierarchialParent
 {
 public:
 	Robot();
 	Robot(float fX, float fY, float fZ, float fRotY);
-	~Robot();
-
-	static void LoadResources();
-	static void ReleaseResources();
+	~Robot() = default;
 
 	void Update();
 	void Draw();
 
 
 private:
-	void UpdateMatrices();
+
+	void AddComponents();
 
 private:
 	HierarchialComponent m_hRoot;
@@ -45,28 +45,5 @@ private:
 	HierarchialComponent m_hRightHipComponent;
 	HierarchialComponent m_hRightKneeComponent;
 	HierarchialComponent m_hRightAnkleComponent;
-
-
-
-	static CommonMesh* s_pPelvisMesh;
-	static CommonMesh* s_pBodyMesh;
-
-	static CommonMesh* s_pLeftShoulderMesh;
-	static CommonMesh* s_pLeftElbowMesh;
-	static CommonMesh* s_pLeftWristMesh;
-
-	static CommonMesh* s_pRightShoulderMesh;
-	static CommonMesh* s_pRightElbowMesh;
-	static CommonMesh* s_pRightWristMesh;
-
-	static CommonMesh* s_pNeckMesh;
-
-	static CommonMesh* s_pLeftHipMesh;
-	static CommonMesh* s_pLeftKneeMesh;
-	static CommonMesh* s_pLeftAnkleMesh;
-
-	static CommonMesh* s_pRightHipMesh;
-	static CommonMesh* s_pRightKneeMesh;
-	static CommonMesh* s_pRightAnkleMesh;;
 };
 

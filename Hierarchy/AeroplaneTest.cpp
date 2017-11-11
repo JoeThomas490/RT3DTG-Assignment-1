@@ -1,10 +1,5 @@
 #include "AeroplaneTest.h"
 
-CommonMesh* AeroplaneTest::s_pPlaneMesh = nullptr;
-CommonMesh* AeroplaneTest::s_pPropMesh = nullptr;
-CommonMesh* AeroplaneTest::s_pTurretMesh = nullptr;
-CommonMesh* AeroplaneTest::s_pGunMesh = nullptr;
-
 bool AeroplaneTest::s_bResourcesReady = false;
 
 AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
@@ -19,6 +14,11 @@ AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
 	AddComponent(&m_hPropComponent, 0);
 	AddComponent(&m_hTurretComponent, 0);
 	AddComponent(&m_hGunComponent, 2);
+
+	m_hHullComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/plane.x", "plane"));
+	m_hPropComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/prop.x", "prop"));
+	m_hTurretComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/turret.x", "turret"));
+	m_hGunComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/gun.x", "gun"));
 
 	m_hHullComponent.SetLocalPosition(fX, fY, fZ);
 	m_hHullComponent.SetLocalRotation(0.0f, fRotY, 0.0f);
@@ -36,18 +36,10 @@ AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
 
 void AeroplaneTest::LoadResources()
 {
-	s_pPlaneMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Plane/plane.x");
-	s_pPropMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Plane/prop.x");
-	s_pTurretMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Plane/turret.x");
-	s_pGunMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Plane/gun.x");
 }
 
 void AeroplaneTest::ReleaseResources()
 {
-	delete s_pPlaneMesh;
-	delete s_pPropMesh;
-	delete s_pTurretMesh;
-	delete s_pGunMesh;
 }
 
 void AeroplaneTest::Update(bool bPlayerControl)
@@ -87,10 +79,7 @@ void AeroplaneTest::Update(bool bPlayerControl)
 
 void AeroplaneTest::Draw()
 {
-	m_hHullComponent.Draw(s_pPlaneMesh);
-	m_hPropComponent.Draw(s_pPropMesh);
-	m_hTurretComponent.Draw(s_pTurretMesh);
-	m_hGunComponent.Draw(s_pGunMesh);
+	DrawHierarchy();
 }
 
 void AeroplaneTest::UpdateMatrices()

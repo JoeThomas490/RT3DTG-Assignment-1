@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "HierarchialComponent.h"
 #include "HierarchialParent.h"
+#include "MeshManager.h"
 //*********************************************************************************************
 // File:			AeroplaneTest.h
 // Description:			
@@ -29,11 +30,6 @@ private:
 	void ResetMovementToZero();
 
 private:
-	static CommonMesh* s_pPlaneMesh;
-	static CommonMesh* s_pPropMesh;
-	static CommonMesh* s_pTurretMesh;
-	static CommonMesh* s_pGunMesh;
-
 	static bool s_bResourcesReady;
 
 	HierarchialComponent m_hHullComponent;
@@ -63,6 +59,7 @@ public :
 	}
 
 	XMMATRIX GetGunWorldMatrix() { return m_hGunComponent.GetWorldMatrix(); };
+	XMFLOAT4 GetGunRotation() { return m_hTurretComponent.GetLocalRotation(); };	
 
 	XMFLOAT4 GetForwardVector()
 	{

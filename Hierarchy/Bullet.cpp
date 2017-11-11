@@ -123,8 +123,8 @@ void Bullet::UpdateMatrices()
 	XMMATRIX mTrans, mScale, mRotX, mRotY, mRotZ;
 
 	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	mRotY = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.y));
-	mRotZ = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.z));
+	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
+	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4Rot.z));
 
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 	mScale = XMMatrixScaling(0.1f, 0.1f, 0.1f);

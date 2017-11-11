@@ -9,6 +9,8 @@ HierarchialComponent::HierarchialComponent()
 
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+
+	m_bIsDrawable = false;
 }
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
@@ -42,9 +44,10 @@ void HierarchialComponent::SetLocalPosition(float fX, float fY, float fZ)
 	m_v4Pos = XMFLOAT4(fX, fY, fZ, 0.0f);
 }
 
-void HierarchialComponent::Draw(CommonMesh * mesh)
+void HierarchialComponent::Draw()
 {
 	Application::s_pApp->SetWorldMatrix(m_mWorldMatrix);
-	mesh->Draw();
+	if (m_bIsDrawable)
+		m_mMesh->Draw();
 }
 

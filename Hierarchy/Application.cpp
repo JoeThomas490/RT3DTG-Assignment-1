@@ -4,8 +4,9 @@
 #include "AeroplaneTest.h"
 #include "Bullet.h"
 #include "Robot.h"
+#include "MeshManager.h"
 
-Application* Application::s_pApp = NULL;
+Application* Application::s_pApp = nullptr;
 
 const int CAMERA_MAP = 0;
 const int CAMERA_PLANE = 1;
@@ -36,7 +37,7 @@ bool Application::HandleStart()
 	m_pAeroplaneTest->LoadResources();
 
 	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
-	m_pRobot->LoadResources();
+	//m_pRobot->LoadResources();
 
 
 	m_pBullet = new Bullet(XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), XMVectorSet(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 0.0f);
@@ -73,7 +74,7 @@ void Application::HandleStop()
 	delete m_pBullet;
 	m_pBullet = nullptr;
 
-	Robot::ReleaseResources();
+	//Robot::ReleaseResources();
 	delete m_pRobot;
 	m_pRobot = nullptr;
 
@@ -176,7 +177,8 @@ void Application::HandleUpdate()
 			XMStoreFloat4(&mPos, bulletWorldPos);
 
 			//Get guns local rotation
-			XMFLOAT4 mRot = m_pAeroplane->GetGunRotation();
+			XMFLOAT4 mRot = m_pAeroplaneTest->GetGunRotation();
+			mRot.y += 90.0f;
 
 
 			int freeIndex = 0;
@@ -274,6 +276,7 @@ void Application::HandleRender()
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	Application application;
+	MeshManager meshManager;
 
 	Run(&application);
 
