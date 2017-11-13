@@ -34,14 +34,11 @@ bool Application::HandleStart()
 	m_pAeroplane = new Aeroplane(0.0f, 3.5f, 0.0f, 105.0f);
 
 	m_pAeroplaneTest = new AeroplaneTest(0.0f, 6.5f, 0.0f, 105.0f);
-	m_pAeroplaneTest->LoadResources();
+	//m_pAeroplaneTest->LoadResources();
 
 	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
 	//m_pRobot->LoadResources();
 
-
-	m_pBullet = new Bullet(XMFLOAT4(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), XMVectorSet(0, 0, 0, 0), XMFLOAT4(0, 0, 0, 0), 0.0f);
-	//m_pBullet = new Bullet[MAX_BULLETS];
 	Bullet::LoadResources();
 
 	m_cameraZ = 50.0f;
@@ -70,8 +67,6 @@ void Application::HandleStop()
 	delete m_pAeroplaneTest;
 
 	Bullet::ReleaseResources();
-	delete m_pBullet;
-	m_pBullet = nullptr;
 
 	//Robot::ReleaseResources();
 	delete m_pRobot;
@@ -258,7 +253,6 @@ void Application::HandleRender()
 
 	m_pHeightMap->Draw();
 
-	//m_pAeroplane->Draw();
 	m_pAeroplaneTest->Draw();
 
 	m_pRobot->Draw();
@@ -277,6 +271,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Application application;
 
 	Run(&application);
+
+	//Delete the mesh manager singleton
+	delete &MeshManager::GetInstance();
 
 	return 0;
 }

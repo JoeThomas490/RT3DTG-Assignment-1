@@ -16,7 +16,7 @@ AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
 	AddComponent(&m_hGunComponent, 2);
 
 
-	AddHierarchyComponent(new HierarchialComponent(-1, MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
+	//AddHierarchyComponent(new HierarchialComponent(-1, MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
 
 	m_hHullComponent.SetMesh(MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x","plane"));
 

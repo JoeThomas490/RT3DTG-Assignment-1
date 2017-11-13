@@ -50,8 +50,6 @@ class Application : public CommonApp
 
 	HeightMap* m_pHeightMap;
 
-	Bullet* m_pBullet;
-
 	Robot* m_pRobot;
 
 };

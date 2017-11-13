@@ -30,7 +30,7 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 	//If it can't be found in the map return a nullptr
 	if (m_mHierarchyComponents.find(tag) == m_mHierarchyComponents.end())
 	{
-		return nullptr;
+		return nullptr;		
 	}
 	//Otherwise return the pointer
 	else

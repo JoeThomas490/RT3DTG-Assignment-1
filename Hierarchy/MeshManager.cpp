@@ -1,8 +1,5 @@
 #include "MeshManager.h"
 
-
-
-
 MeshManager::MeshManager()
 {
 }
