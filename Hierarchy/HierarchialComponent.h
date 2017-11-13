@@ -4,11 +4,21 @@
 #include "Application.h"
 
 
+//*********************************************************************************************
+// File:			HierarchialComponent.h
+// Description:		Class to hold data for each component in an animation hiararchy
+// Notes:
+//*********************************************************************************************
+
 __declspec(align(16)) class HierarchialComponent
 {
 public:
+
 	HierarchialComponent();
-	virtual ~HierarchialComponent() = default;
+	HierarchialComponent(int parentIndex);
+	HierarchialComponent(int parentIndex, CommonMesh* mesh);
+
+	~HierarchialComponent() = default;
 
 	void SetWorldMatrix(XMMATRIX* mWorldMatrix);
 
@@ -33,6 +43,7 @@ private:
 
 	bool m_bIsDrawable;
 
+	int m_iParentIndex;
 
 public:
 
@@ -41,6 +52,8 @@ public:
 
 	XMFLOAT4 GetLocalPosition() { return m_v4Pos; };
 	XMFLOAT4 GetLocalRotation() { return m_v4Rot; };
+
+	int GetParentIndex() { return m_iParentIndex; };
 
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
 

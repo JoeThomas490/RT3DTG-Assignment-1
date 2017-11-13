@@ -1,12 +1,10 @@
 #include "MeshManager.h"
 
 
-MeshManager* MeshManager::s_pMeshManager = nullptr;
 
 
 MeshManager::MeshManager()
 {
-	s_pMeshManager = this;
 }
 
 MeshManager::~MeshManager()
@@ -36,4 +34,10 @@ CommonMesh * MeshManager::LoadResources(char* fileName, string tag)
 CommonMesh* MeshManager::GetMeshFromTag(string tag)
 {
 	return m_mMeshes.at(tag);
+}
+
+void MeshManager::DeleteResource(string tag)
+{
+	delete m_mMeshes.at(tag);
+	m_mMeshes.erase(tag);
 }

@@ -67,7 +67,6 @@ void Application::HandleStop()
 	Aeroplane::ReleaseResources();
 	delete m_pAeroplane;
 
-	AeroplaneTest::ReleaseResources();
 	delete m_pAeroplaneTest;
 
 	Bullet::ReleaseResources();
@@ -276,7 +275,6 @@ void Application::HandleRender()
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	Application application;
-	MeshManager meshManager;
 
 	Run(&application);
 

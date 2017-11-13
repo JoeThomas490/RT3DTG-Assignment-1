@@ -6,8 +6,9 @@
 #include "MeshManager.h"
 //*********************************************************************************************
 // File:			AeroplaneTest.h
-// Description:			
-// Notes:
+// Description:		New Aeroplane class extending from HierchialParent and using 
+//					HierarchialComponents
+// Notes:			Need to move into old Aeroplane class
 //*********************************************************************************************
 
 __declspec(align(16)) class AeroplaneTest : public HierarchialParent
@@ -16,8 +17,8 @@ public:
 	AeroplaneTest(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
 	~AeroplaneTest() = default;
 
-	static void LoadResources();
-	static void ReleaseResources();
+	void LoadResources();
+	void ReleaseResources();
 
 	void Update(bool bPlayerControl);
 	void Draw();
@@ -49,7 +50,7 @@ private:
 
 	bool m_bGunCam;
 
-public :
+public:
 	XMFLOAT4 GetFocusPosition(void) { return m_hHullComponent.GetLocalPosition(); }
 	XMFLOAT4 GetCameraPosition(void)
 	{

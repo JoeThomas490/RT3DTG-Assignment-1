@@ -20,6 +20,25 @@ void HierarchialParent::AddComponent(HierarchialComponent * mComponents, int par
 	m_componentParents.push_back(parentIndex);
 }
 
+void HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, char * tag)
+{
+	m_mHierarchyComponents.emplace(tag, mComponent);
+}
+
+HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * tag)
+{
+	//If it can't be found in the map return a nullptr
+	if (m_mHierarchyComponents.find(tag) == m_mHierarchyComponents.end())
+	{
+		return nullptr;
+	}
+	//Otherwise return the pointer
+	else
+	{
+		return m_mHierarchyComponents.at(tag);
+	}
+}
+
 void HierarchialParent::UpdateHierarchy()
 {
 	CalculateLocalMatrices();
@@ -28,17 +47,17 @@ void HierarchialParent::UpdateHierarchy()
 
 void HierarchialParent::DrawHierarchy()
 {
-	for (int i = 0; i < m_pHierarchyComponents.size(); i++)
+	for (const auto& component : m_pHierarchyComponents)
 	{
-		m_pHierarchyComponents[i]->Draw();
+		component->Draw();
 	}
 }
 
 void HierarchialParent::CalculateLocalMatrices()
 {
-	for (int i = 0; i < m_pHierarchyComponents.size(); i++)
+	for (const auto& component : m_pHierarchyComponents)
 	{
-		m_pHierarchyComponents.at(i)->UpdateLocalMatrix();
+		component->UpdateLocalMatrix();
 	}
 }
 

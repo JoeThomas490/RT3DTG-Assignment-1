@@ -15,10 +15,14 @@ AeroplaneTest::AeroplaneTest(float fX, float fY, float fZ, float fRotY)
 	AddComponent(&m_hTurretComponent, 0);
 	AddComponent(&m_hGunComponent, 2);
 
-	m_hHullComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/plane.x", "plane"));
-	m_hPropComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/prop.x", "prop"));
-	m_hTurretComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/turret.x", "turret"));
-	m_hGunComponent.SetMesh(MeshManager::s_pMeshManager->LoadResources("Resources/Plane/gun.x", "gun"));
+
+	AddHierarchyComponent(new HierarchialComponent(-1, MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
+
+	m_hHullComponent.SetMesh(MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x","plane"));
+
+	m_hPropComponent.SetMesh(MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop"));
+	m_hTurretComponent.SetMesh(MeshManager::GetInstance().LoadResources("Resources/Plane/turret.x", "turret"));
+	m_hGunComponent.SetMesh(MeshManager::GetInstance().LoadResources("Resources/Plane/gun.x", "gun"));
 
 	m_hHullComponent.SetLocalPosition(fX, fY, fZ);
 	m_hHullComponent.SetLocalRotation(0.0f, fRotY, 0.0f);

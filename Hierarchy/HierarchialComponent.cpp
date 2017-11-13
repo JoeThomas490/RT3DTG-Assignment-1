@@ -11,6 +11,36 @@ HierarchialComponent::HierarchialComponent()
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
 
 	m_bIsDrawable = false;
+
+	m_iParentIndex = -1;
+}
+
+HierarchialComponent::HierarchialComponent(int parentIndex)
+{
+	m_mLocalMatrix = XMMatrixIdentity();
+	m_mWorldMatrix = XMMatrixIdentity();
+
+	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+
+	m_bIsDrawable = false;
+
+	m_iParentIndex = parentIndex;
+}
+
+HierarchialComponent::HierarchialComponent(int parentIndex, CommonMesh * mesh)
+{
+	m_mLocalMatrix = XMMatrixIdentity();
+	m_mWorldMatrix = XMMatrixIdentity();
+
+	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+
+	m_bIsDrawable = false;
+
+	m_iParentIndex = parentIndex;
+
+	m_mMesh = mesh;
 }
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
