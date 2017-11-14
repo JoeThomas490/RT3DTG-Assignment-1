@@ -33,11 +33,6 @@ private:
 private:
 	static bool s_bResourcesReady;
 
-	HierarchialComponent m_hHullComponent;
-	HierarchialComponent m_hPropComponent;
-	HierarchialComponent m_hTurretComponent;
-	HierarchialComponent m_hGunComponent;
-
 	XMVECTOR m_vForwardVector;
 	XMVECTOR m_vCamWorldPos;
 
@@ -51,7 +46,7 @@ private:
 	bool m_bGunCam;
 
 public:
-	XMFLOAT4 GetFocusPosition(void) { return m_hHullComponent.GetLocalPosition(); }
+	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
 	XMFLOAT4 GetCameraPosition(void)
 	{
 		XMFLOAT4 v4Pos;
@@ -59,8 +54,8 @@ public:
 		return v4Pos;
 	}
 
-	XMMATRIX GetGunWorldMatrix() { return m_hGunComponent.GetWorldMatrix(); };
-	XMFLOAT4 GetGunRotation() { return m_hTurretComponent.GetLocalRotation(); };	
+	XMMATRIX GetGunWorldMatrix() { return GetHiararchyComponentFromTag("gun")->GetWorldMatrix(); };
+	XMFLOAT4 GetGunRotation() { return GetHiararchyComponentFromTag("turret")->GetLocalRotation(); };	
 
 	XMFLOAT4 GetForwardVector()
 	{

@@ -12,10 +12,10 @@ HierarchialComponent::HierarchialComponent()
 
 	m_bIsDrawable = false;
 
-	m_iParentIndex = -1;
+	m_cParentNode = "";
 }
 
-HierarchialComponent::HierarchialComponent(int parentIndex)
+HierarchialComponent::HierarchialComponent(char * parentNode)
 {
 	m_mLocalMatrix = XMMatrixIdentity();
 	m_mWorldMatrix = XMMatrixIdentity();
@@ -25,10 +25,10 @@ HierarchialComponent::HierarchialComponent(int parentIndex)
 
 	m_bIsDrawable = false;
 
-	m_iParentIndex = parentIndex;
+	m_cParentNode = parentNode;
 }
 
-HierarchialComponent::HierarchialComponent(int parentIndex, CommonMesh * mesh)
+HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 {
 	m_mLocalMatrix = XMMatrixIdentity();
 	m_mWorldMatrix = XMMatrixIdentity();
@@ -36,11 +36,11 @@ HierarchialComponent::HierarchialComponent(int parentIndex, CommonMesh * mesh)
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
 
-	m_bIsDrawable = false;
-
-	m_iParentIndex = parentIndex;
+	m_cParentNode = parentNode;
 
 	m_mMesh = mesh;
+
+	m_bIsDrawable = true;
 }
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()

@@ -14,15 +14,15 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 	m_v4LocalRot = startRot;
 }
 
-void HierarchialParent::AddComponent(HierarchialComponent * mComponents, int parentIndex)
-{
-	m_pHierarchyComponents.push_back(mComponents);
-	m_componentParents.push_back(parentIndex);
-}
 
 void HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, char * tag)
 {
+	//Add the component into the map with it's associated tag
 	m_mHierarchyComponents.emplace(tag, mComponent);
+
+	//Add the tag to a vector to hold the order of insertion
+	//TODO Think of another way to handle this as having a map and a vector is a bit overkill
+	m_vHierarchyOrder.push_back(tag);
 }
 
 HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * tag)
@@ -35,7 +35,7 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 	//Otherwise return the pointer
 	else
 	{
-		return m_mHierarchyComponents.at(tag);
+		return m_mHierarchyComponents.find(tag)->second;
 	}
 }
 
@@ -47,40 +47,40 @@ void HierarchialParent::UpdateHierarchy()
 
 void HierarchialParent::DrawHierarchy()
 {
-	for (const auto& component : m_pHierarchyComponents)
+	//for (const auto& component : m_mHierarchyComponents)
+	//{
+	//	component->Draw();
+	//}
+
+	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
-		component->Draw();
+		it->second->Draw();
 	}
 }
 
 void HierarchialParent::CalculateLocalMatrices()
 {
-	for (const auto& component : m_pHierarchyComponents)
+	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
-		component->UpdateLocalMatrix();
+		it->second->UpdateLocalMatrix();
 	}
 }
 
 void HierarchialParent::CalculateWorldMatrices()
 {
-	int currentComponentInd = 0;
-
-	//Loop through each component
-	for (auto &component : m_pHierarchyComponents)
+	//TODO Change this so it iterates through the map in order of hierarchy
+	for(auto& tag : m_vHierarchyOrder)
 	{
-		//If the component has a parent
-		if (m_componentParents[currentComponentInd] != -1)
+		HierarchialComponent* hc = m_mHierarchyComponents.find(tag)->second;
+		if (hc->GetParentNode() != "")
 		{
-			int parentInd = m_componentParents[currentComponentInd];
-			XMMATRIX mWorldMatrix = component->GetLocalMatrix() * (m_pHierarchyComponents.at(parentInd)->GetWorldMatrix());
-			component->SetWorldMatrix(&mWorldMatrix);
+			char* parentNode = hc->GetParentNode();
+			XMMATRIX mWorldMatrix = hc->GetLocalMatrix() * (m_mHierarchyComponents.at(parentNode)->GetWorldMatrix());
+			hc->SetWorldMatrix(&mWorldMatrix);
 		}
-		//If the component is the top parent
 		else
 		{
-			component->SetWorldMatrix(&component->GetLocalMatrix());
+			hc->SetWorldMatrix(&hc->GetLocalMatrix());
 		}
-
-		currentComponentInd++;
 	}
 }

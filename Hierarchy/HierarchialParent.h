@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <map>	
+
 
 #include "Application.h"
 #include "HierarchialComponent.h"
@@ -14,8 +15,6 @@ public:
 	
 	~HierarchialParent() = default;
 
-	void AddComponent(HierarchialComponent* mComponents, int parentIndex);
-
 	void AddHierarchyComponent(HierarchialComponent* mComponent, char* tag);
 
 	HierarchialComponent* GetHiararchyComponentFromTag(char* tag);
@@ -26,8 +25,7 @@ public:
 
 
 private:
-	std::vector<HierarchialComponent*> m_pHierarchyComponents;
-	std::vector<int> m_componentParents;
+	std::vector<char*> m_vHierarchyOrder;
 
 	std::map<char*, HierarchialComponent*> m_mHierarchyComponents;
 
