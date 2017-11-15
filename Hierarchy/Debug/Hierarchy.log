@@ -1,3 +1,21 @@
-﻿  HierarchialComponent.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialcomponent.cpp(70): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  Aeroplane.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(39): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(72): warning C4238: nonstandard extension used: class rvalue used as lvalue
+  Application.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(39): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(27): warning C4324: 'Robot': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(36): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
+  Bullet.cpp
+  HeightMap.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\heightmap.cpp(133): warning C4389: '!=': signed/unsigned mismatch
+  HierarchialComponent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialcomponent.cpp(87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  HierarchialParent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(69): warning C4130: '!=': logical operation on address of string constant
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(77): warning C4238: nonstandard extension used: class rvalue used as lvalue
+  MeshManager.cpp
+  Robot.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(27): warning C4324: 'Robot': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(15): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

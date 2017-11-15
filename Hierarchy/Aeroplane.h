@@ -1,103 +1,73 @@
-#ifndef AEROPLANE_H
-#define AEROPLANE_H
+#pragma once
+
+#include "Application.h"
+#include "HierarchialComponent.h"
+#include "HierarchialParent.h"
+#include "MeshManager.h"
 
 //*********************************************************************************************
 // File:			Aeroplane.h
-// Description:		A very simple class to represent an aeroplane as one object with all the
-//					hierarchical components stored internally within the class.
-// Module:			Real-Time 3D Techniques for Games
-// Created:			Jake - 2010-2011
-// Notes:
+// Description:		New Aeroplane class extending from HierchialParent and using 
+//					HierarchialComponents. Contains logic controlling player input for the plane
+//					and handling the camera view when toggled on.
+// Notes:			
+// Todo:			Add comments for readability
 //*********************************************************************************************
 
-#include "Application.h"
-
-__declspec(align(16)) class Aeroplane
+__declspec(align(16)) class Aeroplane : public HierarchialParent
 {
 public:
 	Aeroplane(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
-	~Aeroplane(void);
+	~Aeroplane() = default;
 
-	static void LoadResources(void); // Only load the resources once for all instances
-	static void ReleaseResources(void); // Only free the resources once for all instances
-	void Update(bool bPlayerControl); // Player only has control of plane when flag is set
-	void Draw(void);
+	void LoadResources();
+	void ReleaseResources();
 
-	void SetWorldPosition(float fX, float fY, float fZ);
-
-	XMMATRIX GetGunWorldMatrix();
-	XMMATRIX GetGunLocalMatrix();
-	XMMATRIX GetGunWorldRotationMatrix();
-
-	bool m_canMove = true;
+	void Update(bool bPlayerControl);
+	void Draw();
 
 private:
-	void UpdateMatrices(void);
+	void UpdateMatrices();
+	void UpdateCameraMatrix();
+
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
-	XMMATRIX CreateLocalMatrix(const XMFLOAT4& mRotation, const XMFLOAT4& mOffset);
 
-	static CommonMesh* s_pPlaneMesh; // Only one plane mesh for all instances
-	static CommonMesh* s_pPropMesh; // Only one propellor mesh for all instances
-	static CommonMesh* s_pTurretMesh; // Only one turret mesh for all instances
-	static CommonMesh* s_pGunMesh; // Only one gun mesh for all instances
-
+private:
 	static bool s_bResourcesReady;
 
-	XMFLOAT4 m_v4Rot; // Euler rotation angles
-	XMFLOAT4 m_v4Pos; // World position
+	XMVECTOR m_vForwardVector;
+	XMVECTOR m_vCamWorldPos;
 
-	XMVECTOR m_vForwardVector; // Forward Vector for Plane
-	float m_fSpeed; // Forward speed
-
-	XMMATRIX m_mWorldTrans; // World translation matrix
-	XMMATRIX m_mWorldMatrix; // World transformation matrix
-
-	XMFLOAT4 m_v4PropRot; // Local rotation angles
-	XMFLOAT4 m_v4PropOff; // Local offset
-	XMMATRIX m_mPropWorldMatrix; // Propeller's world transformation matrix
-
-	XMFLOAT4 m_v4TurretRot; // Local rotation angles
-	XMFLOAT4 m_v4TurretOff; // Local offset
-	XMMATRIX m_mTurretWorldMatrix; // Turret's world transformation matrix
-
-	XMFLOAT4 m_v4GunRot; // Local rotation angles
-	XMFLOAT4 m_v4GunOff; // Local offset
-	XMMATRIX m_mGunWorldMatrix; // Gun's world transformation matrix
-	XMMATRIX m_mGunLocalMatrix; // Gun's local transformation matrix
-	XMMATRIX m_mGunLocalRotation; //Gun's local rotation matrix
+	XMMATRIX m_mCamWorldMatrix;
 
 	XMFLOAT4 m_v4CamRot; // Local rotation angles
 	XMFLOAT4 m_v4CamOff; // Local offset
 
-	XMVECTOR m_vCamWorldPos; // World position
-	XMMATRIX m_mCamWorldMatrix; // Camera's world transformation matrix
+	float m_fSpeed;
 
 	bool m_bGunCam;
 
 public:
-	float GetXPosition(void) { return m_v4Pos.x; }
-	float GetYPosition(void) { return m_v4Pos.y; }
-	float GetZPosition(void) { return m_v4Pos.z; }
-	XMFLOAT4 GetFocusPosition(void) { return GetPosition(); }
+	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
 	XMFLOAT4 GetCameraPosition(void)
 	{
 		XMFLOAT4 v4Pos;
 		XMStoreFloat4(&v4Pos, m_vCamWorldPos);
 		return v4Pos;
 	}
-	XMFLOAT4 GetPosition(void) { return m_v4Pos; }
 
-	XMFLOAT4 GetGunRotation() { return m_v4TurretRot; }
+	XMMATRIX GetGunWorldMatrix() { return GetHiararchyComponentFromTag("gun")->GetWorldMatrix(); };
+	XMFLOAT4 GetGunRotation() { return GetHiararchyComponentFromTag("turret")->GetLocalRotation(); };
 
-	XMFLOAT4 GetForwardVector() 
+	XMFLOAT4 GetForwardVector()
 	{
 		XMFLOAT4 v4Forward;
 		XMStoreFloat4(&v4Forward, XMVector3Normalize(m_vForwardVector));
 		return v4Forward;
 	}
-	void SetGunCamera(bool value) { m_bGunCam = value; }
 
+	void SetGunCamera(bool value) { m_bGunCam = value; }
 
 	void* operator new(size_t i)
 	{
@@ -110,4 +80,3 @@ public:
 	}
 };
 
-#endif

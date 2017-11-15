@@ -45,6 +45,9 @@ private:
 
 	char* m_cParentNode;
 
+private:
+	XMVECTOR CalculateQuaternion();
+
 public:
 
 	XMMATRIX GetLocalMatrix() { return m_mLocalMatrix; };

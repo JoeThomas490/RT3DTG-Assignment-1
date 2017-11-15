@@ -2,16 +2,16 @@
 
 #include "Application.h"
 
-/*
-BULLET.H
-Class holding all the data relavent to the bullet. Handles the spawning, visibility
-, lifetime and movement of each bullet
+//*********************************************************************************************
+// File:			Bullet.h
+// Description:		Class holding logic for a singular bullet including visibility, lifetime, 
+//					spawning and movement. Used inside Application.cpp inside an array of 
+//					pooled bullet that are reset whenever the space bar is pressed.
+// Notes:			
+// Todo:			- Convert to using the mesh manager and hiearchialComponent to clean up
+//					- Add comments
+//*********************************************************************************************
 
-
-TODO
-- Change to a dynamically allocated array (See Application.h and Application.cpp)
-- Modify the rotation of the bullet based on the rotation of the gun barrel (Modified in Application.cpp)
-*/
 
 __declspec(align(16)) class Bullet
 {

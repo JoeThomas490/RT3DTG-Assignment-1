@@ -86,7 +86,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aeroplane.cpp" />
-    <ClCompile Include="AeroplaneTest.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="HeightMap.cpp" />
@@ -102,7 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aeroplane.h" />
-    <ClInclude Include="AeroplaneTest.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="HeightMap.h" />

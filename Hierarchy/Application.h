@@ -16,7 +16,6 @@
 
 
 class Aeroplane;
-class AeroplaneTest;
 class HeightMap;
 class Bullet;
 class Robot;
@@ -43,15 +42,10 @@ class Application : public CommonApp
 
 	int m_cameraState;
 
-	Aeroplane* m_pAeroplane;
-
-	AeroplaneTest* m_pAeroplaneTest;
-	
-
 	HeightMap* m_pHeightMap;
 
+	Aeroplane* m_pAeroplane;
 	Robot* m_pRobot;
-
 };
 
 #endif

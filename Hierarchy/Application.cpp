@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "Heightmap.h"
 #include "Aeroplane.h"
-#include "AeroplaneTest.h"
 #include "Bullet.h"
 #include "Robot.h"
 #include "MeshManager.h"
@@ -31,10 +30,7 @@ bool Application::HandleStart()
 	m_bWireframe = false;
 
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
-	m_pAeroplane = new Aeroplane(0.0f, 3.5f, 0.0f, 105.0f);
-
-	m_pAeroplaneTest = new AeroplaneTest(0.0f, 6.5f, 0.0f, 105.0f);
-	//m_pAeroplaneTest->LoadResources();
+	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 
 	Robot::LoadResources();
 	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
@@ -61,10 +57,7 @@ void Application::HandleStop()
 {
 	delete m_pHeightMap;
 
-	Aeroplane::ReleaseResources();
 	delete m_pAeroplane;
-
-	delete m_pAeroplaneTest;
 
 	Bullet::ReleaseResources();
 
@@ -91,23 +84,6 @@ void Application::HandleUpdate()
 
 		if (this->IsKeyPressed('A'))
 			m_cameraZ += 2.0f;
-	}
-
-
-	static bool dbS = false;
-
-	if (this->IsKeyPressed('S'))
-	{
-		if (!dbS)
-		{
-			m_pAeroplane->m_canMove = !m_pAeroplane->m_canMove;
-
-			dbS = true;
-		}
-	}
-	else
-	{
-		dbS = false;
 	}
 
 	static bool dbC = false;
@@ -143,10 +119,7 @@ void Application::HandleUpdate()
 	}
 
 
-	//m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
-
-	m_pAeroplaneTest->Update(m_cameraState != CAMERA_MAP);
-
+	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	static bool dbSpace = false;
 
@@ -157,8 +130,8 @@ void Application::HandleUpdate()
 		{
 			dbSpace = true;
 
-			XMMATRIX mGunWorldMatrix = m_pAeroplaneTest->GetGunWorldMatrix();
-			XMFLOAT4 mPlaneForwardVector = m_pAeroplaneTest->GetForwardVector();
+			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
+			XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
 
 			int freeIndex = 0;
 			while (freeIndex < MAX_BULLETS)
@@ -201,17 +174,17 @@ void Application::HandleRender()
 		vLookat = XMFLOAT3(0.0f, 4.0f, 0.0f);
 		break;
 	case CAMERA_PLANE:
-		m_pAeroplaneTest->SetGunCamera(false);
-		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
-		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
+		m_pAeroplane->SetGunCamera(false);
+		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
 		break;
 	case CAMERA_GUN:
-		m_pAeroplaneTest->SetGunCamera(true);
-		vCamera = XMFLOAT3(m_pAeroplaneTest->GetCameraPosition().x, m_pAeroplaneTest->GetCameraPosition().y, m_pAeroplaneTest->GetCameraPosition().z);
-		vLookat = XMFLOAT3(m_pAeroplaneTest->GetFocusPosition().x, m_pAeroplaneTest->GetFocusPosition().y, m_pAeroplaneTest->GetFocusPosition().z);
+		m_pAeroplane->SetGunCamera(true);
+		vCamera = XMFLOAT3(m_pAeroplane->GetCameraPosition().x, m_pAeroplane->GetCameraPosition().y, m_pAeroplane->GetCameraPosition().z);
+		vLookat = XMFLOAT3(m_pAeroplane->GetFocusPosition().x, m_pAeroplane->GetFocusPosition().y, m_pAeroplane->GetFocusPosition().z);
 		break;
 	case CAMERA_ROBOT:
-		m_pAeroplaneTest->SetGunCamera(false);
+		m_pAeroplane->SetGunCamera(false);
 		vCamera = XMFLOAT3(sin(12.1f) * m_cameraZ, m_cameraZ / 4, cos(12.1f) * m_cameraZ);
 		vLookat = XMFLOAT3(0.0f, 5.0f, -20.0f);
 		break;
@@ -238,7 +211,7 @@ void Application::HandleRender()
 
 	m_pHeightMap->Draw();
 
-	m_pAeroplaneTest->Draw();
+	m_pAeroplane->Draw();
 
 	m_pRobot->Draw();
 

@@ -45,39 +45,46 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
-	double radX, radY, radZ;
-	radX = XMConvertToRadians(m_v4Rot.x);
-	radY = XMConvertToRadians(m_v4Rot.y);
-	radZ = XMConvertToRadians(m_v4Rot.z);
-
-	double c1 = cos(radY / 2.0);
-	double c2 = cos(radZ / 2.0);
-	double c3 = cos(radX / 2.0);
-
-	double s1 = sin(radY / 2.0);
-	double s2 = sin(radZ / 2.0);
-	double s3 = sin(radX / 2.0);
-
-	double w, x, y, z;
-
-	w = (c1 * c2 * c3) - (s1 * s2 * s3);
-	x = (s1 * s2 * c3) + (c1 * c2 * s3);
-	y = (s1 * c2 * c3) + (c1 * s2 * s3);
-	z = (c1 * s2 * c3) - (s1 * c2 * s3);
-
-	XMVECTOR mQuart = XMVectorSet(x, y, z, w); 
+	XMVECTOR mQuart = CalculateQuaternion();
 	mQuart = XMQuaternionNormalize(mQuart);
 
 	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);
 
 	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
-	
+
 	//TODO add scaling to each component 
 	//XMMATRIX mScale = XMMatrixScalingFromVector(XMLoadFloat4())
 
 	m_mLocalMatrix = mRot * mTrans;
 
 	return m_mLocalMatrix;
+}
+
+XMVECTOR HierarchialComponent::CalculateQuaternion()
+{
+	//Convert stored angle into radians
+	double radX = XMConvertToRadians(m_v4Rot.x);
+	double radY = XMConvertToRadians(m_v4Rot.y);
+	double radZ = XMConvertToRadians(m_v4Rot.z);
+	
+	//Calculate cos components
+	double c1 = cos(radY / 2.0);
+	double c2 = cos(radZ / 2.0);
+	double c3 = cos(radX / 2.0);
+
+	//Calculate sin components
+	double s1 = sin(radY / 2.0);
+	double s2 = sin(radZ / 2.0);
+	double s3 = sin(radX / 2.0);
+
+	//Calculate quaternion value using components
+	double w = (c1 * c2 * c3) - (s1 * s2 * s3);
+	double x = (s1 * s2 * c3) + (c1 * c2 * s3);
+	double y = (s1 * c2 * c3) + (c1 * s2 * s3);
+	double z = (c1 * s2 * c3) - (s1 * c2 * s3);
+
+	//Return as an XMVECTOR
+	return XMVectorSet(x, y, z, w);
 }
 
 void HierarchialComponent::SetWorldMatrix(XMMATRIX* mWorldMatrix)
