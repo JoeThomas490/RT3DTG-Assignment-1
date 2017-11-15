@@ -158,23 +158,7 @@ void Application::HandleUpdate()
 			dbSpace = true;
 
 			XMMATRIX mGunWorldMatrix = m_pAeroplaneTest->GetGunWorldMatrix();
-
-			XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
-
 			XMFLOAT4 mPlaneForwardVector = m_pAeroplaneTest->GetForwardVector();
-
-			//Set the initial offset
-			XMVECTOR bulletLocalPos = XMVectorSet(0.0f, 0.2f, 1.5f, 1.0f);
-			XMVECTOR bulletWorldPos = XMVector3Transform(bulletLocalPos, mGunWorldMatrix);
-
-			//Store positions and rotations from matrix
-			XMFLOAT4 mPos;
-			XMStoreFloat4(&mPos, bulletWorldPos);
-
-			//Get guns local rotation
-			XMFLOAT4 mRot = m_pAeroplaneTest->GetGunRotation();
-			mRot.y += 90.0f;
-
 
 			int freeIndex = 0;
 			while (freeIndex < MAX_BULLETS)
@@ -187,7 +171,7 @@ void Application::HandleUpdate()
 			}
 			//Pass position and rotation
 
-			m_arrBullets[freeIndex].ResetBullet(mPos, mRot, mGunForwardVector, mPlaneForwardVector, 1.0f);
+			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, 1.0f);
 		}
 	}
 	else

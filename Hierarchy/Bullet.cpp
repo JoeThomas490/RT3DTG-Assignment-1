@@ -14,44 +14,32 @@ Bullet::Bullet()
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
 	m_v4ForwardVector = XMFLOAT4(0, 0, 0, 0);
 
+	m_vBulletOffset = XMVectorSet(0.0f, 0.2f, 1.5f, 1.0f);
+
+
 	m_fMovementSpeed = 0;
 
 	m_bIsReadyToUpdate = false;
 }
 
-Bullet::Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed)
+void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector, float fSpeed)
 {
+
+	//Set the initial offset
+	XMVECTOR bulletWorldPos = XMVector3Transform(m_vBulletOffset, mGunWorldMatrix);
+
+	XMVECTOR mGunForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), mGunWorldMatrix);
+
+	//Store positions and rotations from matrix
+	XMStoreFloat4(&m_v4Pos, bulletWorldPos);
 
 	//Initialise world matrix
 	m_mWorldMatrix = XMMatrixIdentity();
-	m_v4Pos = mPos;
-	m_v4Rot = mRot;
 
-	//Set bullet's forward vector
-	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
-	mGunForwardVector += XMLoadFloat4(&mPlaneForwardVector);
-	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
+	XMVECTOR rot, scale, trans;
+	XMMatrixDecompose(&scale, &rot, &trans, mGunWorldMatrix);
 
-	XMStoreFloat4(&m_v4ForwardVector, mGunForwardVector);
-
-	//Set movement speed
-	m_fMovementSpeed = fSpeed;
-
-	//Set the bullet to start off invisible
-	m_bIsVisible = true;
-
-	m_bIsReadyToUpdate = false;
-
-}
-
-void Bullet::ResetBullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed)
-{
-	//Initialise world matrix
-	m_mWorldMatrix = XMMatrixIdentity();
-	m_v4Pos = mPos;
-	m_v4Rot = mRot;
-
-	//m_mRotation = mRot;
+	XMStoreFloat4(&m_v4Rot, rot);
 
 	//Set bullet's forward vector
 	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
@@ -120,16 +108,11 @@ void Bullet::Draw()
 
 void Bullet::UpdateMatrices()
 {
-	XMMATRIX mTrans, mScale, mRotX, mRotY, mRotZ;
+	XMMATRIX mTrans, mScale, mRot;
 
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4Rot.z));
-
+	mRot = XMMatrixRotationQuaternion(XMLoadFloat4(&m_v4Rot));
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 	mScale = XMMatrixScaling(0.1f, 0.1f, 0.1f);
 
-
-	m_mWorldMatrix = mRotX * mRotY * mRotZ * mScale * mTrans;
-
+	m_mWorldMatrix = mRot * mScale * mTrans;
 }

@@ -17,10 +17,9 @@ __declspec(align(16)) class Bullet
 {
 public:
 	Bullet();
-	Bullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed);
 	~Bullet() = default;
 
-	void ResetBullet(XMFLOAT4 mPos, XMFLOAT4 mRot, XMVECTOR mGunForwardVector, XMFLOAT4 mPlaneForwardVector, float fSpeed);
+	void ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector, float fSpeed);
 
 	static void LoadResources();
 	static void ReleaseResources();
@@ -60,6 +59,8 @@ private:
 	float m_fLifeTime;
 
 	XMMATRIX m_mWorldMatrix;
+
+	XMVECTOR m_vBulletOffset;
 
 
 public:
