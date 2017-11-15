@@ -45,15 +45,37 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
-	XMMATRIX mRotX, mRotY, mRotZ, mTrans;
+	double radX, radY, radZ;
+	radX = XMConvertToRadians(m_v4Rot.x);
+	radY = XMConvertToRadians(m_v4Rot.y);
+	radZ = XMConvertToRadians(m_v4Rot.z);
 
-	mRotX = XMMatrixRotationX(XMConvertToRadians(m_v4Rot.x));
-	mRotY = XMMatrixRotationY(XMConvertToRadians(m_v4Rot.y));
-	mRotZ = XMMatrixRotationZ(XMConvertToRadians(m_v4Rot.z));
+	double c1 = cos(radY / 2.0);
+	double c2 = cos(radZ / 2.0);
+	double c3 = cos(radX / 2.0);
 
-	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
+	double s1 = sin(radY / 2.0);
+	double s2 = sin(radZ / 2.0);
+	double s3 = sin(radX / 2.0);
 
-	m_mLocalMatrix = mRotZ * mRotX * mRotY * mTrans;
+	double w, x, y, z;
+
+	w = (c1 * c2 * c3) - (s1 * s2 * s3);
+	x = (s1 * s2 * c3) + (c1 * c2 * s3);
+	y = (s1 * c2 * c3) + (c1 * s2 * s3);
+	z = (c1 * s2 * c3) - (s1 * c2 * s3);
+
+	XMVECTOR mQuart = XMVectorSet(x, y, z, w); 
+	mQuart = XMQuaternionNormalize(mQuart);
+
+	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);
+
+	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
+	
+	//TODO add scaling to each component 
+	//XMMATRIX mScale = XMMatrixScalingFromVector(XMLoadFloat4())
+
+	m_mLocalMatrix = mRot * mTrans;
 
 	return m_mLocalMatrix;
 }
