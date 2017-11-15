@@ -36,8 +36,8 @@ bool Application::HandleStart()
 	m_pAeroplaneTest = new AeroplaneTest(0.0f, 6.5f, 0.0f, 105.0f);
 	//m_pAeroplaneTest->LoadResources();
 
-	//m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
-	//m_pRobot->LoadResources();
+	Robot::LoadResources();
+	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
 
 	Bullet::LoadResources();
 
@@ -69,8 +69,8 @@ void Application::HandleStop()
 	Bullet::ReleaseResources();
 
 	//Robot::ReleaseResources();
-	//delete m_pRobot;
-	//m_pRobot = nullptr;
+	delete m_pRobot;
+	m_pRobot = nullptr;
 
 	this->CommonApp::HandleStop();
 }
@@ -80,7 +80,8 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-	//m_pRobot->Update();
+	m_pRobot->Update();
+
 	m_rotationAngle += .01f;
 
 	if (m_cameraState == CAMERA_MAP)
@@ -255,7 +256,7 @@ void Application::HandleRender()
 
 	m_pAeroplaneTest->Draw();
 
-	//m_pRobot->Draw();
+	m_pRobot->Draw();
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{

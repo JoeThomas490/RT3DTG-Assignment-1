@@ -1,19 +1,13 @@
-﻿  AeroplaneTest.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplanetest.h(36): warning C4324: 'AeroplaneTest': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplanetest.cpp(72): warning C4238: nonstandard extension used: class rvalue used as lvalue
-  Application.cpp
+﻿  Application.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(50): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplanetest.h(36): warning C4324: 'AeroplaneTest': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(48): warning C4324: 'Robot': structure was padded due to alignment specifier
-  HierarchialComponent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(27): warning C4324: 'Robot': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(40): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
   HierarchialParent.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(75): warning C4130: '!=': logical operation on address of string constant
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(83): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(69): warning C4130: '!=': logical operation on address of string constant
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(77): warning C4238: nonstandard extension used: class rvalue used as lvalue
   Robot.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(48): warning C4324: 'Robot': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(7): warning C4100: 'fRotY': unreferenced formal parameter
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(7): warning C4100: 'fZ': unreferenced formal parameter
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(7): warning C4100: 'fY': unreferenced formal parameter
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(7): warning C4100: 'fX': unreferenced formal parameter
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.h(27): warning C4324: 'Robot': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\robot.cpp(15): warning C4305: 'argument': truncation from 'double' to 'float'
   Generating Code...
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

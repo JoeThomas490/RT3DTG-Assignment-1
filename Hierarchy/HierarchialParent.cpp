@@ -47,11 +47,6 @@ void HierarchialParent::UpdateHierarchy()
 
 void HierarchialParent::DrawHierarchy()
 {
-	//for (const auto& component : m_mHierarchyComponents)
-	//{
-	//	component->Draw();
-	//}
-
 	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		it->second->Draw();
@@ -68,7 +63,6 @@ void HierarchialParent::CalculateLocalMatrices()
 
 void HierarchialParent::CalculateWorldMatrices()
 {
-	//TODO Change this so it iterates through the map in order of hierarchy
 	for(auto& tag : m_vHierarchyOrder)
 	{
 		HierarchialComponent* hc = m_mHierarchyComponents.find(tag)->second;
