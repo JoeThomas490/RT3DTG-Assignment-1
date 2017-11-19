@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="tinyxml\tinystr.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxml.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchialComponent.cpp">
+      <Filter>Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchialParent.cpp">
+      <Filter>Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Aeroplane.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationLoader.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="tinyxml\tinystr.h">
+      <Filter>TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml\tinyxml.h">
+      <Filter>TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchialComponent.h">
+      <Filter>Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchialParent.h">
+      <Filter>Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Aeroplane.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationLoader.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="TinyXML">
+      <UniqueIdentifier>{6eb66cbd-b8d0-493a-acdd-092def4841b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{a8d5bc2e-72c2-41ee-b563-10107cbfdd74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hierarchy">
+      <UniqueIdentifier>{aedafc3a-fdd8-4bd1-97d3-37456210e744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{71a38bca-4f5d-4b33-91a9-8bd1813c3960}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
