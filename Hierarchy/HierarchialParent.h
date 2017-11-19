@@ -7,6 +7,8 @@
 #include "Application.h"
 #include "HierarchialComponent.h"
 
+#include "Animation.h"
+
 class HierarchialParent
 {
 public:
@@ -23,6 +25,8 @@ public:
 
 	void DrawHierarchy();
 
+	void SetAnimation(Animation mAnim) { m_animation = mAnim; };
+
 
 private:
 	std::vector<char*> m_vHierarchyOrder;
@@ -37,5 +41,6 @@ private:
 
 	XMFLOAT4 m_v4LocalScale;
 
+	Animation m_animation;
 };
 

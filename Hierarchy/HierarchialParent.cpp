@@ -30,7 +30,7 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 	//If it can't be found in the map return a nullptr
 	if (m_mHierarchyComponents.find(tag) == m_mHierarchyComponents.end())
 	{
-		return nullptr;		
+		return nullptr;
 	}
 	//Otherwise return the pointer
 	else
@@ -41,6 +41,9 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 
 void HierarchialParent::UpdateHierarchy()
 {
+
+	m_animation.Update();
+
 	CalculateLocalMatrices();
 	CalculateWorldMatrices();
 }
@@ -63,7 +66,7 @@ void HierarchialParent::CalculateLocalMatrices()
 
 void HierarchialParent::CalculateWorldMatrices()
 {
-	for(auto& tag : m_vHierarchyOrder)
+	for (auto& tag : m_vHierarchyOrder)
 	{
 		HierarchialComponent* hc = m_mHierarchyComponents.find(tag)->second;
 		if (hc->GetParentNode() != "")

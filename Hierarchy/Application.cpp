@@ -23,6 +23,7 @@ Bullet m_arrBullets[50];
 
 bool Application::HandleStart()
 {
+
 	s_pApp = this;
 
 	this->SetWindowTitle("Assignment 1");
@@ -46,6 +47,9 @@ bool Application::HandleStart()
 	this->SetRasterizerState(false, m_bWireframe);
 
 	m_cameraState = CAMERA_MAP;
+
+	LoadXML();
+
 
 	return true;
 }
@@ -119,7 +123,7 @@ void Application::HandleUpdate()
 	}
 
 
-	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
+	//m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	static bool dbSpace = false;
 
@@ -219,6 +223,14 @@ void Application::HandleRender()
 	{
 		m_arrBullets[i].Draw();
 	}
+}
+
+
+void Application::LoadXML()
+{
+	AnimationLoader loader;
+	Animation anim = loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml");
+	m_pRobot->SetAnimation(anim);
 }
 
 //////////////////////////////////////////////////////////////////////

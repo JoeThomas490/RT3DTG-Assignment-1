@@ -13,10 +13,14 @@
 #include "CommonApp.h"
 #include "CommonMesh.h"
 
+#include "AnimationLoader.h"
+
+#include "tinyxml\tinyxml.h"
+
 
 
 class Aeroplane;
-class HeightMap;
+class HeightMap;	
 class Bullet;
 class Robot;
 class MeshManager;
@@ -34,6 +38,8 @@ class Application : public CommonApp
 	void HandleStop();
 	void HandleUpdate();
 	void HandleRender();
+
+	void LoadXML();
 
   private:
 	float m_rotationAngle;
