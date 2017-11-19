@@ -20,6 +20,8 @@ public:
 
 	void AddAnimationElement(float mTime, float mValue);
 
+	float GetTime(int index);
+	float GetValue(int index);
 	void GetTimeValuePair(int index, float& time, float& value);
 
 	enum AnimationType
@@ -41,7 +43,14 @@ public:
 
 	int GetAnimationCount() { return m_iCount; };
 
+	float Interpolate(float mTime);
+	int GetIndex(float mTime);
+	float GetT(float mTime);
+
 private:
+
+	float Lerp(float t, float a, float b);
+
 
 	AnimationType m_animationType;
 
@@ -49,6 +58,8 @@ private:
 	std::vector<float> m_vValues;
 
 	int m_iCount;
+
+	int fromInd, toInd;
 
 };
 

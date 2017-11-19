@@ -35,6 +35,7 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+	m_v4Offset = XMFLOAT4(0, 0, 0, 0);
 
 	m_cParentNode = parentNode;
 
@@ -45,12 +46,14 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
-	XMVECTOR mQuart = CalculateQuaternion();
-	mQuart = XMQuaternionNormalize(mQuart);
+	//XMVECTOR mQuart = CalculateQuaternion();
+	//mQuart = XMQuaternionNormalize(mQuart);
+
+	XMVECTOR mQuart = XMLoadFloat4(&m_v4Rot);
 
 	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);
 
-	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
+	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos) + XMLoadFloat4(&m_v4Offset));
 
 	//TODO add scaling to each component 
 	//XMMATRIX mScale = XMMatrixScalingFromVector(XMLoadFloat4())
@@ -101,6 +104,11 @@ void HierarchialComponent::SetLocalRotation(float fX, float fY, float fZ)
 void HierarchialComponent::SetLocalPosition(float fX, float fY, float fZ)
 {
 	m_v4Pos = XMFLOAT4(fX, fY, fZ, 0.0f);
+}
+
+void HierarchialComponent::SetLocalOffset(float fX, float fY, float fZ)
+{
+	m_v4Offset = XMFLOAT4(fX, fY, fZ, 0.0f);
 }
 
 void HierarchialComponent::Draw()

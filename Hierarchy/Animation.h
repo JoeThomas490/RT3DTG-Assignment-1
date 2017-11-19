@@ -21,8 +21,6 @@ public:
 
 	void Update();
 
-	void Play();
-
 	AnimationComponent* GetAnimationComponentByName(char* componentName);
 
 public:
@@ -30,6 +28,8 @@ public:
 	std::vector<AnimationComponent> m_vAnimationComponents;
 
 private:
+
+	void UpdateComponents();
 
 	float GetMaxTime();
 

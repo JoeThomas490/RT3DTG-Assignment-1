@@ -13,8 +13,6 @@
 #include "CommonApp.h"
 #include "CommonMesh.h"
 
-#include "AnimationLoader.h"
-
 #include "tinyxml\tinyxml.h"
 
 
@@ -24,6 +22,7 @@ class HeightMap;
 class Bullet;
 class Robot;
 class MeshManager;
+class AnimationLoader;
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////

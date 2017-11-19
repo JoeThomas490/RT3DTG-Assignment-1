@@ -8,31 +8,31 @@ Robot::Robot(float fX, float fY, float fZ, float fRotY)
 {
 	AddComponents();
 
-	GetHiararchyComponentFromTag("root")->SetLocalPosition(fX + (1.027778f / 10.0f), fY + (75.644722f / 10.0f), fZ);
+	GetHiararchyComponentFromTag("root")->SetLocalOffset(fX + (1.027778f / 10.0f), fY + (75.644722f / 10.0f), fZ);
 	GetHiararchyComponentFromTag("root")->SetLocalRotation(0.0f, fRotY, 0.0f);
 
 	
-	GetHiararchyComponentFromTag("pelvis")->SetLocalPosition((-0.250011 / 10.0f), (15.250000f / 10.0f), (-0.00005f / 10.0f));
+	GetHiararchyComponentFromTag("pelvis")->SetLocalOffset((-0.250011 / 10.0f), (15.250000f / 10.0f), (-0.00005f / 10.0f));
 
-	GetHiararchyComponentFromTag("body")->SetLocalPosition((0.500099f / 10.0f), (43.749992f / 10.0f), (0.000003f / 10.0f));
+	GetHiararchyComponentFromTag("body")->SetLocalOffset((0.500099f / 10.0f), (43.749992f / 10.0f), (0.000003f / 10.0f));
 
-	GetHiararchyComponentFromTag("left_shoulder")->SetLocalPosition((46.0f / 10.0f), 0.0f, (-0.009992f / 10.0f));
-	GetHiararchyComponentFromTag("left_elbow")->SetLocalPosition((34.250019f / 10.0f), (-0.499817f / 10.0f), (-0.004262f / 10.0f));
-	GetHiararchyComponentFromTag("left_wrist")->SetLocalPosition((55.250008f / 10.0f), (-0.999710f / 10.0f), (0.003968f / 10.0f));
+	GetHiararchyComponentFromTag("left_shoulder")->SetLocalOffset((46.0f / 10.0f), 0.0f, (-0.009992f / 10.0f));
+	GetHiararchyComponentFromTag("left_elbow")->SetLocalOffset((34.250019f / 10.0f), (-0.499817f / 10.0f), (-0.004262f / 10.0f));
+	GetHiararchyComponentFromTag("left_wrist")->SetLocalOffset((55.250008f / 10.0f), (-0.999710f / 10.0f), (0.003968f / 10.0f));
 
-	GetHiararchyComponentFromTag("right_shoulder")->SetLocalPosition((-44.500023f / 10.0f), (0.5f / 10.0f), (-0.000021f / 10.0f));
-	GetHiararchyComponentFromTag("right_elbow")->SetLocalPosition((-33.999996f / 10.0f), (0.250229f / 10.0f), (-0.000194f / 10.0f));
-	GetHiararchyComponentFromTag("right_wrist")->SetLocalPosition((-60.000381f / 10.0f), (-1.750183f / 10.0f), (0.007156f / 10.0f));
+	GetHiararchyComponentFromTag("right_shoulder")->SetLocalOffset((-44.500023f / 10.0f), (0.5f / 10.0f), (-0.000021f / 10.0f));
+	GetHiararchyComponentFromTag("right_elbow")->SetLocalOffset((-33.999996f / 10.0f), (0.250229f / 10.0f), (-0.000194f / 10.0f));
+	GetHiararchyComponentFromTag("right_wrist")->SetLocalOffset((-60.000381f / 10.0f), (-1.750183f / 10.0f), (0.007156f / 10.0f));
 
-	GetHiararchyComponentFromTag("neck")->SetLocalPosition((0.249983f / 10.0f), (36.625015f / 10.0f), (25.999998f / 10.0f));
+	GetHiararchyComponentFromTag("neck")->SetLocalOffset((0.249983f / 10.0f), (36.625015f / 10.0f), (25.999998f / 10.0f));
 
-	GetHiararchyComponentFromTag("left_hip")->SetLocalPosition((19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f);
-	GetHiararchyComponentFromTag("left_knee")->SetLocalPosition((0.000006f / 10.0f), (-22.200001f / 10.0f), 0.0f);
-	GetHiararchyComponentFromTag("left_ankle")->SetLocalPosition((-0.800152f / 10.0f), (-36.399994f / 10.0f), (-0.000098f / 10.0f));
+	GetHiararchyComponentFromTag("left_hip")->SetLocalOffset((19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f);
+	GetHiararchyComponentFromTag("left_knee")->SetLocalOffset((0.000006f / 10.0f), (-22.200001f / 10.0f), 0.0f);
+	GetHiararchyComponentFromTag("left_ankle")->SetLocalOffset((-0.800152f / 10.0f), (-36.399994f / 10.0f), (-0.000098f / 10.0f));
 
-	GetHiararchyComponentFromTag("right_hip")->SetLocalPosition((-19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f);
-	GetHiararchyComponentFromTag("right_knee")->SetLocalPosition((0.000006f / 10.0f), (-22.0f / 10.0f), 0.0f);
-	GetHiararchyComponentFromTag("right_ankle")->SetLocalPosition((0.199911f / 10.0f), (-36.7999995f / 10.0f), (0.000039f / 10.0f));
+	GetHiararchyComponentFromTag("right_hip")->SetLocalOffset((-19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f);
+	GetHiararchyComponentFromTag("right_knee")->SetLocalOffset((0.000006f / 10.0f), (-22.0f / 10.0f), 0.0f);
+	GetHiararchyComponentFromTag("right_ankle")->SetLocalOffset((0.199911f / 10.0f), (-36.7999995f / 10.0f), (0.000039f / 10.0f));
 }
 
 void Robot::LoadResources()

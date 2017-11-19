@@ -44,6 +44,13 @@ void HierarchialParent::UpdateHierarchy()
 
 	m_animation.Update();
 
+	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+	{
+		AnimationComponent* ac = m_animation.GetAnimationComponentByName(it->first);
+		it->second->SetLocalPosition(ac->GetCurrentPosition());
+		it->second->SetLocalRotation(ac->GetCurrentRotation());
+	}
+
 	CalculateLocalMatrices();
 	CalculateWorldMatrices();
 }

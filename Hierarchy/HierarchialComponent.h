@@ -25,6 +25,7 @@ public:
 
 	void SetLocalRotation(float fX, float fY, float fZ);
 	void SetLocalPosition(float fX, float fY, float fZ);
+	void SetLocalOffset(float fX, float fY, float fZ);
 
 	void Draw();
 
@@ -37,6 +38,9 @@ private:
 
 	XMFLOAT4 m_v4Rot;
 	XMFLOAT4 m_v4Pos;
+
+	XMFLOAT4 m_v4Offset;
+
 	XMFLOAT4 m_vForwardVector;
 
 	CommonMesh* m_mMesh;
@@ -59,6 +63,11 @@ public:
 	char* GetParentNode() { return m_cParentNode; };
 
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
+	void SetLocalRotation(XMFLOAT4 mRot) { m_v4Rot = mRot; };
+
+	void SetLocalOffset(XMFLOAT4 mPos) { m_v4Offset = mPos; };
+
+	//void AddToLocalPosition(XMFLOAT4 mPos) {  }
 
 	void SetPositionX(float f) { m_v4Pos.x = f; };
 	void SetPositionY(float f) { m_v4Pos.y = f; };

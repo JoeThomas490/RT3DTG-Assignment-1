@@ -1,7 +1,6 @@
 #include "AnimationLoader.h"
 
 
-
 AnimationLoader::AnimationLoader()
 {
 }
@@ -35,6 +34,8 @@ Animation AnimationLoader::LoadXML(const char * fileName)
 		}
 		ParseAnimationTag(animationNode, &component);
 	}
+
+	animation.m_vAnimationComponents.push_back(component);
 
 	return animation;
 }
@@ -87,9 +88,9 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 
 			for (int i = 0; i < timeValues.size(); i++)
 			{
-				xTranslateData.AddAnimationElement(timeValues[i], positionValues[0 + (i * 3)]);
-				yTranslateData.AddAnimationElement(timeValues[i], positionValues[1 + (i * 3)]);
-				zTranslateData.AddAnimationElement(timeValues[i], positionValues[2 + (i * 3)]);
+				xTranslateData.AddAnimationElement(timeValues[i], positionValues[0 + (i * 3)] / 10.0f);
+				yTranslateData.AddAnimationElement(timeValues[i], positionValues[1 + (i * 3)] / 10.0f);
+				zTranslateData.AddAnimationElement(timeValues[i], positionValues[2 + (i * 3)] / 10.0f);
 			}
 
 			componentData->m_animationData.push_back(xTranslateData);

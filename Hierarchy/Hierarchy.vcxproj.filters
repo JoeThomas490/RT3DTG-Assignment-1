@@ -99,5 +99,8 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{71a38bca-4f5d-4b33-91a9-8bd1813c3960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{5fd84aa5-ddf1-47ae-ba3d-ca0d08e5bd6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

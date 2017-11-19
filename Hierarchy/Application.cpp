@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Robot.h"
 #include "MeshManager.h"
+#include "AnimationLoader.h"
 
 Application* Application::s_pApp = nullptr;
 

@@ -10,11 +10,21 @@ Animation::Animation()
 
 void Animation::Update()
 {
-	m_animTimer += 0.005f;
+	m_animTimer += 0.0133f;
 
 	if (m_animTimer > GetMaxTime())
 	{
 		m_animTimer = 0;
+	}
+
+	UpdateComponents();
+}
+
+void Animation::UpdateComponents()
+{
+	for (auto& component : m_vAnimationComponents)
+	{
+		component.Update(m_animTimer);
 	}
 }
 
