@@ -123,6 +123,50 @@ void Application::HandleUpdate()
 		dbW = false;
 	}
 
+	static AnimationLoader m_animLoader;
+
+	static bool db1 = false;
+	if (this->IsKeyPressed('1'))
+	{
+		if (!db1)
+		{
+			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
+			db1 = true;
+		}
+	}
+	else
+	{
+		db1 = false;
+	}
+
+	static bool db2 = false;
+	if (this->IsKeyPressed('2'))
+	{
+		if (!db2)
+		{
+			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
+			db2 = true;
+		}
+	}
+	else
+	{
+		db2 = false;
+	}
+
+	static bool db3 = false;
+	if (this->IsKeyPressed('3'))
+	{
+		if (!db3)
+		{
+			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));
+			db3 = true;
+		}
+	}
+	else
+	{
+		db3 = false;
+	}
+
 
 	//m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 

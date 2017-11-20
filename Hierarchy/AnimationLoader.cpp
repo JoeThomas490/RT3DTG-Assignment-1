@@ -20,13 +20,13 @@ Animation AnimationLoader::LoadXML(const char * fileName)
 
 	//Get first "animation" node
 	for (TiXmlNode* animationNode = headNode->FirstChild("animation"); animationNode != NULL; animationNode = animationNode->NextSibling())
-	{	
+	{
 		string componentName = GetAnimationComponentName(animationNode->ToElement());
 		if (component.GetNodeName() == "")
 		{
 			component.SetNodeName(componentName);
 		}
-		else if(componentName != component.GetNodeName())
+		else if (componentName != component.GetNodeName())
 		{
 			animation.m_vAnimationComponents.push_back(component);
 			component.m_animationData.clear();
@@ -42,13 +42,8 @@ Animation AnimationLoader::LoadXML(const char * fileName)
 
 TiXmlDocument AnimationLoader::LoadXMLDocument(const char * fileName)
 {
-	TiXmlDocument doc;
-	//Load in XML file
-	{
-		doc = TiXmlDocument(fileName);
-		bool loadOkay = doc.LoadFile();
-	}
-
+	TiXmlDocument doc = TiXmlDocument(fileName);
+	doc.LoadFile(fileName);
 	return doc;
 }
 
@@ -77,6 +72,8 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 				data.AddAnimationElement(timeValues[i], positionValues[i]);
 			}
 
+			data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
+
 			componentData->m_animationData.push_back(data);
 		}
 		else
@@ -92,6 +89,10 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 				yTranslateData.AddAnimationElement(timeValues[i], positionValues[1 + (i * 3)] / 10.0f);
 				zTranslateData.AddAnimationElement(timeValues[i], positionValues[2 + (i * 3)] / 10.0f);
 			}
+
+			xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
+			yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[1]);
+			zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[2]);
 
 			componentData->m_animationData.push_back(xTranslateData);
 			componentData->m_animationData.push_back(yTranslateData);

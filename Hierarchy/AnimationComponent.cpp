@@ -48,14 +48,14 @@ void AnimationComponent::CalculateTranslation(float mTime)
 		switch (animType)
 		{
 		case AnimationData::TRANSLATE_X:
-			m_v4CurrentPos.x = value;
+			m_v4CurrentPos.x = -value;
 			break;
-		case AnimationData::TRANSLATE_Y:
-			m_v4CurrentPos.y = value;
-			break;
-		case AnimationData::TRANSLATE_Z:
-			m_v4CurrentPos.z = value;
-			break;
+		//case AnimationData::TRANSLATE_Y:
+		//	m_v4CurrentPos.y = value;
+		//	break;
+		//case AnimationData::TRANSLATE_Z:
+		//	m_v4CurrentPos.z = value;
+		//	break;
 		}
 	}
 }
