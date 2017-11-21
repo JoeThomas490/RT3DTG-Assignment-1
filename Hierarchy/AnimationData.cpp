@@ -40,7 +40,7 @@ float AnimationData::Interpolate(float mTime)
 
 	if (m_iCount == 1)
 	{
-		return 0;
+		return m_vValues[0];
 		//return Lerp(GetT(mTime), 0, m_vValues[0]);
 	}
 

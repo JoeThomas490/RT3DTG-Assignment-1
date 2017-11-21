@@ -27,9 +27,6 @@ public:
 
 	void SetAnimation(Animation mAnim) { m_animation = mAnim; };
 
-	void SetOffsetForComponent(char* tag, XMFLOAT4 m_offset);
-
-
 private:
 	std::vector<char*> m_vHierarchyOrder;
 
@@ -41,8 +38,17 @@ private:
 	XMFLOAT4 m_v4LocalPos;
 	XMFLOAT4 m_v4LocalRot;
 
+	XMMATRIX m_mLocalMatrix;
+
 	XMFLOAT4 m_v4LocalScale;
 
 	Animation m_animation;
+
+
+public:
+
+	void SetLocalPosition(XMFLOAT4 mPos) { m_v4LocalPos = mPos; };
+	void SetLocalPosition(float fX, float fY, float fZ) { m_v4LocalPos = XMFLOAT4(fX, fY, fZ, 0); };
+	void SetLocalRotation(XMFLOAT4 mRot) { m_v4LocalRot = mRot; };
 };
 

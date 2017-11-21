@@ -66,51 +66,20 @@ void HierarchialParent::DrawHierarchy()
 	}
 }
 
-void HierarchialParent::SetOffsetForComponent(char * tag, XMFLOAT4 m_offset)
-{
-	AnimationComponent* ac = m_animation.GetAnimationComponentByName(tag);
-	
-
-	for (auto& animData : ac->m_animationData)
-	{
-		AnimationData::AnimationType animType = animData.GetAnimationType();
-
-		switch (animType)
-		{
-		case AnimationData::TRANSLATE_X:
-			for (int i = 0; i < animData.GetAnimationCount(); i++)
-			{
-				animData.AddOffset(i, m_offset.x);
-			}
-			break;
-		case AnimationData::TRANSLATE_Y:
-			for (int i = 0; i < animData.GetAnimationCount(); i++)
-			{
-				animData.AddOffset(i, m_offset.y);
-			}
-			break;
-		case AnimationData::TRANSLATE_Z:
-			for (int i = 0; i < animData.GetAnimationCount(); i++)
-			{
-				animData.AddOffset(i, m_offset.z);
-			}
-			break;
-		}
-	}
-
-
-}
-
 void HierarchialParent::CalculateLocalMatrices()
 {
 	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		it->second->UpdateLocalMatrix();
 	}
+
+	//Todo add local rotation and scaling here 
+	m_mLocalMatrix = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4LocalPos));
 }
 
 void HierarchialParent::CalculateWorldMatrices()
 {
+
 	for (auto& tag : m_vHierarchyOrder)
 	{
 		HierarchialComponent* hc = m_mHierarchyComponents.find(tag)->second;
@@ -122,7 +91,7 @@ void HierarchialParent::CalculateWorldMatrices()
 		}
 		else
 		{
-			hc->SetWorldMatrix(&hc->GetLocalMatrix());
+			hc->SetWorldMatrix(&(hc->GetLocalMatrix() * m_mLocalMatrix));
 		}
 	}
 }

@@ -6,10 +6,12 @@ Robot::Robot()
 
 Robot::Robot(float fX, float fY, float fZ, float fRotY)
 {
-	AddComponents();
+	HierarchialParent(XMFLOAT4(fX, fY, fZ, 0), XMFLOAT4(0, fRotY, 0, 0));
 
-	//GetHiararchyComponentFromTag("root")->SetLocalPosition(fX + (1.027778f / 10.0f), fY + (75.644722f / 10.0f), fZ);
+
+	AddComponents();
 	GetHiararchyComponentFromTag("root")->SetLocalRotation(0.0f, fRotY, 0.0f);
+	//GetHiararchyComponentFromTag("root")->SetLocalPosition(fX + (1.027778f / 10.0f), fY + (75.644722f / 10.0f), fZ);
 	/*GetHiararchyComponentFromTag("pelvis")->SetLocalPosition((-0.250011 / 10.0f), (15.250000f / 10.0f), (-0.00005f / 10.0f));
 
 	GetHiararchyComponentFromTag("body")->SetLocalPosition((0.500099f / 10.0f), (43.749992f / 10.0f), (0.000003f / 10.0f));
@@ -86,29 +88,4 @@ void Robot::Update()
 void Robot::Draw()
 {
 	DrawHierarchy();
-}
-
-void Robot::AddOffsetToAnimation()
-{
-	SetOffsetForComponent("root", XMFLOAT4(0.0f + (1.027778f / 10.0f), 2.0f + (75.644722f / 10.0f), 10.f, 0));
-	SetOffsetForComponent("pelvis", XMFLOAT4((-0.250011 / 10.0f), (15.250000f / 10.0f), (-0.00005f / 10.0f), 0));
-	SetOffsetForComponent("body", XMFLOAT4((0.500099f / 10.0f), (43.749992f / 10.0f), (0.000003f / 10.0f), 0));
-
-	SetOffsetForComponent("left_shoulder", XMFLOAT4((46.0f / 10.0f), 0.0f, (-0.009992f / 10.0f), 0));
-	SetOffsetForComponent("left_elbow", XMFLOAT4((34.250019f / 10.0f), (-0.499817f / 10.0f), (-0.004262f / 10.0f), 0));
-	SetOffsetForComponent("left_wrist", XMFLOAT4((55.250008f / 10.0f), (-0.999710f / 10.0f), (0.003968f / 10.0f), 0));
-
-	SetOffsetForComponent("right_shoulder", XMFLOAT4((-44.500023f / 10.0f), (0.5f / 10.0f), (-0.000021f / 10.0f), 0));
-	SetOffsetForComponent("right_elbow", XMFLOAT4((-33.999996f / 10.0f), (0.250229f / 10.0f), (-0.000194f / 10.0f), 0));
-	SetOffsetForComponent("right_wrist", XMFLOAT4((-60.000381f / 10.0f), (-1.750183f / 10.0f), (0.007156f / 10.0f), 0));
-
-	SetOffsetForComponent("neck", XMFLOAT4((0.249983f / 10.0f), (36.625015f / 10.0f), (25.999998f / 10.0f), 0));
-
-	SetOffsetForComponent("left_hip", XMFLOAT4((19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f, 0));
-	SetOffsetForComponent("left_knee", XMFLOAT4((0.000006f / 10.0f), (-22.200001f / 10.0f), 0.0f, 0));
-	SetOffsetForComponent("left_ankle", XMFLOAT4((-0.800152f / 10.0f), (-36.399994f / 10.0f), (-0.000098f / 10.0f), 0));
-
-	SetOffsetForComponent("right_hip", XMFLOAT4((-19.5f / 10.0f), (-7.724991f / 10.0f), 0.0f, 0));
-	SetOffsetForComponent("right_knee", XMFLOAT4((0.000006f / 10.0f), (-22.0f / 10.0f), 0.0f, 0));
-	SetOffsetForComponent("right_ankle", XMFLOAT4((0.199911f / 10.0f), (-36.7999995f / 10.0f), (0.000039f / 10.0f), 0));
 }

@@ -35,7 +35,7 @@ bool Application::HandleStart()
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 
 	Robot::LoadResources();
-	m_pRobot = new Robot(0.0f, 2.0f, -20.0f, 0.0f);
+	m_pRobot = new Robot(10.0f, 10.0f, -20.0f, 0.0f);
 
 	Bullet::LoadResources();
 
@@ -51,6 +51,7 @@ bool Application::HandleStart()
 
 	LoadXML();
 
+	m_pRobot->SetLocalPosition(0.0f, 2.5f, 10.0f);
 
 	return true;
 }
