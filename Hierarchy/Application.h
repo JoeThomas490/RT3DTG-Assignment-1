@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <string>
+#include <vector>
 
 #include <stdio.h>
 #include <windows.h>
@@ -43,7 +44,9 @@ class Application : public CommonApp
   private:
 	float m_rotationAngle;
 	float m_cameraZ;
+
 	bool m_bWireframe;
+	bool m_bDebugAnimations;
 
 	int m_cameraState;
 
@@ -51,6 +54,8 @@ class Application : public CommonApp
 
 	Aeroplane* m_pAeroplane;
 	Robot* m_pRobot;
+
+	std::vector<Robot*> m_pRobots;
 };
 
 #endif

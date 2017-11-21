@@ -8,6 +8,10 @@ Animation::Animation()
 {
 	m_animTimer = 0;
 	m_fMaxTime = 0;
+
+	m_bIsLoopable = true;
+
+	m_bDebugAnim = false;
 }
 
 void Animation::Update()
@@ -15,14 +19,29 @@ void Animation::Update()
 	//Increment animation timer
 	m_animTimer += ANIMATION_TICK;
 
-	//If the timer has gone past the max time
-	if (m_animTimer > GetMaxTime())
+
+	if (!m_bIsLoopable)
 	{
-		//Reset the timer
-		m_animTimer = 0;
+		if (m_animTimer > GetMaxTime() - 0.5f)
+		{
+			m_animTimer = GetMaxTime() - 0.5f;
+		}
 	}
+	else
+
+		//If the timer has gone past the max time
+		if (m_animTimer > GetMaxTime())
+		{
+			//Reset the timer
+			m_animTimer = 0;
+		}
 
 	UpdateComponents();
+}
+
+void Animation::ResetTimer()
+{
+	m_animTimer = 0;
 }
 
 void Animation::UpdateComponents()
@@ -69,7 +88,7 @@ float Animation::GetMaxTime()
 			}
 		}
 	}
-	
+
 	m_fMaxTime = maxTime;
 	return maxTime;
 }

@@ -41,8 +41,7 @@ void AnimationComponent::CalculateTranslation(float mTime)
 		float value = 0;
 		if (animType == AnimationData::TRANSLATE_X || animType == AnimationData::TRANSLATE_Y || animType == AnimationData::TRANSLATE_Z)
 		{
-			//if (m_nodeName == "left_elbow")
-				value = data.Interpolate(mTime);
+			value = data.Interpolate(mTime);
 		}
 
 		switch (animType)

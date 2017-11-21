@@ -46,9 +46,6 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
-	//XMVECTOR mQuart = CalculateQuaternion();
-	//mQuart = XMQuaternionNormalize(mQuart);
-
 	XMVECTOR mQuart = XMLoadFloat4(&m_v4Rot);
 
 	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);

@@ -25,15 +25,22 @@ public:
 
 	void DrawHierarchy();
 
-	void SetAnimation(Animation mAnim) { m_animation = mAnim; };
+	void SetActiveAnimation(int index);
 
+	void AddAnimation(const Animation &mAnim) { m_mAnimations.push_back(mAnim); };
+	Animation* GetAnimation(int index) { return &(m_mAnimations[index]); };
+
+	Animation* GetActiveAnimation() { return m_pAnimation; };
 private:
 	std::vector<char*> m_vHierarchyOrder;
 
 	std::map<char*, HierarchialComponent*> m_mHierarchyComponents;
+	std::vector<Animation> m_mAnimations;
 
 	void CalculateLocalMatrices();
 	void CalculateWorldMatrices();
+
+	XMVECTOR CalculateQuaternion(XMFLOAT4 mRot);
 
 	XMFLOAT4 m_v4LocalPos;
 	XMFLOAT4 m_v4LocalRot;
@@ -42,7 +49,7 @@ private:
 
 	XMFLOAT4 m_v4LocalScale;
 
-	Animation m_animation;
+	Animation* m_pAnimation;
 
 
 public:
@@ -50,5 +57,6 @@ public:
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4LocalPos = mPos; };
 	void SetLocalPosition(float fX, float fY, float fZ) { m_v4LocalPos = XMFLOAT4(fX, fY, fZ, 0); };
 	void SetLocalRotation(XMFLOAT4 mRot) { m_v4LocalRot = mRot; };
+	void SetLocalRotation(float fX, float fY, float fZ) { m_v4LocalRot = XMFLOAT4(fX, fY, fZ, 0); };
 };
 

@@ -1,4 +1,5 @@
 #include "Application.h"
+
 #include "Heightmap.h"
 #include "Aeroplane.h"
 #include "Bullet.h"
@@ -30,12 +31,19 @@ bool Application::HandleStart()
 	this->SetWindowTitle("Assignment 1");
 
 	m_bWireframe = false;
+	m_bDebugAnimations = false;
 
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 
 	Robot::LoadResources();
 	m_pRobot = new Robot(10.0f, 10.0f, -20.0f, 0.0f);
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_pRobots.push_back(new Robot(cos(i * 3.14f) * 10.0f, 10.0f, sin(i * 3.14f) * 10.0f, i * 25.0f));
+	}
+
 
 	Bullet::LoadResources();
 
@@ -53,6 +61,13 @@ bool Application::HandleStart()
 
 	m_pRobot->SetLocalPosition(0.0f, 2.5f, 10.0f);
 
+	int index = 0;
+	for (int i = 0; i < 360; i+= 360/5)
+	{
+		m_pRobots[index]->SetLocalPosition(cos(XMConvertToRadians(i)) * 25.0f, 2.0f, sin(XMConvertToRadians(i)) * 25.0f);
+		m_pRobots[index]->SetLocalRotation(0, 360 - (i), 0);
+		index++;
+	}
 	return true;
 }
 
@@ -71,6 +86,11 @@ void Application::HandleStop()
 	delete m_pRobot;
 	m_pRobot = nullptr;
 
+	for (auto& robot : m_pRobots)
+	{
+		delete robot;
+	}
+
 	this->CommonApp::HandleStop();
 }
 
@@ -79,7 +99,12 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-	m_pRobot->Update();
+	//m_pRobot->Update();
+
+	for (auto& robot : m_pRobots)
+	{
+		robot->Update();
+	}
 
 	m_rotationAngle += .01f;
 
@@ -131,7 +156,12 @@ void Application::HandleUpdate()
 	{
 		if (!db1)
 		{
-			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetActiveAnimation(0);
+				robot->GetActiveAnimation()->ResetTimer();
+			}
+			
 			db1 = true;
 		}
 	}
@@ -145,7 +175,10 @@ void Application::HandleUpdate()
 	{
 		if (!db2)
 		{
-			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetActiveAnimation(1);
+			}
 			db2 = true;
 		}
 	}
@@ -159,13 +192,25 @@ void Application::HandleUpdate()
 	{
 		if (!db3)
 		{
-			m_pRobot->SetAnimation(m_animLoader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetActiveAnimation(2);
+			}
 			db3 = true;
 		}
 	}
 	else
 	{
 		db3 = false;
+	}
+
+	if (this->IsKeyPressed('F'))
+	{
+		m_bDebugAnimations = true;
+	}
+	else
+	{
+		m_bDebugAnimations = false;
 	}
 
 
@@ -263,7 +308,12 @@ void Application::HandleRender()
 
 	m_pAeroplane->Draw();
 
-	m_pRobot->Draw();
+	//m_pRobot->Draw();
+
+	for (auto& robot : m_pRobots)
+	{
+		robot->Draw();
+	}
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
@@ -275,8 +325,21 @@ void Application::HandleRender()
 void Application::LoadXML()
 {
 	AnimationLoader loader;
-	Animation anim = loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml");
-	m_pRobot->SetAnimation(anim);
+	for (auto& robot : m_pRobots)
+	{
+		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
+		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
+		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));
+
+		robot->SetActiveAnimation(0);
+		robot->GetActiveAnimation()->SetIsLoopable(false);
+	}
+	/*m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
+	m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
+	m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));*/
+
+	//m_pRobot->SetActiveAnimation(0);
+	//m_pRobot->GetActiveAnimation()->SetIsLoopable(false);
 }
 
 //////////////////////////////////////////////////////////////////////
