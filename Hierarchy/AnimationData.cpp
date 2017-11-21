@@ -36,12 +36,15 @@ float AnimationData::Interpolate(float mTime)
 {
 	GetIndex(mTime);
 
+	float t = GetT(mTime);
+
 	if (m_iCount == 1)
 	{
-		return Lerp(mTime, 0, m_vValues[0]);
+		return 0;
+		//return Lerp(GetT(mTime), 0, m_vValues[0]);
 	}
 
-	float value = Lerp(GetT(mTime), m_vValues[fromInd], m_vValues[toInd]);
+	float value = Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
 	return value;
 }
 
@@ -73,9 +76,24 @@ float AnimationData::GetT(float mTime)
 		float t = (mTime - fromTime) / (toTime - fromTime);
 		return t;
 	}
+	else
+	{
+		float fromTime = 0;
+		float toTime = m_vTimes[0];
+
+		float t = (mTime - fromTime) / toTime - fromTime;
+		return t;
+	}
+	
+	return 0;
+}
+
+void AnimationData::AddOffset(int index, float val)
+{
+	m_vValues[index] += val;
 }
 
 float AnimationData::Lerp(float t, float a, float b)
 {
-	return (1 - t) * a + t * b;
+	return ((1 - t) * a) + (t * b);
 }

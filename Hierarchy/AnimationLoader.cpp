@@ -72,7 +72,8 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 				data.AddAnimationElement(timeValues[i], positionValues[i]);
 			}
 
-			data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
+			if (timeValues.size() > 1)
+				data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
 
 			componentData->m_animationData.push_back(data);
 		}
@@ -90,9 +91,13 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 				zTranslateData.AddAnimationElement(timeValues[i], positionValues[2 + (i * 3)] / 10.0f);
 			}
 
-			xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
-			yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[1]);
-			zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[2]);
+			if (timeValues.size() > 1)
+			{
+				xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0] / 10.0f);
+				yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[1] / 10.0f);
+				zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[2] / 10.0f);
+			}
+			
 
 			componentData->m_animationData.push_back(xTranslateData);
 			componentData->m_animationData.push_back(yTranslateData);

@@ -27,6 +27,8 @@ public:
 
 	void SetAnimation(Animation mAnim) { m_animation = mAnim; };
 
+	void SetOffsetForComponent(char* tag, XMFLOAT4 m_offset);
+
 
 private:
 	std::vector<char*> m_vHierarchyOrder;

@@ -28,7 +28,7 @@ void AnimationComponent::Update(float mTime)
 
 void AnimationComponent::InterpolateData(float mTime)
 {
-	//CalculateTranslation(mTime);
+	CalculateTranslation(mTime);
 	CalculateRotation(mTime);
 }
 
@@ -41,21 +41,21 @@ void AnimationComponent::CalculateTranslation(float mTime)
 		float value = 0;
 		if (animType == AnimationData::TRANSLATE_X || animType == AnimationData::TRANSLATE_Y || animType == AnimationData::TRANSLATE_Z)
 		{
-			value = data.Interpolate(mTime);
+			//if (m_nodeName == "left_elbow")
+				value = data.Interpolate(mTime);
 		}
-
 
 		switch (animType)
 		{
 		case AnimationData::TRANSLATE_X:
-			m_v4CurrentPos.x = -value;
+			m_v4CurrentPos.x = value;
 			break;
-		//case AnimationData::TRANSLATE_Y:
-		//	m_v4CurrentPos.y = value;
-		//	break;
-		//case AnimationData::TRANSLATE_Z:
-		//	m_v4CurrentPos.z = value;
-		//	break;
+		case AnimationData::TRANSLATE_Y:
+			m_v4CurrentPos.y = value;
+			break;
+		case AnimationData::TRANSLATE_Z:
+			m_v4CurrentPos.z = value;
+			break;
 		}
 	}
 }

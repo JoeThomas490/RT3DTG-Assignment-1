@@ -53,7 +53,7 @@ XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 
 	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);
 
-	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos) + XMLoadFloat4(&m_v4Offset));
+	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 
 	//TODO add scaling to each component 
 	//XMMATRIX mScale = XMMatrixScalingFromVector(XMLoadFloat4())

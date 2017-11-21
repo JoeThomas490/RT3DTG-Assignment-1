@@ -47,7 +47,10 @@ void HierarchialParent::UpdateHierarchy()
 	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		AnimationComponent* ac = m_animation.GetAnimationComponentByName(it->first);
-		it->second->SetLocalPosition(ac->GetCurrentPosition());
+
+		XMFLOAT4 animPosition = ac->GetCurrentPosition();
+
+		it->second->SetLocalPosition(animPosition);
 		it->second->SetLocalRotation(ac->GetCurrentRotation());
 	}
 
@@ -61,6 +64,41 @@ void HierarchialParent::DrawHierarchy()
 	{
 		it->second->Draw();
 	}
+}
+
+void HierarchialParent::SetOffsetForComponent(char * tag, XMFLOAT4 m_offset)
+{
+	AnimationComponent* ac = m_animation.GetAnimationComponentByName(tag);
+	
+
+	for (auto& animData : ac->m_animationData)
+	{
+		AnimationData::AnimationType animType = animData.GetAnimationType();
+
+		switch (animType)
+		{
+		case AnimationData::TRANSLATE_X:
+			for (int i = 0; i < animData.GetAnimationCount(); i++)
+			{
+				animData.AddOffset(i, m_offset.x);
+			}
+			break;
+		case AnimationData::TRANSLATE_Y:
+			for (int i = 0; i < animData.GetAnimationCount(); i++)
+			{
+				animData.AddOffset(i, m_offset.y);
+			}
+			break;
+		case AnimationData::TRANSLATE_Z:
+			for (int i = 0; i < animData.GetAnimationCount(); i++)
+			{
+				animData.AddOffset(i, m_offset.z);
+			}
+			break;
+		}
+	}
+
+
 }
 
 void HierarchialParent::CalculateLocalMatrices()

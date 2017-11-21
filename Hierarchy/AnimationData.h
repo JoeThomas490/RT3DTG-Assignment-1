@@ -47,6 +47,8 @@ public:
 	int GetIndex(float mTime);
 	float GetT(float mTime);
 
+	void AddOffset(int index, float val);
+
 private:
 
 	float Lerp(float t, float a, float b);
