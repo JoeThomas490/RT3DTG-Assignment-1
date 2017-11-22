@@ -56,7 +56,7 @@ void HierarchialParent::UpdateHierarchy()
 			XMFLOAT4 animPosition = ac->GetCurrentPosition();
 
 			it->second->SetLocalPosition(animPosition);
-			it->second->SetLocalRotation(ac->GetCurrentRotation());
+			it->second->SetLocalRotationQuart(ac->GetCurrentRotation());
 		}
 	}
 

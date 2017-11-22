@@ -99,7 +99,6 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-	//m_pRobot->Update();
 
 	for (auto& robot : m_pRobots)
 	{
@@ -214,7 +213,7 @@ void Application::HandleUpdate()
 	}
 
 
-	//m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
+	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	static bool dbSpace = false;
 
@@ -307,8 +306,6 @@ void Application::HandleRender()
 	m_pHeightMap->Draw();
 
 	m_pAeroplane->Draw();
-
-	//m_pRobot->Draw();
 
 	for (auto& robot : m_pRobots)
 	{

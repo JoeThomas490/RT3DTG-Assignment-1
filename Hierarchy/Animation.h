@@ -6,8 +6,8 @@
 
 //*********************************************************************************************
 // File:			Animation.h
-// Description:		Class which holds the complete hierarchy for one animation.
-//					
+// Description:		Class which holds the complete hierarchy for one animation i.e A vector
+//					of AnimationComponents. Each animation has it's own update timer
 //					
 // Notes:			
 // Todo:			

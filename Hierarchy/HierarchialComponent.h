@@ -37,6 +37,7 @@ private:
 	XMMATRIX m_mWorldMatrix;
 
 	XMFLOAT4 m_v4Rot;
+	XMFLOAT4 m_v4RotQuart;
 	XMFLOAT4 m_v4Pos;
 
 	XMFLOAT4 m_v4Offset;
@@ -50,7 +51,7 @@ private:
 	char* m_cParentNode;
 
 private:
-	XMVECTOR CalculateQuaternion();
+	XMVECTOR CalculateQuaternion(float fX, float fY, float fZ);
 
 public:
 
@@ -63,11 +64,11 @@ public:
 	char* GetParentNode() { return m_cParentNode; };
 
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
-	void SetLocalRotation(XMFLOAT4 mRot) { m_v4Rot = mRot; };
+
+	void SetLocalRotationQuart(XMFLOAT4 mQuart) { m_v4RotQuart = mQuart; };
+	void SetLocalRotationEuler(XMFLOAT4 mRot) { XMVECTOR mQuart = CalculateQuaternion(mRot.x, mRot.y, mRot.z); XMStoreFloat4(&m_v4Rot, mQuart); };
 
 	void SetLocalOffset(XMFLOAT4 mPos) { m_v4Offset = mPos; };
-
-	//void AddToLocalPosition(XMFLOAT4 mPos) {  }
 
 	void SetPositionX(float f) { m_v4Pos.x = f; };
 	void SetPositionY(float f) { m_v4Pos.y = f; };

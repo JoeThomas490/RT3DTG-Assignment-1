@@ -8,6 +8,7 @@ HierarchialComponent::HierarchialComponent()
 	m_mWorldMatrix = XMMatrixIdentity();
 
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4RotQuart = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
 
 	m_bIsDrawable = false;
@@ -21,6 +22,7 @@ HierarchialComponent::HierarchialComponent(char * parentNode)
 	m_mWorldMatrix = XMMatrixIdentity();
 
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4RotQuart = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
 
 	m_bIsDrawable = false;
@@ -34,6 +36,7 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 	m_mWorldMatrix = XMMatrixIdentity();
 
 	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4RotQuart = XMFLOAT4(0, 0, 0, 0);
 	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
 	m_v4Offset = XMFLOAT4(0, 0, 0, 0);
 
@@ -46,9 +49,13 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
-	XMVECTOR mQuart = XMLoadFloat4(&m_v4Rot);
+	
+	XMVECTOR mQuart1 = XMLoadFloat4(&m_v4RotQuart);
+	
 
-	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart);
+	XMVECTOR mQuart2 = CalculateQuaternion(m_v4Rot.x, m_v4Rot.y, m_v4Rot.z);
+
+	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart1) * XMMatrixRotationQuaternion(mQuart2);
 
 	XMMATRIX mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
 
@@ -60,12 +67,12 @@ XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 	return m_mLocalMatrix;
 }
 
-XMVECTOR HierarchialComponent::CalculateQuaternion()
+XMVECTOR HierarchialComponent::CalculateQuaternion(float fX, float fY, float fZ)
 {
 	//Convert stored angle into radians
-	double radX = XMConvertToRadians(m_v4Rot.x);
-	double radY = XMConvertToRadians(m_v4Rot.y);
-	double radZ = XMConvertToRadians(m_v4Rot.z);
+	double radX = XMConvertToRadians(fX);
+	double radY = XMConvertToRadians(fY);
+	double radZ = XMConvertToRadians(fZ);
 	
 	//Calculate cos components
 	double c1 = cos(radY / 2.0);

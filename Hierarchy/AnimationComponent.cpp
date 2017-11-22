@@ -87,8 +87,6 @@ void AnimationComponent::CalculateRotation(float mTime)
 
 	XMVECTOR quart = XMQuaternionSlerp(quart1, quart2, data->GetT(mTime));
 	XMStoreFloat4(&m_v4CurrentRotation, quart);
-
-
 }
 
 XMVECTOR AnimationComponent::CalculateQuaternion(float fX, float fY, float fZ)

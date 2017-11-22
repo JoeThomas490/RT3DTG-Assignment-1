@@ -4,6 +4,7 @@ bool Aeroplane::s_bResourcesReady = false;
 
 Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 {
+	HierarchialParent();
 	m_fSpeed = 0.0f;
 	m_bGunCam = false;
 
