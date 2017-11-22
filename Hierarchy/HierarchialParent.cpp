@@ -11,6 +11,7 @@ HierarchialParent::HierarchialParent()
 	m_pBlendingAnimation = nullptr;
 
 	m_fBlendTimer = 0;
+	m_iFrameCounter = 0;
 }
 
 HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
@@ -22,6 +23,7 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 	m_pBlendingAnimation = nullptr;
 
 	m_fBlendTimer = 0;
+	m_iFrameCounter = 0;
 
 }
 
@@ -50,10 +52,10 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 	}
 }
 
-void HierarchialParent::UpdateHierarchy()
+void HierarchialParent::UpdateHierarchy(bool mDebug)
 {
 
-	UpdateAnimations();
+	UpdateAnimations(mDebug);
 
 	CalculateLocalMatrices();
 	CalculateWorldMatrices();
@@ -74,8 +76,11 @@ void HierarchialParent::SetActiveAnimation(int index)
 
 void HierarchialParent::SetBlendingAnimation(Animation * pBlend)
 {
+	if (m_pBlendingAnimation != NULL)
+	{
+		m_pActiveAnimation = m_pBlendingAnimation;
+	}
 	m_pBlendingAnimation = pBlend;
-
 	m_pBlendingAnimation->SetTime(m_pActiveAnimation->GetTimer(), m_pActiveAnimation->GetMaxTime());
 }
 
@@ -110,20 +115,15 @@ void HierarchialParent::CalculateWorldMatrices()
 	}
 }
 
-void HierarchialParent::UpdateAnimations()
+void HierarchialParent::UpdateAnimations(bool mDebug)
 {
-	//for (auto& anim : m_mAnimations)
-	//{
-	//	anim.Update();
-	//}
-
 	if (m_pActiveAnimation != nullptr)
 	{
-		m_pActiveAnimation->Update();
+		m_pActiveAnimation->Update(mDebug);
 
 		if (m_pBlendingAnimation != NULL)
 		{
-			m_pBlendingAnimation->Update();
+			m_pBlendingAnimation->Update(mDebug);
 
 
 			if (m_fBlendTimer > m_pBlendingAnimation->GetBlendTime())
@@ -141,9 +141,6 @@ void HierarchialParent::UpdateAnimations()
 
 			XMFLOAT4 activeAnimPosition = ac->GetCurrentPosition();
 			XMFLOAT4 activeAnimRotation = ac->GetCurrentRotation();
-
-			it->second->SetLocalPosition(activeAnimPosition);
-			it->second->SetLocalRotationQuart(activeAnimRotation);
 
 			//If the blending animation has been set
 			if (m_pBlendingAnimation != NULL)
@@ -168,10 +165,27 @@ void HierarchialParent::UpdateAnimations()
 				it->second->SetLocalPosition(finalPos);
 				it->second->SetLocalRotationQuart(finalRot);
 			}
+			else
+			{
+				it->second->SetLocalPosition(activeAnimPosition);
+				it->second->SetLocalRotationQuart(activeAnimRotation);
+			}
 		}
 
 		if (m_pBlendingAnimation != NULL)
-			m_fBlendTimer += 0.0133f;
+		{
+			if (!mDebug)
+				m_fBlendTimer += 0.0133f;
+			else
+			{
+				m_iFrameCounter++;
+				if (m_iFrameCounter > 60)
+				{
+					m_fBlendTimer += (0.0133f * 2);
+					m_iFrameCounter = 0;
+				}
+			}
+		}
 
 	}
 }

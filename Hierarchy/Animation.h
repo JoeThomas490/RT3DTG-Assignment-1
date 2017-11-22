@@ -20,7 +20,7 @@ public:
 	~Animation() = default;
 
 	//To be called every frame for the animation to be updated
-	void Update();
+	void Update(bool mDebug);
 
 	void ResetTimer();
 
@@ -37,8 +37,6 @@ public:
 public:
 	void SetIsLoopable(bool mLoop) { m_bIsLoopable = mLoop; };
 	bool GetIsLoopable() { return m_bIsLoopable; };
-
-	void SetDebugAnim(bool mDebug) { m_bDebugAnim = mDebug; };
 
 	float GetBlendTime() { return m_fBlendTime; };
 
@@ -69,6 +67,6 @@ private:
 	//Whether the animation should loop or not
 	bool m_bIsLoopable;
 
-	bool m_bDebugAnim;
+	int m_iFrameCounter;
 };
 

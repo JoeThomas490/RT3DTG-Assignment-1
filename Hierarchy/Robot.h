@@ -14,7 +14,7 @@ public:
 	Robot(float fX, float fY, float fZ, float fRotY);
 	~Robot() = default;
 
-	void Update();
+	void Update(bool mDebug);
 	void Draw();
 
 	static void LoadResources();

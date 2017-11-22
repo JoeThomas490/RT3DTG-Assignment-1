@@ -80,9 +80,9 @@ void Robot::AddComponents()
 	AddHierarchyComponent(new HierarchialComponent("right_elbow", MeshManager::GetInstance().GetMeshFromTag("robot_right_wrist")), "right_wrist");
 }
 
-void Robot::Update()
+void Robot::Update(bool mDebug)
 {
-	UpdateHierarchy();
+	UpdateHierarchy(mDebug);
 }
 
 void Robot::Draw()

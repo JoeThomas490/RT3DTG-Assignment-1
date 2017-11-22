@@ -86,7 +86,7 @@ void Aeroplane::UpdateMatrices()
 {
 	XMMATRIX mPlaneCameraRot, mForwardMatrix;
 
-	UpdateHierarchy();
+	UpdateHierarchy(false);
 	UpdateCameraMatrix();
 
 	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), GetHiararchyComponentFromTag("plane")->GetWorldMatrix());

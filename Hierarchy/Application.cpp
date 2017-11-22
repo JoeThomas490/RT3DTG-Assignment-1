@@ -100,10 +100,15 @@ void Application::HandleStop()
 void Application::HandleUpdate()
 {
 
+	SelectAnimation();
+
 	for (auto& robot : m_pRobots)
 	{
-		robot->Update();
+		robot->Update(m_bDebugAnimations);
 	}
+
+	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
+
 
 	m_rotationAngle += .01f;
 
@@ -148,72 +153,6 @@ void Application::HandleUpdate()
 		dbW = false;
 	}
 
-	static AnimationLoader m_animLoader;
-
-	static bool db1 = false;
-	if (this->IsKeyPressed('1'))
-	{
-		if (!db1)
-		{
-			for (auto& robot : m_pRobots)
-			{
-				robot->SetBlendingAnimation(robot->GetAnimation(0));
-				//robot->GetActiveAnimation()->ResetTimer();
-			}
-			
-			db1 = true;
-		}
-	}
-	else
-	{
-		db1 = false;
-	}
-
-	static bool db2 = false;
-	if (this->IsKeyPressed('2'))
-	{
-		if (!db2)
-		{
-			for (auto& robot : m_pRobots)
-			{
-				robot->SetBlendingAnimation(robot->GetAnimation(1));
-			}
-			db2 = true;
-		}
-	}
-	else
-	{
-		db2 = false;
-	}
-
-	static bool db3 = false;
-	if (this->IsKeyPressed('3'))
-	{
-		if (!db3)
-		{
-			for (auto& robot : m_pRobots)
-			{
-				robot->SetBlendingAnimation(robot->GetAnimation(2));
-			}
-			db3 = true;
-		}
-	}
-	else
-	{
-		db3 = false;
-	}
-
-	if (this->IsKeyPressed('F'))
-	{
-		m_bDebugAnimations = true;
-	}
-	else
-	{
-		m_bDebugAnimations = false;
-	}
-
-
-	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	static bool dbSpace = false;
 
@@ -331,12 +270,70 @@ void Application::LoadXML()
 		robot->SetActiveAnimation(0);
 		robot->GetActiveAnimation()->SetIsLoopable(false);
 	}
-	/*m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
-	m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
-	m_pRobot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));*/
+}
 
-	//m_pRobot->SetActiveAnimation(0);
-	//m_pRobot->GetActiveAnimation()->SetIsLoopable(false);
+void Application::SelectAnimation()
+{
+	static bool db1 = false;
+	if (this->IsKeyPressed('1'))
+	{
+		if (!db1)
+		{
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetBlendingAnimation(robot->GetAnimation(0));
+			}
+
+			db1 = true;
+		}
+	}
+	else
+	{
+		db1 = false;
+	}
+
+	static bool db2 = false;
+	if (this->IsKeyPressed('2'))
+	{
+		if (!db2)
+		{
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetBlendingAnimation(robot->GetAnimation(1));
+			}
+			db2 = true;
+		}
+	}
+	else
+	{
+		db2 = false;
+	}
+
+	static bool db3 = false;
+	if (this->IsKeyPressed('3'))
+	{
+		if (!db3)
+		{
+			for (auto& robot : m_pRobots)
+			{
+				robot->SetBlendingAnimation(robot->GetAnimation(2));
+			}
+			db3 = true;
+		}
+	}
+	else
+	{
+		db3 = false;
+	}
+
+	if (this->IsKeyPressed('F'))
+	{
+		m_bDebugAnimations = true;
+	}
+	else
+	{
+		m_bDebugAnimations = false;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////

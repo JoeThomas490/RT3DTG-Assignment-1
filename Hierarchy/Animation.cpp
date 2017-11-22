@@ -12,13 +12,28 @@ Animation::Animation()
 
 	m_bIsLoopable = true;
 
-	m_bDebugAnim = false;
+	m_iFrameCounter = 0;
 }
 
-void Animation::Update()
+void Animation::Update(bool mDebug)
 {
-	//Increment animation timer
-	m_animTimer += ANIMATION_TICK;
+
+	if(!mDebug)
+	{
+		//Increment animation timer
+		m_animTimer += ANIMATION_TICK;
+	}
+	else
+	{
+		//Do debug frame counter here 
+		m_iFrameCounter++;
+		if (m_iFrameCounter > 60)
+		{
+			m_animTimer += ANIMATION_TICK * 2;
+			m_iFrameCounter = 0;
+		}
+	}
+
 
 
 	if (!m_bIsLoopable)
@@ -49,9 +64,9 @@ void Animation::SetTime(float mTime, float mMaxTime)
 {
 	float percent = mTime / mMaxTime;
 
-	if (mTime / m_fMaxTime > 1)
+	if (percent > 1)
 	{
-		m_animTimer = mTime * percent;
+		m_animTimer = m_fMaxTime * percent;
 	}
 	m_animTimer = mTime;
 }

@@ -21,7 +21,7 @@ public:
 
 	HierarchialComponent* GetHiararchyComponentFromTag(char* tag);
 
-	void UpdateHierarchy();
+	void UpdateHierarchy(bool mDebug);
 
 	void DrawHierarchy();
 
@@ -40,7 +40,7 @@ private:
 
 	void CalculateLocalMatrices();
 	void CalculateWorldMatrices();
-	void UpdateAnimations();
+	void UpdateAnimations(bool mDebug);
 
 	XMVECTOR CalculateQuaternion(XMFLOAT4 mRot);
 
@@ -55,6 +55,8 @@ private:
 	Animation* m_pBlendingAnimation;
 
 	float m_fBlendTimer;
+
+	int m_iFrameCounter;
 
 
 public:

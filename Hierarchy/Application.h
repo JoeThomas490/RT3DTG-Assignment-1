@@ -41,6 +41,10 @@ class Application : public CommonApp
 
 	void LoadXML();
 
+private:
+
+	void SelectAnimation();
+
   private:
 	float m_rotationAngle;
 	float m_cameraZ;
