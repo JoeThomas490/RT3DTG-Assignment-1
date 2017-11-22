@@ -30,7 +30,8 @@ public:
 	void AddAnimation(const Animation &mAnim) { m_mAnimations.push_back(mAnim); };
 	Animation* GetAnimation(int index) { return &(m_mAnimations[index]); };
 
-	Animation* GetActiveAnimation() { return m_pAnimation; };
+	Animation* GetActiveAnimation() { return m_pActiveAnimation; };
+	void SetBlendingAnimation(Animation* pBlend);
 private:
 	std::vector<char*> m_vHierarchyOrder;
 
@@ -39,6 +40,7 @@ private:
 
 	void CalculateLocalMatrices();
 	void CalculateWorldMatrices();
+	void UpdateAnimations();
 
 	XMVECTOR CalculateQuaternion(XMFLOAT4 mRot);
 
@@ -49,7 +51,10 @@ private:
 
 	XMFLOAT4 m_v4LocalScale;
 
-	Animation* m_pAnimation;
+	Animation* m_pActiveAnimation;
+	Animation* m_pBlendingAnimation;
+
+	float m_fBlendTimer;
 
 
 public:
@@ -58,5 +63,6 @@ public:
 	void SetLocalPosition(float fX, float fY, float fZ) { m_v4LocalPos = XMFLOAT4(fX, fY, fZ, 0); };
 	void SetLocalRotation(XMFLOAT4 mRot) { m_v4LocalRot = mRot; };
 	void SetLocalRotation(float fX, float fY, float fZ) { m_v4LocalRot = XMFLOAT4(fX, fY, fZ, 0); };
+
 };
 

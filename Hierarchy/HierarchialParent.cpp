@@ -7,7 +7,10 @@ HierarchialParent::HierarchialParent()
 	m_v4LocalPos = XMFLOAT4(0, 0, 0, 0);
 	m_v4LocalRot = XMFLOAT4(0, 0, 0, 0);
 
-	m_pAnimation = nullptr;
+	m_pActiveAnimation = nullptr;
+	m_pBlendingAnimation = nullptr;
+
+	m_fBlendTimer = 0;
 }
 
 HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
@@ -15,7 +18,11 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 	m_v4LocalPos = startPos;
 	m_v4LocalRot = startRot;
 
-	m_pAnimation = nullptr;
+	m_pActiveAnimation = nullptr;
+	m_pBlendingAnimation = nullptr;
+
+	m_fBlendTimer = 0;
+
 }
 
 
@@ -45,21 +52,8 @@ HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * ta
 
 void HierarchialParent::UpdateHierarchy()
 {
-	if(m_pAnimation != nullptr)
-	{
-		m_pAnimation->Update();
 
-		for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
-		{
-			AnimationComponent* ac = m_pAnimation->GetAnimationComponentByName(it->first);
-
-			XMFLOAT4 animPosition = ac->GetCurrentPosition();
-
-			it->second->SetLocalPosition(animPosition);
-			it->second->SetLocalRotationQuart(ac->GetCurrentRotation());
-		}
-	}
-
+	UpdateAnimations();
 
 	CalculateLocalMatrices();
 	CalculateWorldMatrices();
@@ -75,7 +69,14 @@ void HierarchialParent::DrawHierarchy()
 
 void HierarchialParent::SetActiveAnimation(int index)
 {
-	m_pAnimation = &(m_mAnimations[index]);
+	m_pActiveAnimation = &(m_mAnimations[index]);
+}
+
+void HierarchialParent::SetBlendingAnimation(Animation * pBlend)
+{
+	m_pBlendingAnimation = pBlend;
+
+	m_pBlendingAnimation->SetTime(m_pActiveAnimation->GetTimer(), m_pActiveAnimation->GetMaxTime());
 }
 
 void HierarchialParent::CalculateLocalMatrices()
@@ -106,6 +107,72 @@ void HierarchialParent::CalculateWorldMatrices()
 		{
 			hc->SetWorldMatrix(&(hc->GetLocalMatrix() * m_mLocalMatrix));
 		}
+	}
+}
+
+void HierarchialParent::UpdateAnimations()
+{
+	//for (auto& anim : m_mAnimations)
+	//{
+	//	anim.Update();
+	//}
+
+	if (m_pActiveAnimation != nullptr)
+	{
+		m_pActiveAnimation->Update();
+
+		if (m_pBlendingAnimation != NULL)
+		{
+			m_pBlendingAnimation->Update();
+
+
+			if (m_fBlendTimer > m_pBlendingAnimation->GetBlendTime())
+			{
+				m_fBlendTimer = 0;
+				m_pActiveAnimation = m_pBlendingAnimation;
+				m_pBlendingAnimation = nullptr;
+			}
+		}
+
+
+		for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+		{
+			AnimationComponent* ac = m_pActiveAnimation->GetAnimationComponentByName(it->first);
+
+			XMFLOAT4 activeAnimPosition = ac->GetCurrentPosition();
+			XMFLOAT4 activeAnimRotation = ac->GetCurrentRotation();
+
+			it->second->SetLocalPosition(activeAnimPosition);
+			it->second->SetLocalRotationQuart(activeAnimRotation);
+
+			//If the blending animation has been set
+			if (m_pBlendingAnimation != NULL)
+			{
+				AnimationComponent* blendAnimCompo = m_pBlendingAnimation->GetAnimationComponentByName(it->first);
+
+				XMVECTOR blendAnimPosition = XMLoadFloat4(&blendAnimCompo->GetCurrentPosition()) - XMLoadFloat4(&activeAnimPosition);
+				XMVECTOR blendAnimRotation = XMLoadFloat4(&blendAnimCompo->GetCurrentRotation()) - XMLoadFloat4(&activeAnimRotation);
+
+				float t = m_fBlendTimer / m_pBlendingAnimation->GetBlendTime();
+
+				blendAnimPosition *= t;
+				blendAnimRotation *= t;
+
+				blendAnimPosition += XMLoadFloat4(&activeAnimPosition);
+				blendAnimRotation += XMLoadFloat4(&activeAnimRotation);
+
+				XMFLOAT4 finalPos, finalRot;
+				XMStoreFloat4(&finalPos, blendAnimPosition);
+				XMStoreFloat4(&finalRot, blendAnimRotation);
+
+				it->second->SetLocalPosition(finalPos);
+				it->second->SetLocalRotationQuart(finalRot);
+			}
+		}
+
+		if (m_pBlendingAnimation != NULL)
+			m_fBlendTimer += 0.0133f;
+
 	}
 }
 

@@ -63,6 +63,7 @@ void AnimationComponent::CalculateRotation(float mTime)
 {
 	float eulerX, eulerY, eulerZ;
 
+
 	AnimationData* data = GetDataByType(AnimationData::ROTATE_X);
 	eulerX = data->GetValue(data->GetIndex(mTime));
 

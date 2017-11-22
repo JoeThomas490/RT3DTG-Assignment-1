@@ -8,6 +8,7 @@ Animation::Animation()
 {
 	m_animTimer = 0;
 	m_fMaxTime = 0;
+	m_fBlendTime = 0.3f;
 
 	m_bIsLoopable = true;
 
@@ -42,6 +43,17 @@ void Animation::Update()
 void Animation::ResetTimer()
 {
 	m_animTimer = 0;
+}
+
+void Animation::SetTime(float mTime, float mMaxTime)
+{
+	float percent = mTime / mMaxTime;
+
+	if (mTime / m_fMaxTime > 1)
+	{
+		m_animTimer = mTime * percent;
+	}
+	m_animTimer = mTime;
 }
 
 void Animation::UpdateComponents()

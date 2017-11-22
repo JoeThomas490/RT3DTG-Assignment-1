@@ -24,6 +24,8 @@ public:
 
 	void ResetTimer();
 
+	void SetTime(float mTime, float mMaxTime);
+
 	//Get an animation component based on it's name (name of node)
 	AnimationComponent* GetAnimationComponentByName(char* componentName);
 
@@ -38,11 +40,15 @@ public:
 
 	void SetDebugAnim(bool mDebug) { m_bDebugAnim = mDebug; };
 
+	float GetBlendTime() { return m_fBlendTime; };
+
+	float GetTimer() { return m_animTimer; };
+	float GetMaxTime();
+
 private:
 
 	void UpdateComponents();
 
-	float GetMaxTime();
 
 private:
 
@@ -54,6 +60,8 @@ private:
 
 	//Maximun time of animation
 	float m_fMaxTime;
+
+	float m_fBlendTime;
 
 	//Whether the animation is playing or not
 	bool m_bIsPlaying;

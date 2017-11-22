@@ -157,8 +157,8 @@ void Application::HandleUpdate()
 		{
 			for (auto& robot : m_pRobots)
 			{
-				robot->SetActiveAnimation(0);
-				robot->GetActiveAnimation()->ResetTimer();
+				robot->SetBlendingAnimation(robot->GetAnimation(0));
+				//robot->GetActiveAnimation()->ResetTimer();
 			}
 			
 			db1 = true;
@@ -176,7 +176,7 @@ void Application::HandleUpdate()
 		{
 			for (auto& robot : m_pRobots)
 			{
-				robot->SetActiveAnimation(1);
+				robot->SetBlendingAnimation(robot->GetAnimation(1));
 			}
 			db2 = true;
 		}
@@ -193,7 +193,7 @@ void Application::HandleUpdate()
 		{
 			for (auto& robot : m_pRobots)
 			{
-				robot->SetActiveAnimation(2);
+				robot->SetBlendingAnimation(robot->GetAnimation(2));
 			}
 			db3 = true;
 		}
