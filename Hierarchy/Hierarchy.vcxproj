@@ -123,6 +123,12 @@
     <ClInclude Include="tinyxml\tinystr.h" />
     <ClInclude Include="tinyxml\tinyxml.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\asphalt.dds" />
+    <Image Include="Resources\Textures\grass.dds" />
+    <Image Include="Resources\Textures\materialmap.dds" />
+    <Image Include="Resources\Textures\moss.dds" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

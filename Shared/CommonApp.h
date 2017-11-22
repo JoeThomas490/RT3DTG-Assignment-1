@@ -116,6 +116,8 @@ struct Vertex_Pos3fColour4ubNormal3fTex2f
 
 	Vertex_Pos3fColour4ubNormal3fTex2f();
 	Vertex_Pos3fColour4ubNormal3fTex2f(const D3DXVECTOR3 &pos, VertexColour colour, const D3DXVECTOR3 &normal, const D3DXVECTOR2 &tex);
+	Vertex_Pos3fColour4ubNormal3fTex2f(const XMVECTOR &pos, VertexColour colour, const XMVECTOR &normal, const XMVECTOR &tex);
+	Vertex_Pos3fColour4ubNormal3fTex2f(const XMFLOAT3 &pos, VertexColour colour, const XMFLOAT3 &normal, const XMFLOAT2 &tex);
 };
 
 extern const D3D11_INPUT_ELEMENT_DESC g_aVertexDesc_Pos3fColour4ubNormal3fTex2f[];

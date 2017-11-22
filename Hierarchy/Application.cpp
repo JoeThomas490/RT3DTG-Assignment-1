@@ -33,6 +33,8 @@ bool Application::HandleStart()
 	m_bWireframe = false;
 	m_bDebugAnimations = false;
 
+	m_fFrameCount = 0.0f;
+
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 
@@ -242,7 +244,8 @@ void Application::HandleRender()
 	matWorld = XMMatrixIdentity();
 	this->SetWorldMatrix(matWorld);
 
-	m_pHeightMap->Draw();
+	m_pHeightMap->Draw(m_fFrameCount);
+	m_fFrameCount++;
 
 	m_pAeroplane->Draw();
 
@@ -263,6 +266,7 @@ void Application::LoadXML()
 	AnimationLoader loader;
 	for (auto& robot : m_pRobots)
 	{
+		//TODO Create a animation manager class so same anim isn't loaded over
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));

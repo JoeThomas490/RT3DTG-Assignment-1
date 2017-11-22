@@ -1,12 +1,37 @@
 ﻿  Aeroplane.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(73): warning C4238: nonstandard extension used: class rvalue used as lvalue
+  Animation.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animation.cpp(87): warning C4018: '<': signed/unsigned mismatch
+  AnimationComponent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.cpp(13): warning C4018: '<': signed/unsigned mismatch
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.cpp(117): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  AnimationLoader.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(70): warning C4018: '<': signed/unsigned mismatch
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(72): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(76): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(87): warning C4018: '<': signed/unsigned mismatch
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(89): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(90): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(91): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(97): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(98): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationloader.cpp(129): warning C4100: 'data': unreferenced formal parameter
   Application.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(40): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(44): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(42): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(46): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(70): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Bullet.cpp
+  HeightMap.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\heightmap.cpp(327): warning C4389: '!=': signed/unsigned mismatch
+  HierarchialComponent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialcomponent.cpp(94): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   HierarchialParent.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(105): warning C4130: '!=': logical operation on address of string constant
@@ -14,6 +39,7 @@ c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarc
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(150): warning C4238: nonstandard extension used: class rvalue used as lvalue
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(151): warning C4238: nonstandard extension used: class rvalue used as lvalue
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(217): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  MeshManager.cpp
   Robot.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
   Generating Code...

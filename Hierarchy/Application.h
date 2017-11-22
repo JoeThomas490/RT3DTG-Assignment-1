@@ -52,6 +52,8 @@ private:
 	bool m_bWireframe;
 	bool m_bDebugAnimations;
 
+	float m_fFrameCount;
+
 	int m_cameraState;
 
 	HeightMap* m_pHeightMap;

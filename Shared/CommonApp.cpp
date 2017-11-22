@@ -271,8 +271,26 @@ tex(texArg)
 {
 }
 
+Vertex_Pos3fColour4ubNormal3fTex2f::Vertex_Pos3fColour4ubNormal3fTex2f(const XMFLOAT3 &posArg, VertexColour colourArg, const XMFLOAT3 &normalArg, const XMFLOAT2 &texArg) :
+	pos(posArg.x, posArg.y, posArg.z),
+	colour(colourArg),
+	tex(texArg.x, texArg.y),
+	normal(normalArg.x, normalArg.y, normalArg.z)
+{
+}
+
+Vertex_Pos3fColour4ubNormal3fTex2f::Vertex_Pos3fColour4ubNormal3fTex2f(const XMVECTOR &posArg, VertexColour colourArg, const XMVECTOR &normalArg, const XMVECTOR &texArg)
+{
+	XMStoreFloat3((XMFLOAT3*)&pos, posArg);
+	colour = colourArg;
+	XMStoreFloat2((XMFLOAT2*)&tex, texArg);
+	XMStoreFloat3((XMFLOAT3*)&normal, normalArg);
+}
+
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+
 
 const D3D11_INPUT_ELEMENT_DESC g_aVertexDesc_Pos3fColour4ubNormal3fTex2f[] = {
 	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex_Pos3fColour4ubNormal3fTex2f, pos), D3D11_INPUT_PER_VERTEX_DATA, 0,},
