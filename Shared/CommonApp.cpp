@@ -477,7 +477,7 @@ bool CommonApp::HandleStart()
 	D3DXMatrixIdentity(&m_viewMtx);
 	D3DXMatrixIdentity(&m_worldMtx);
 
-	m_constantColour=D3DXVECTOR4(1.f, 1.f, 1.f, 1.f);
+	m_constantColour=D3DXVECTOR4(1.f, 1.0f, 1.0f, 1.f);
 
 	return true;
 }
@@ -620,7 +620,7 @@ void CommonApp::SetDefaultViewMatrix(const D3DXVECTOR3 &camera, const D3DXVECTOR
 
 void CommonApp::DrawUntextured(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, ID3D11Buffer *pIndexBuffer, unsigned numItems)
 {
-	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ub), pIndexBuffer, 0, numItems, NULL, NULL, &m_shaderUntextured);
+	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ub), pIndexBuffer, 0, numItems, NULL, NULL, &m_shaderUntextured, XMFLOAT4(1.0f,1.0f,1.0f,1.0f));
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -628,7 +628,7 @@ void CommonApp::DrawUntextured(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *
 
 void CommonApp::DrawUntexturedLit(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, ID3D11Buffer *pIndexBuffer, unsigned numItems)
 {
-	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubNormal3f), pIndexBuffer, 0, numItems, NULL, NULL, &m_shaderUntexturedLit);
+	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubNormal3f), pIndexBuffer, 0, numItems, NULL, NULL, &m_shaderUntexturedLit, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -636,7 +636,7 @@ void CommonApp::DrawUntexturedLit(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffe
 
 void CommonApp::DrawTextured(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, ID3D11Buffer *pIndexBuffer, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler)
 {
-	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubTex2f), pIndexBuffer, 0, numItems, pTextureView, pTextureSampler, &m_shaderTextured);
+	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubTex2f), pIndexBuffer, 0, numItems, pTextureView, pTextureSampler, &m_shaderTextured, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -644,13 +644,13 @@ void CommonApp::DrawTextured(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pV
 
 void CommonApp::DrawTexturedLit(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, ID3D11Buffer *pIndexBuffer, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler)
 {
-	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubNormal3fTex2f), pIndexBuffer, 0, numItems, pTextureView, pTextureSampler, &m_shaderTexturedLit);
+	this->DrawWithShader(topology, pVertexBuffer, sizeof(Vertex_Pos3fColour4ubNormal3fTex2f), pIndexBuffer, 0, numItems, pTextureView, pTextureSampler, &m_shaderTexturedLit, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-void CommonApp::DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, size_t vertexStride, ID3D11Buffer *pIndexBuffer, unsigned firstItem, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler, Shader *pShader)
+void CommonApp::DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, size_t vertexStride, ID3D11Buffer *pIndexBuffer, unsigned firstItem, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler, Shader *pShader, XMFLOAT4 colour)
 {
 	if (pShader->pVSCBuffer || pShader->pPSCBuffer)
 	{
@@ -693,8 +693,8 @@ void CommonApp::DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *
 		SetCBufferFloat4x4(vsMap, pShader->vsGlobals.invXposeW, invXposeW);
 		SetCBufferFloat4x4(psMap, pShader->psGlobals.invXposeW, invXposeW);
 
-		SetCBufferFloat4(vsMap, pShader->vsGlobals.constantColour, m_constantColour);
-		SetCBufferFloat4(psMap, pShader->psGlobals.constantColour, m_constantColour);
+		SetCBufferFloat4(vsMap, pShader->vsGlobals.constantColour, D3DXVECTOR4(colour.x, colour.y, colour.z, colour.w));
+		SetCBufferFloat4(psMap, pShader->psGlobals.constantColour, D3DXVECTOR4(colour.x, colour.y, colour.z, colour.w));
 
 		int numLights = 0;
 
@@ -1184,6 +1184,7 @@ void CommonApp::CreateShaderFromCompiledShader(Shader *pShader, ID3D11VertexShad
 
 CommonApp::Shader *CommonApp::GetUntexturedShader()
 {
+
 	return &m_shaderUntextured;
 }
 

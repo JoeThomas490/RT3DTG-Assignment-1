@@ -218,7 +218,7 @@ public:
 	// enabled lights aren't contiguous.
 	//
 	class Shader;
-	void DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, size_t vertexStride, ID3D11Buffer *pIndexBuffer, unsigned firstItem, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler, Shader *pShader);
+	void DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY topology, ID3D11Buffer *pVertexBuffer, size_t vertexStride, ID3D11Buffer *pIndexBuffer, unsigned firstItem, unsigned numItems, ID3D11ShaderResourceView *pTextureView, ID3D11SamplerState *pTextureSampler, Shader *pShader, XMFLOAT4 colour);
 
 	// Set constant colour.
 	void SetConstantColour(const D3DXVECTOR4 &constantColour);

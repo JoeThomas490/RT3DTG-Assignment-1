@@ -1,6 +1,5 @@
 #include "Animation.h"
 
-
 const float ANIMATION_TICK = 0.0133f;
 
 
@@ -38,9 +37,9 @@ void Animation::Update(bool mDebug)
 
 	if (!m_bIsLoopable)
 	{
-		if (m_animTimer > GetMaxTime() - 0.5f)
+		if (m_animTimer > GetMaxTime() - 0.1f)
 		{
-			m_animTimer = GetMaxTime() - 0.5f;
+			m_animTimer = GetMaxTime() - 0.1f;
 		}
 	}
 	else

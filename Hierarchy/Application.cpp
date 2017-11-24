@@ -64,9 +64,9 @@ bool Application::HandleStart()
 	m_pRobot->SetLocalPosition(0.0f, 2.5f, 10.0f);
 
 	int index = 0;
-	for (int i = 0; i < 360; i+= 360/5)
+	for (int i = 0; i < 360; i += 360 / 5)
 	{
-		m_pRobots[index]->SetLocalPosition(cos(XMConvertToRadians(i)) * 25.0f, 2.0f, sin(XMConvertToRadians(i)) * 25.0f);
+		m_pRobots[index]->SetLocalPosition(cos(XMConvertToRadians(i)) * 100.0f, 2.0f, sin(XMConvertToRadians(i)) * 25.0f);
 		m_pRobots[index]->SetLocalRotation(0, 360 - (i), 0);
 		index++;
 	}
@@ -101,8 +101,13 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-
 	SelectAnimation();
+	HandleCameraUpdate();
+	HandleDebug();
+
+	HandleSpawnBullets();
+
+	HandleCollision();
 
 	for (auto& robot : m_pRobots)
 	{
@@ -110,83 +115,6 @@ void Application::HandleUpdate()
 	}
 
 	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
-
-
-	m_rotationAngle += .01f;
-
-	if (m_cameraState == CAMERA_MAP)
-	{
-		if (this->IsKeyPressed('Q'))
-			m_cameraZ -= 2.0f;
-
-		if (this->IsKeyPressed('A'))
-			m_cameraZ += 2.0f;
-	}
-
-	static bool dbC = false;
-
-	if (this->IsKeyPressed('C'))
-	{
-		if (!dbC)
-		{
-			if (++m_cameraState == CAMERA_MAX)
-				m_cameraState = CAMERA_MAP;
-
-			dbC = true;
-		}
-	}
-	else
-	{
-		dbC = false;
-	}
-
-	static bool dbW = false;
-	if (this->IsKeyPressed('W'))
-	{
-		if (!dbW)
-		{
-			m_bWireframe = !m_bWireframe;
-			this->SetRasterizerState(false, m_bWireframe);
-			dbW = true;
-		}
-	}
-	else
-	{
-		dbW = false;
-	}
-
-
-	static bool dbSpace = false;
-
-	//If space bar is pressed
-	if (this->IsKeyPressed(32))
-	{
-		if (!dbSpace)
-		{
-			dbSpace = true;
-
-			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
-			XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
-
-			int freeIndex = 0;
-			while (freeIndex < MAX_BULLETS)
-			{
-				if (!m_arrBullets[freeIndex].GetIsVisible())
-				{
-					break;
-				}
-				freeIndex++;
-			}
-			//Pass position and rotation
-
-			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, 1.0f);
-		}
-	}
-	else
-	{
-		dbSpace = false;
-	}
-
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
@@ -260,6 +188,123 @@ void Application::HandleRender()
 	}
 }
 
+void Application::HandleCollision()
+{
+	XMFLOAT4 planePos = m_pAeroplane->GetParentPosition();
+	for (auto& robot : m_pRobots)
+	{
+		/*if (GetLengthBetweenEntities(planePos, robot->GetParentPosition()) < 50)
+		{
+			robot->SetBlendingAnimation(robot->GetAnimation(2));
+		}*/
+
+		for (int i = 0; i < MAX_BULLETS; i++)
+		{
+			if (m_arrBullets[i].GetIsVisible())
+			{
+				if (GetLengthBetweenEntities(m_arrBullets[i].GetPosition(), robot->GetParentPosition()) < 20)
+				{
+					robot->SetBlendingAnimation(robot->GetAnimation(0));
+				}
+			}
+		}
+	}
+
+
+}
+
+void Application::HandleDebug()
+{
+	static bool dbW = false;
+	if (this->IsKeyPressed('W'))
+	{
+		if (!dbW)
+		{
+			m_bWireframe = !m_bWireframe;
+			this->SetRasterizerState(false, m_bWireframe);
+			dbW = true;
+		}
+	}
+	else
+	{
+		dbW = false;
+	}
+
+	if (this->IsKeyPressed('F'))
+	{
+		m_bDebugAnimations = true;
+	}
+	else
+	{
+		m_bDebugAnimations = false;
+	}
+
+}
+
+void Application::HandleSpawnBullets()
+{
+	static bool dbSpace = false;
+	//If space bar is pressed
+	if (this->IsKeyPressed(32))
+	{
+		if (!dbSpace)
+		{
+			dbSpace = true;
+
+			XMMATRIX mGunWorldMatrix = m_pAeroplane->GetGunWorldMatrix();
+			XMFLOAT4 mPlaneForwardVector = m_pAeroplane->GetForwardVector();
+
+			int freeIndex = 0;
+			while (freeIndex < MAX_BULLETS)
+			{
+				if (!m_arrBullets[freeIndex].GetIsVisible())
+				{
+					break;
+				}
+				freeIndex++;
+			}
+			//Pass position and rotation
+
+			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, 1.0f);
+		}
+	}
+	else
+	{
+		dbSpace = false;
+	}
+
+}
+
+void Application::HandleCameraUpdate()
+{
+	m_rotationAngle += .01f;
+
+	if (m_cameraState == CAMERA_MAP)
+	{
+		if (this->IsKeyPressed('Q'))
+			m_cameraZ -= 2.0f;
+
+		if (this->IsKeyPressed('A'))
+			m_cameraZ += 2.0f;
+	}
+
+	static bool dbC = false;
+
+	if (this->IsKeyPressed('C'))
+	{
+		if (!dbC)
+		{
+			if (++m_cameraState == CAMERA_MAX)
+				m_cameraState = CAMERA_MAP;
+
+			dbC = true;
+		}
+	}
+	else
+	{
+		dbC = false;
+	}
+}
 
 void Application::LoadXML()
 {
@@ -273,6 +318,7 @@ void Application::LoadXML()
 
 		robot->SetActiveAnimation(0);
 		robot->GetActiveAnimation()->SetIsLoopable(false);
+
 	}
 }
 
@@ -329,15 +375,18 @@ void Application::SelectAnimation()
 	{
 		db3 = false;
 	}
+}
 
-	if (this->IsKeyPressed('F'))
-	{
-		m_bDebugAnimations = true;
-	}
-	else
-	{
-		m_bDebugAnimations = false;
-	}
+float Application::GetLengthBetweenEntities(XMFLOAT4 a, XMFLOAT4 b)
+{
+
+	XMVECTOR diff = XMLoadFloat4(&a); -XMLoadFloat4(&b);
+
+	XMFLOAT4 lengthVec;
+	XMStoreFloat4(&lengthVec, diff);
+
+	float length = sqrt((lengthVec.x * lengthVec.x) + (lengthVec.y * lengthVec.y) + (lengthVec.z * lengthVec.z));
+	return abs(length);
 }
 
 //////////////////////////////////////////////////////////////////////

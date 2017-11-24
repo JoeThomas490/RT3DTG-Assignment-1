@@ -1,7 +1,2 @@
-﻿  CommonApp.cpp
-  CommonFont.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\shared\commonfont.cpp(108): warning C4456: declaration of 'ch' hides previous local declaration
-  c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\shared\commonfont.cpp(99): note: see declaration of 'ch'
-  CommonMesh.cpp
-  Generating Code...
+﻿  CommonMesh.cpp
   Shared.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Shared.lib

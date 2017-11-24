@@ -92,6 +92,9 @@ struct CommonMesh::Subset
 
 	Subset();
 	~Subset();
+public :
+	XMFLOAT4 colour;
+
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -108,7 +111,8 @@ pTexture(NULL),
 pTextureView(NULL),
 pSamplerState(NULL),
 localAABBMin(0.f, 0.f, 0.f),
-localAABBMax(0.f, 0.f, 0.f)
+localAABBMax(0.f, 0.f, 0.f),
+colour(1.0f,1.0f,1.0f,1.0f)
 {
 }
 
@@ -390,7 +394,7 @@ void CommonMesh::DrawSubset(size_t subsetIndex)
 	const Subset *pSubset = &m_pSubsets[subsetIndex];
 
 	m_pApp->DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pSubset->pVertexBuffer, pSubset->vtxStride, pSubset->pIndexBuffer, pSubset->firstItem, 
-		pSubset->numItems, pSubset->pTextureView, pSubset->pSamplerState, pSubset->pShader);
+		pSubset->numItems, pSubset->pTextureView, pSubset->pSamplerState, pSubset->pShader, pSubset->colour);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -404,6 +408,12 @@ void CommonMesh::GetSubsetLocalAABB(size_t subsetIndex, D3DXVECTOR3 *pLocalAABBM
 
 	*pLocalAABBMin = pSubset->localAABBMin;
 	*pLocalAABBMax = pSubset->localAABBMax;
+}
+
+void CommonMesh::SetColour(size_t subsetIndex,const XMFLOAT4& colour)
+{
+	Subset* pSubset = &m_pSubsets[subsetIndex];
+	pSubset->colour = colour;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -69,6 +69,20 @@ void HierarchialParent::DrawHierarchy()
 	}
 }
 
+XMFLOAT4 HierarchialParent::GetParentPosition()
+{
+	return m_v4LocalPos;
+
+	/*for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+	{
+		if (it->second->GetParentNode() == "")
+		{
+			return it->second->GetLocalPosition();
+		}
+	}*/
+	//return XMFLOAT4(0,0,0,0);
+}
+
 void HierarchialParent::SetActiveAnimation(int index)
 {
 	m_pActiveAnimation = &(m_mAnimations[index]);
@@ -78,7 +92,10 @@ void HierarchialParent::SetBlendingAnimation(Animation * pBlend)
 {
 	if (m_pBlendingAnimation != NULL)
 	{
-		m_pActiveAnimation = m_pBlendingAnimation;
+		if (m_pBlendingAnimation != pBlend)
+		{
+			m_pActiveAnimation = m_pBlendingAnimation;
+		}
 	}
 	m_pBlendingAnimation = pBlend;
 	m_pBlendingAnimation->SetTime(m_pActiveAnimation->GetTimer(), m_pActiveAnimation->GetMaxTime());

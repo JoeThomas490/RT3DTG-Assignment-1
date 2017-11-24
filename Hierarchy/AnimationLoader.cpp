@@ -73,7 +73,7 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 			}
 
 			if (timeValues.size() > 1)
-				data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0]);
+				data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[0]);
 
 			componentData->m_animationData.push_back(data);
 		}
@@ -93,9 +93,9 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 
 			if (timeValues.size() > 1)
 			{
-				xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[0] / 10.0f);
-				yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[1] / 10.0f);
-				zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.5f, positionValues[2] / 10.0f);
+				xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[0] / 10.0f);
+				yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[1] / 10.0f);
+				zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[2] / 10.0f);
 			}
 			
 

@@ -22,16 +22,14 @@ public:
 	HierarchialComponent* GetHiararchyComponentFromTag(char* tag);
 
 	void UpdateHierarchy(bool mDebug);
-
 	void DrawHierarchy();
 
+	XMFLOAT4 GetParentPosition();
+
 	void SetActiveAnimation(int index);
-
 	void AddAnimation(const Animation &mAnim) { m_mAnimations.push_back(mAnim); };
-	Animation* GetAnimation(int index) { return &(m_mAnimations[index]); };
 
-	Animation* GetActiveAnimation() { return m_pActiveAnimation; };
-	void SetBlendingAnimation(Animation* pBlend);
+
 private:
 	std::vector<char*> m_vHierarchyOrder;
 
@@ -58,7 +56,6 @@ private:
 
 	int m_iFrameCounter;
 
-
 public:
 
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4LocalPos = mPos; };
@@ -66,5 +63,9 @@ public:
 	void SetLocalRotation(XMFLOAT4 mRot) { m_v4LocalRot = mRot; };
 	void SetLocalRotation(float fX, float fY, float fZ) { m_v4LocalRot = XMFLOAT4(fX, fY, fZ, 0); };
 
+	Animation* GetAnimation(int index) { return &(m_mAnimations[index]); };
+	Animation* GetActiveAnimation() { return m_pActiveAnimation; };
+	Animation* GetBlendingAnimation() { return m_pBlendingAnimation; };
+	void SetBlendingAnimation(Animation* pBlend);
 };
 

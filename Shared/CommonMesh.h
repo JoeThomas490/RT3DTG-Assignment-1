@@ -15,6 +15,8 @@ struct ID3DXBuffer;
 class CommonMesh
 {
 public:
+	struct Subset;
+
 	static CommonMesh *LoadFromXFile(CommonApp *pApp, const char *pFileName);
 	static CommonMesh *NewBoxMesh(CommonApp *pApp, float width, float height, float depth);
 	static CommonMesh *NewCylinderMesh(CommonApp *pApp, float radius1, float radius2, float length, unsigned slices, unsigned stacks);
@@ -35,12 +37,11 @@ public:
 	void SetSubsetShader(size_t subsetIndex, CommonApp::Shader *pShader);
 	void DrawSubset(size_t subsetIndex);
 	void GetSubsetLocalAABB(size_t subsetIndex, D3DXVECTOR3 *pLocalAABBMin, D3DXVECTOR3 *pLocalAABBMax) const;
-
+	void SetColour(size_t subsetIndex, const XMFLOAT4& colour);
 	// Many meshes have only one subset.
 	void SetShaderForAllSubsets(CommonApp::Shader *pShader);
 protected:
 private:
-	struct Subset;
 
 	CommonMesh();
 

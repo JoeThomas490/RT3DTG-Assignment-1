@@ -27,6 +27,9 @@ public:
 	void SetLocalPosition(float fX, float fY, float fZ);
 	void SetLocalOffset(float fX, float fY, float fZ);
 
+	void SetColor(float r, float g, float b, float a);
+	void SetColor(XMFLOAT4 col);
+
 	void Draw();
 
 	XMMATRIX UpdateLocalMatrix();
@@ -78,7 +81,10 @@ public:
 	void SetRotationY(float f) { m_v4Rot.y = f; };
 	void SetRotationZ(float f) { m_v4Rot.z = f; };
 
-	void SetMesh(CommonMesh* mesh) { m_mMesh = mesh; m_bIsDrawable = true; };
+	void SetMesh(CommonMesh* mesh) { 
+		m_mMesh = mesh; 
+		m_bIsDrawable = true; 
+	};
 
 	void* operator new(size_t i)
 	{

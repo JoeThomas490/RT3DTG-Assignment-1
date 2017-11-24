@@ -39,11 +39,19 @@ class Application : public CommonApp
 	void HandleUpdate();
 	void HandleRender();
 
+	void HandleCollision();
+	void HandleDebug();
+	void HandleSpawnBullets();
+
+	void HandleCameraUpdate();
+
 	void LoadXML();
 
 private:
 
 	void SelectAnimation();
+
+	float GetLengthBetweenEntities(XMFLOAT4 a, XMFLOAT4 b);
 
   private:
 	float m_rotationAngle;

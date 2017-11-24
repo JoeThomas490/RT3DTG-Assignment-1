@@ -26,6 +26,11 @@ Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 
 	GetHiararchyComponentFromTag("gun")->SetLocalPosition(0.0f, 0.5f, 0.0f);
 
+	GetHiararchyComponentFromTag("plane")->SetColor(0.050f, 0.231f, 0.101f, 1.0f);
+	GetHiararchyComponentFromTag("prop")->SetColor(0.862f, 0.858f, 0.015f, 1.0f);
+	GetHiararchyComponentFromTag("turret")->SetColor(0.345, 0.207f, 0.098f, 1.0f);
+	GetHiararchyComponentFromTag("gun")->SetColor(0.819f, 0.8190f, 0.717f, 1.0f);
+
 	m_v4CamOff = XMFLOAT4(0.0f, 4.5f, -15.0f, 0.0f);
 	m_v4CamRot = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -60,11 +65,20 @@ void Aeroplane::Update(bool bPlayerControl)
 	mProp->SetRotationZ(mProp->GetLocalRotation().z + 100 * m_fSpeed);
 
 	HierarchialComponent* mTurret = GetHiararchyComponentFromTag("turret");
-	mTurret->SetRotationY(mTurret->GetLocalRotation().y + 0.1f);
 
 	// Tilt gun up and down as turret rotates
 	HierarchialComponent* mGun = GetHiararchyComponentFromTag("gun");
-	mGun->SetRotationX(sin((float)XMConvertToRadians(mTurret->GetLocalRotation().y * 4.0f)) * 10.0f - 10.0f);
+
+	if (!m_bGunCam)
+	{
+		mGun->SetLocalRotation(0, 0, 0);
+		mTurret->SetLocalRotation(0, 0, 0);
+	}
+	else
+	{
+		mTurret->SetRotationY(mTurret->GetLocalRotation().y + 0.1f);
+		mGun->SetRotationX(sin((float)XMConvertToRadians(mTurret->GetLocalRotation().y * 4.0f)) * 10.0f - 10.0f);
+	}
 
 	UpdateMatrices();
 

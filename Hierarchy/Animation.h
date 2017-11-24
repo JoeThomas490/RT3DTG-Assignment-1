@@ -38,6 +38,7 @@ public:
 	void SetIsLoopable(bool mLoop) { m_bIsLoopable = mLoop; };
 	bool GetIsLoopable() { return m_bIsLoopable; };
 
+	void SetBlendTime(float mBlend) { m_fBlendTime = mBlend; };
 	float GetBlendTime() { return m_fBlendTime; };
 
 	float GetTimer() { return m_animTimer; };

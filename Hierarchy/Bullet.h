@@ -37,6 +37,8 @@ public:
 		_mm_free(p);
 	}
 
+	XMFLOAT4 GetPosition() { return m_v4Pos; };
+
 
 private:
 	void UpdateMatrices();

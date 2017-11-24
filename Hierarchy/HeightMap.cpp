@@ -136,7 +136,14 @@ XMFLOAT3* HeightMap::GetFaceNormalPtr(int faceIndex, int offset)
 
 HeightMap::~HeightMap()
 {
+
+	delete[]m_pMapVtxs;
+	delete[]m_pHeightMap;
+
+
 	Release(m_pHeightMapBuffer);
+	Release(m_pMyAppCBuffer);
+
 
 	DeleteShader();
 }
@@ -194,7 +201,7 @@ void HeightMap::Draw(float frameCount)
 	m_pSamplerState = Application::s_pApp->GetSamplerState(true, true, true);
 
 	Application::s_pApp->DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, m_pHeightMapBuffer, sizeof(Vertex_Pos3fColour4ubNormal3fTex2f),
-		NULL, 0, m_HeightMapVtxCount, NULL, m_pSamplerState, &m_shader);
+		NULL, 0, m_HeightMapVtxCount, NULL, m_pSamplerState, &m_shader, XMFLOAT4(1.0f,1.0f,1.0f,1.0f));
 }
 
 bool HeightMap::ReloadShader(void)

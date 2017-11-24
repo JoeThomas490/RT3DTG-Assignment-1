@@ -115,6 +115,18 @@ void HierarchialComponent::SetLocalOffset(float fX, float fY, float fZ)
 	m_v4Offset = XMFLOAT4(fX, fY, fZ, 0.0f);
 }
 
+void HierarchialComponent::SetColor(float r, float g, float b, float a)
+{
+	for (int i = 0; i < m_mMesh->GetNumSubsets(); i++)
+	{
+		m_mMesh->SetColour(i, XMFLOAT4(r,g,b,a));
+	}
+}
+
+void HierarchialComponent::SetColor(XMFLOAT4 col)
+{
+}
+
 void HierarchialComponent::Draw()
 {
 	Application::s_pApp->SetWorldMatrix(m_mWorldMatrix);

@@ -16,7 +16,6 @@ Bullet::Bullet()
 
 	m_vBulletOffset = XMVectorSet(0.0f, 0.2f, 1.5f, 1.0f);
 
-
 	m_fMovementSpeed = 0;
 
 	m_bIsReadyToUpdate = false;
@@ -76,7 +75,7 @@ void Bullet::Update()
 	if (m_bIsVisible)
 	{
 		m_fLifeTime++;
-		if (m_fLifeTime > 150)
+		if (m_fLifeTime > 300)
 		{
 			m_fLifeTime = 0;
 			m_bIsVisible = false;
@@ -84,10 +83,10 @@ void Bullet::Update()
 
 		if (m_bIsReadyToUpdate)
 		{
-			m_v4Pos.x += m_v4ForwardVector.x;
-			m_v4Pos.y += m_v4ForwardVector.y;
-			m_v4Pos.z += m_v4ForwardVector.z;
-		}
+			m_v4Pos.x += (m_v4ForwardVector.x * 1.6f);
+			m_v4Pos.y += (m_v4ForwardVector.y * 1.6f);
+			m_v4Pos.z += (m_v4ForwardVector.z * 1.6f);
+		}									  
 		else
 		{
 			m_bIsReadyToUpdate = true;
@@ -112,7 +111,7 @@ void Bullet::UpdateMatrices()
 
 	mRot = XMMatrixRotationQuaternion(XMLoadFloat4(&m_v4Rot));
 	mTrans = XMMatrixTranslationFromVector(XMLoadFloat4(&m_v4Pos));
-	mScale = XMMatrixScaling(0.1f, 0.1f, 0.1f);
+	mScale = XMMatrixScaling(0.2f, 0.2f, 0.2f);
 
 	m_mWorldMatrix = mRot * mScale * mTrans;
 }
