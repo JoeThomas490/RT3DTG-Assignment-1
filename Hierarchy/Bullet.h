@@ -19,7 +19,7 @@ public:
 	Bullet();
 	~Bullet() = default;
 
-	void ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector, float fSpeed);
+	void ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector, float fPlaneSpeed);
 
 	static void LoadResources();
 	static void ReleaseResources();

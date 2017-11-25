@@ -11,6 +11,8 @@ Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 	m_vCamWorldPos = XMVectorZero();
 	m_vForwardVector = XMVectorZero();
 
+	//m_pMyAppCBuffer = NULL;
+
 
 	AddHierarchyComponent(new HierarchialComponent("", MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
 	AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop")), "prop");
@@ -33,6 +35,9 @@ Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 
 	m_v4CamOff = XMFLOAT4(0.0f, 4.5f, -15.0f, 0.0f);
 	m_v4CamRot = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+
+
+	LoadShader();
 }
 
 
@@ -91,10 +96,81 @@ void Aeroplane::Update(bool bPlayerControl)
 	GetHiararchyComponentFromTag("plane")->SetLocalPosition(planePosition);
 }
 
-void Aeroplane::Draw()
+void Aeroplane::Draw(XMFLOAT3 camPos)
 {
+	HierarchialParent::UpdateShader(camPos);
 	DrawHierarchy();
 }
+
+//void Aeroplane::UpdateShader(XMFLOAT3 camPos)
+//{
+//	ID3D11DeviceContext* pContext = Application::s_pApp->GetDeviceContext();
+//
+//	if (m_pMyAppCBuffer)
+//	{
+//		D3D11_MAPPED_SUBRESOURCE map;
+//		if (SUCCEEDED(pContext->Map(m_pMyAppCBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map)))
+//		{
+//			// Set the buffer contents. There is only one variable to set in this case.
+//			// This method relies on the offset which has been found through Shader Reflection.
+//			SetCBufferFloat3(map, m_cameraPosOffset, D3DXVECTOR3(camPos.x, camPos.y, camPos.z));
+//			pContext->Unmap(m_pMyAppCBuffer, 0);
+//		}
+//	}
+//}
+
+//bool Aeroplane::LoadShader()
+//{
+//
+//	ID3D11VertexShader* pVS = NULL;
+//	ID3D11PixelShader* pPS = NULL;
+//	ID3D11InputLayout* pIL = NULL;
+//
+//	ShaderDescription vs, ps;
+//
+//	ID3D11Device* pDevice = Application::s_pApp->GetDevice();
+//
+//	char maxNumLightsValue[100];
+//	_snprintf_s(maxNumLightsValue, sizeof maxNumLightsValue, _TRUNCATE, "%d", CommonApp::MAX_NUM_LIGHTS);
+//
+//	D3D_SHADER_MACRO aMacros[] = {
+//		{
+//			"MAX_NUM_LIGHTS",
+//			maxNumLightsValue,
+//		},
+//		{ NULL },
+//	};
+//
+//	if (!CompileShadersFromFile(pDevice, "./Resources/Shaders/SpecularShader.hlsl", "VSMain", &pVS, &vs, g_aVertexDesc_Pos3fColour4ubNormal3f,
+//		g_vertexDescSize_Pos3fColour4ubNormal3f, &pIL, "PSMain", &pPS, &ps, aMacros))
+//	{
+//		return false; // false;
+//	}
+//
+//	Application::s_pApp->CreateShaderFromCompiledShader(&m_shader, pVS, &vs, pIL, pPS, &ps);
+//
+//	ps.FindCBuffer("MyApp", &m_psMyAppCBufferSlot);
+//	ps.FindFloat(m_psMyAppCBufferSlot, "g_cameraPosition", &m_cameraPosOffset);
+//
+//	// Create a cbuffer, using the shader description to find out how
+//	// large it needs to be.
+//	m_pMyAppCBuffer = CreateBuffer(pDevice, ps.GetCBufferSizeBytes(m_psMyAppCBufferSlot), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, NULL);
+//
+//	// In this example we are sharing the constant buffer between both vertex and pixel shaders.
+//	// This is efficient since we only update one buffer. However we could define separate constant buffers for each stage.
+//	// Generally constant buffers should represent groups of variables that must be updated at the same rate.
+//	// So : we might have 'per execution' 'per frame', 'per draw' constant buffers.
+//
+//	SetShaderForAll(&m_shader);
+//}
+
+//void Aeroplane::DeleteShader()
+//{
+//	HierarchialParent::DeleteShader();
+//	Release(m_pMyAppCBuffer);
+//
+//	m_shader.Reset();
+//}
 
 void Aeroplane::UpdateMatrices()
 {

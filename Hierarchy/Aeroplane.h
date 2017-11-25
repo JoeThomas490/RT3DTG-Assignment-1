@@ -24,7 +24,10 @@ public:
 	void ReleaseResources();
 
 	void Update(bool bPlayerControl);
-	void Draw();
+	void Draw(XMFLOAT3 camPos);
+
+	//bool LoadShader();
+	//void DeleteShader();
 
 private:
 	void UpdateMatrices();
@@ -32,6 +35,8 @@ private:
 
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
+
+	//void UpdateShader(XMFLOAT3 camPos);
 
 private:
 	static bool s_bResourcesReady;
@@ -48,6 +53,12 @@ private:
 
 	bool m_bGunCam;
 
+	//Application::Shader m_shader;
+
+	//ID3D11Buffer* m_pMyAppCBuffer; // our custom buffer resource.
+	//int m_psMyAppCBufferSlot; // custom buffer resource binding in PS, discovered by reflection.
+	//int m_vsMyAppCBufferSlot; // custom buffer resource binding in VS, discovered by reflection.
+	//int m_cameraPosOffset;
 public:
 	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
 	XMFLOAT4 GetCameraPosition(void)
@@ -68,6 +79,8 @@ public:
 	}
 
 	void SetGunCamera(bool value) { m_bGunCam = value; }
+
+	float GetMovementSpeed() { return m_fSpeed; };
 
 	void* operator new(size_t i)
 	{

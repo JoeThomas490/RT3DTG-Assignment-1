@@ -421,8 +421,10 @@ void CommonMesh::SetColour(size_t subsetIndex,const XMFLOAT4& colour)
 
 void CommonMesh::SetShaderForAllSubsets(CommonApp::Shader *pShader)
 {
-	for (size_t i = 0; i < this->GetNumSubsets(); ++i)
-		this->SetSubsetShader(i, pShader);
+	for (size_t i = 0; i < GetNumSubsets(); ++i)
+	{
+		SetSubsetShader(i, pShader);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////

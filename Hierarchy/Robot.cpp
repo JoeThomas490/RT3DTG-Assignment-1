@@ -11,6 +11,25 @@ Robot::Robot(float fX, float fY, float fZ, float fRotY)
 
 	AddComponents();
 	GetHiararchyComponentFromTag("root")->SetLocalRotation(0.0f, fRotY, 0.0f);
+
+	GetHiararchyComponentFromTag("body")->SetColor(0.666f, 0.572f, 0.572f, 1.0f);
+	GetHiararchyComponentFromTag("neck")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
+	GetHiararchyComponentFromTag("pelvis")->SetColor(0.666f, 0.572f, 0.572f, 1.0f);
+
+	GetHiararchyComponentFromTag("left_hip")->SetColor(0.584f, 0.494f, 0.494f, 1.0f);
+	GetHiararchyComponentFromTag("right_hip")->SetColor(0.584f, 0.494f, 0.494f, 1.0f);
+	GetHiararchyComponentFromTag("left_knee")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
+	GetHiararchyComponentFromTag("right_knee")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
+	GetHiararchyComponentFromTag("left_ankle")->SetColor(0.309f, 0.188f, 0.188f, 1.0f);
+	GetHiararchyComponentFromTag("right_ankle")->SetColor(0.309f, 0.188f, 0.188f, 1.0f);
+	
+	GetHiararchyComponentFromTag("left_shoulder")->SetColor(0.584f, 0.494f, 0.494f, 1.0f);
+	GetHiararchyComponentFromTag("right_shoulder")->SetColor(0.584f, 0.494f, 0.494f, 1.0f);
+	GetHiararchyComponentFromTag("left_elbow")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
+	GetHiararchyComponentFromTag("right_elbow")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
+	GetHiararchyComponentFromTag("left_wrist")->SetColor(0.666f, 0.074f, 0.098f, 1.0f);
+	GetHiararchyComponentFromTag("right_wrist")->SetColor(0.666f, 0.074f, 0.098f, 1.0f);
+
 }
 
 void Robot::LoadResources()
@@ -63,7 +82,8 @@ void Robot::Update(bool mDebug)
 	UpdateHierarchy(mDebug);
 }
 
-void Robot::Draw()
+void Robot::Draw(XMFLOAT3 camPos)
 {
+	//UpdateShader(camPos);
 	DrawHierarchy();
 }

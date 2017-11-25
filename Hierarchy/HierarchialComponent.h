@@ -30,6 +30,8 @@ public:
 	void SetColor(float r, float g, float b, float a);
 	void SetColor(XMFLOAT4 col);
 
+	void SetShader(Application::Shader* pShader);
+
 	void Draw();
 
 	XMMATRIX UpdateLocalMatrix();
@@ -85,6 +87,10 @@ public:
 		m_mMesh = mesh; 
 		m_bIsDrawable = true; 
 	};
+
+	CommonMesh* GetMesh() { return m_mMesh; };
+
+	bool GetIsDrawable() { return m_bIsDrawable; };
 
 	void* operator new(size_t i)
 	{

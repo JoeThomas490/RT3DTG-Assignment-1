@@ -29,6 +29,11 @@ public:
 	void SetActiveAnimation(int index);
 	void AddAnimation(const Animation &mAnim) { m_mAnimations.push_back(mAnim); };
 
+	void SetShaderForAll(Application::Shader* pShader);
+
+	bool LoadShader();
+	void DeleteShader();
+	void UpdateShader(XMFLOAT3 camPos);
 
 private:
 	std::vector<char*> m_vHierarchyOrder;
@@ -55,6 +60,13 @@ private:
 	float m_fBlendTimer;
 
 	int m_iFrameCounter;
+
+	Application::Shader m_shader;
+
+	ID3D11Buffer* m_pMyAppCBuffer; // our custom buffer resource.
+	int m_psMyAppCBufferSlot; // custom buffer resource binding in PS, discovered by reflection.
+	int m_vsMyAppCBufferSlot; // custom buffer resource binding in VS, discovered by reflection.
+	int m_cameraPosOffset;
 
 public:
 

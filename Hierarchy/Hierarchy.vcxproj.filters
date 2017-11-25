@@ -108,19 +108,8 @@
     <Filter Include="Resources\Textures">
       <UniqueIdentifier>{f66196b1-71d6-4318-b6bb-16684f4dfcc0}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\Textures\asphalt.dds">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\grass.dds">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\materialmap.dds">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="Resources\Textures\moss.dds">
-      <Filter>Resources\Textures</Filter>
-    </Image>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{9d36cb76-1e85-4677-83ca-417e8697f828}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

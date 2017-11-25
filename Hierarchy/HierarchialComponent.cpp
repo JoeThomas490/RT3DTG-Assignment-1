@@ -123,8 +123,9 @@ void HierarchialComponent::SetColor(float r, float g, float b, float a)
 	}
 }
 
-void HierarchialComponent::SetColor(XMFLOAT4 col)
+void HierarchialComponent::SetShader(Application::Shader * pShader)
 {
+	m_mMesh->SetShaderForAllSubsets(pShader);
 }
 
 void HierarchialComponent::Draw()

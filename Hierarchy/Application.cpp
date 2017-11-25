@@ -37,9 +37,9 @@ bool Application::HandleStart()
 
 	m_pHeightMap = new HeightMap("Resources/heightmap.bmp", 2.0f);
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
+	m_pAeroplane->LoadShader();
 
 	Robot::LoadResources();
-	m_pRobot = new Robot(10.0f, 10.0f, -20.0f, 0.0f);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -61,13 +61,14 @@ bool Application::HandleStart()
 
 	LoadXML();
 
-	m_pRobot->SetLocalPosition(0.0f, 2.5f, 10.0f);
 
 	int index = 0;
 	for (int i = 0; i < 360; i += 360 / 5)
 	{
 		m_pRobots[index]->SetLocalPosition(cos(XMConvertToRadians(i)) * 100.0f, 2.0f, sin(XMConvertToRadians(i)) * 25.0f);
 		m_pRobots[index]->SetLocalRotation(0, 360 - (i), 0);
+
+		m_pRobots[index]->LoadShader();
 		index++;
 	}
 	return true;
@@ -80,16 +81,14 @@ void Application::HandleStop()
 {
 	delete m_pHeightMap;
 
+	m_pAeroplane->DeleteShader();
 	delete m_pAeroplane;
 
 	Bullet::ReleaseResources();
 
-	//Robot::ReleaseResources();
-	delete m_pRobot;
-	m_pRobot = nullptr;
-
 	for (auto& robot : m_pRobots)
 	{
+		robot->DeleteShader();
 		delete robot;
 	}
 
@@ -101,25 +100,41 @@ void Application::HandleStop()
 
 void Application::HandleUpdate()
 {
-	SelectAnimation();
-	HandleCameraUpdate();
-	HandleDebug();
-
 	HandleSpawnBullets();
 
-	HandleCollision();
-
+	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 	for (auto& robot : m_pRobots)
 	{
 		robot->Update(m_bDebugAnimations);
 	}
 
-	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
 		m_arrBullets[i].Update();
 	}
+
+	SelectAnimation();
+	HandleCameraUpdate();
+	HandleDebug();
+
+	static bool dbR = false;
+	if (this->IsKeyPressed('R'))
+	{
+		if (!dbR)
+		{
+			m_pAeroplane->LoadShader();
+			dbR = true;
+		}
+	}
+	else
+	{
+		dbR = false;
+	}
+
+	//HandleCollision();
+
+	
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -175,11 +190,11 @@ void Application::HandleRender()
 	m_pHeightMap->Draw(m_fFrameCount);
 	m_fFrameCount++;
 
-	m_pAeroplane->Draw();
+	m_pAeroplane->Draw(vCamera);
 
 	for (auto& robot : m_pRobots)
 	{
-		robot->Draw();
+		robot->Draw(vCamera);
 	}
 
 	for (int i = 0; i < MAX_BULLETS; i++)
@@ -265,7 +280,7 @@ void Application::HandleSpawnBullets()
 			}
 			//Pass position and rotation
 
-			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, 1.0f);
+			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, m_pAeroplane->GetMovementSpeed());
 		}
 	}
 	else

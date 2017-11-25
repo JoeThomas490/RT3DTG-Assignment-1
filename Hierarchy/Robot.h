@@ -15,7 +15,7 @@ public:
 	~Robot() = default;
 
 	void Update(bool mDebug);
-	void Draw();
+	void Draw(XMFLOAT3 camPos);
 
 	static void LoadResources();
 

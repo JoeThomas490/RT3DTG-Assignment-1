@@ -279,6 +279,8 @@ public:
 		int invXposeW;
 		int w;
 		int constantColour;
+		int specularColour;
+		int specularPower;
 		int lightDirections;
 		int lightPositions;
 		int lightColours;
