@@ -1,5 +1,4 @@
-﻿  Aeroplane.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(33): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(92): warning C4238: nonstandard extension used: class rvalue used as lvalue
+﻿  CubeMap.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\cubemap.cpp(29): warning C4101: 'mCubeMapSRV': unreferenced local variable
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\cubemap.cpp(97): warning C4715: 'CubeMap::ReloadShader': not all control paths return a value
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

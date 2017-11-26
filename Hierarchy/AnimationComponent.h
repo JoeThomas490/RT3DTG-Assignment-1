@@ -45,7 +45,7 @@ private:
 
 public:
 	void SetNodeName(std::string nodeName) { m_nodeName = nodeName; };
-	std::string GetNodeName() { return m_nodeName; };
+	std::string* GetNodeName() { return &m_nodeName; };
 
 	XMFLOAT4 GetCurrentPosition() { return m_v4CurrentPos; };
 	XMFLOAT4 GetCurrentRotation() { return m_v4CurrentRotation; };

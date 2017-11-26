@@ -31,6 +31,7 @@ cbuffer CommonApp
 cbuffer MyApp
 {
 	float3 g_cameraPosition;
+	float g_frameCount;
 };
 
 // VSInput structure defines the vertex format expected by the input assembler when this shader is bound.
@@ -88,7 +89,7 @@ void PSMain(const PSInput input, out PSOutput output)
 
 		float dist = distance(input.pos.xyz,lightDir);
 
-		I += lightIntensity * g_lightColours[i].xyz;
+		I += lightIntensity  * g_lightColours[i].xyz;
 
 		if (lightIntensity > 0.0)
 		{
@@ -100,14 +101,21 @@ void PSMain(const PSInput input, out PSOutput output)
 
 			//Calculate specular component
 			specular = float4(1.0,1.0,1.0,1.0) * pow(saturate(dot(reflection, input.viewDirection)), 64);
+
+			specular = lerp(specular, float4(0.0,0.0,0.0,0.0), abs(sin(g_frameCount * 0.001)));
 		}
 
 		newColour = saturate(newColour + specular);
 	}
 
-	newColour *= I;
+	newColour *= I * max(0.2,abs(cos(g_frameCount * 0.001)));
+	float greyscale = dot(newColour, float3(0.3, 0.59, 0.11));
+	//newColour.rgb = lerp(newColour, newColour * float3(greyscale * 3.0, greyscale * 3.0, greyscale * 3.0), abs(sin(g_frameCount * 0.02)));
+
 	newColour *= 2.5;
 	newColour = saturate(newColour);
 
+
 	output.colour = float4(newColour.rgb, 1.0);
+
 }

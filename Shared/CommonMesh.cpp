@@ -394,7 +394,7 @@ void CommonMesh::DrawSubset(size_t subsetIndex)
 	const Subset *pSubset = &m_pSubsets[subsetIndex];
 
 	m_pApp->DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pSubset->pVertexBuffer, pSubset->vtxStride, pSubset->pIndexBuffer, pSubset->firstItem, 
-		pSubset->numItems, pSubset->pTextureView, pSubset->pSamplerState, pSubset->pShader, pSubset->colour);
+		pSubset->numItems, NULL, pSubset->pSamplerState, pSubset->pShader, pSubset->colour);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@ class Aeroplane;
 class HeightMap;	
 class Bullet;
 class Robot;
+class CubeMap;
 class MeshManager;
 class AnimationLoader;
 
@@ -64,10 +65,14 @@ private:
 
 	int m_cameraState;
 
+	XMFLOAT3 m_cameraPos;
+
 	HeightMap* m_pHeightMap;
 
 	Aeroplane* m_pAeroplane;
 	Robot* m_pRobot;
+
+	CubeMap* m_pSkyBox;
 
 	std::vector<Robot*> m_pRobots;
 };

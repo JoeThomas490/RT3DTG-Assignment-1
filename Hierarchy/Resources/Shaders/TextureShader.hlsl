@@ -28,7 +28,6 @@ cbuffer CommonApp
 cbuffer MyApp
 {
 	float	g_frameCount;
-	float3	g_waveOrigin;
 }
 
 
@@ -129,8 +128,15 @@ void PSMain(const PSInput input, out PSOutput output)
 
 	//output.colour = float4(abs(cos(g_frameCount * 0.01)) * newColour.r ,abs(sin(g_frameCount*0.01)) * newColour.g, newColour.b,1);	// 'return' the colour value for this fragment.
 
+	
 
-	newColour *= I;
+	newColour *= I * max(0.075, abs(cos(g_frameCount * 0.001)));
+	//newColour *= I;
+	//float greyscale = dot(newColour, float3(0.3, 0.59, 0.11));
+	//float3 sampleCol = lerp(newColour, newColour * float3(pow(greyscale * 3.0, 6), pow(greyscale * 3.0, 6), pow(greyscale * 3.0, 3)), abs(sin(g_frameCount * 0.001)));
 
-	output.colour = float4(newColour, 1.0);
+	//// Merge and tint
+
+
+	output.colour = float4(newColour.rgb, 1.0);
 }

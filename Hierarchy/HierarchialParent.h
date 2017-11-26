@@ -33,7 +33,7 @@ public:
 
 	bool LoadShader();
 	void DeleteShader();
-	void UpdateShader(XMFLOAT3 camPos);
+	void UpdateShader(XMFLOAT3 camPos, float mFrameCount);
 
 private:
 	std::vector<char*> m_vHierarchyOrder;
@@ -67,6 +67,7 @@ private:
 	int m_psMyAppCBufferSlot; // custom buffer resource binding in PS, discovered by reflection.
 	int m_vsMyAppCBufferSlot; // custom buffer resource binding in VS, discovered by reflection.
 	int m_cameraPosOffset;
+	int m_framePosOffset;
 
 public:
 

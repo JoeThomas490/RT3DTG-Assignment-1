@@ -131,6 +131,7 @@ bool HierarchialParent::LoadShader()
 
 	ps.FindCBuffer("MyApp", &m_psMyAppCBufferSlot);
 	ps.FindFloat(m_psMyAppCBufferSlot, "g_cameraPosition", &m_cameraPosOffset);
+	ps.FindFloat(m_psMyAppCBufferSlot, "g_frameCount", &m_framePosOffset);
 
 	// Create a cbuffer, using the shader description to find out how
 	// large it needs to be.
@@ -270,7 +271,7 @@ void HierarchialParent::UpdateAnimations(bool mDebug)
 	}
 }
 
-void HierarchialParent::UpdateShader(XMFLOAT3 camPos)
+void HierarchialParent::UpdateShader(XMFLOAT3 camPos, float mFrameCount)
 {
 	ID3D11DeviceContext* pContext = Application::s_pApp->GetDeviceContext();
 
@@ -282,8 +283,15 @@ void HierarchialParent::UpdateShader(XMFLOAT3 camPos)
 			// Set the buffer contents. There is only one variable to set in this case.
 			// This method relies on the offset which has been found through Shader Reflection.
 			SetCBufferFloat3(map, m_cameraPosOffset, D3DXVECTOR3(camPos.x, camPos.y, camPos.z));
+			SetCBufferFloat(map, m_framePosOffset, mFrameCount);
 			pContext->Unmap(m_pMyAppCBuffer, 0);
 		}
+	}
+
+	// Bind the same constant buffer to any stages that use it.
+	if (m_psMyAppCBufferSlot != -1)
+	{
+		pContext->PSSetConstantBuffers(m_psMyAppCBufferSlot, 1, &m_pMyAppCBuffer);
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "Aeroplane.h"
 #include "Bullet.h"
 #include "Robot.h"
+#include "CubeMap.h"
 #include "MeshManager.h"
 #include "AnimationLoader.h"
 
@@ -41,6 +42,7 @@ bool Application::HandleStart()
 
 	Robot::LoadResources();
 
+
 	for (int i = 0; i < 5; i++)
 	{
 		m_pRobots.push_back(new Robot(cos(i * 3.14f) * 10.0f, 10.0f, sin(i * 3.14f) * 10.0f, i * 25.0f));
@@ -71,6 +73,11 @@ bool Application::HandleStart()
 		m_pRobots[index]->LoadShader();
 		index++;
 	}
+
+
+	m_pSkyBox = new CubeMap();
+
+
 	return true;
 }
 
@@ -101,6 +108,7 @@ void Application::HandleStop()
 void Application::HandleUpdate()
 {
 	HandleSpawnBullets();
+	HandleCameraUpdate();
 
 	m_pAeroplane->Update(m_cameraState != CAMERA_MAP);
 	for (auto& robot : m_pRobots)
@@ -114,23 +122,10 @@ void Application::HandleUpdate()
 		m_arrBullets[i].Update();
 	}
 
-	SelectAnimation();
-	HandleCameraUpdate();
-	HandleDebug();
+	m_pSkyBox->Update(m_cameraPos);
 
-	static bool dbR = false;
-	if (this->IsKeyPressed('R'))
-	{
-		if (!dbR)
-		{
-			m_pAeroplane->LoadShader();
-			dbR = true;
-		}
-	}
-	else
-	{
-		dbR = false;
-	}
+	SelectAnimation();
+	HandleDebug();
 
 	//HandleCollision();
 
@@ -171,6 +166,8 @@ void Application::HandleRender()
 	XMMATRIX matView;
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&vCamera), XMLoadFloat3(&vLookat), XMLoadFloat3(&vUpVector));
 
+	m_cameraPos = vCamera;
+
 	XMMATRIX matProj;
 	matProj = XMMatrixPerspectiveFovLH(float(XM_PI / 4), 2, 1.5f, 5000.0f);
 
@@ -188,13 +185,15 @@ void Application::HandleRender()
 	this->SetWorldMatrix(matWorld);
 
 	m_pHeightMap->Draw(m_fFrameCount);
-	m_fFrameCount++;
 
-	m_pAeroplane->Draw(vCamera);
+	m_pAeroplane->Draw(vCamera, m_fFrameCount);
+
+	m_pSkyBox->Draw(m_fFrameCount);
+	m_fFrameCount++;
 
 	for (auto& robot : m_pRobots)
 	{
-		robot->Draw(vCamera);
+		robot->Draw(vCamera, m_fFrameCount);
 	}
 
 	for (int i = 0; i < MAX_BULLETS; i++)
@@ -252,6 +251,35 @@ void Application::HandleDebug()
 	else
 	{
 		m_bDebugAnimations = false;
+	}
+
+	static bool dbR = false;
+	if (this->IsKeyPressed('R'))
+	{
+		if (!dbR)
+		{
+			m_pSkyBox->ReloadShader();
+			m_pHeightMap->ReloadShader();
+			dbR = true;
+		}
+	}
+	else
+	{
+		dbR = false;
+	}
+
+	static bool dbS = false;
+	if (this->IsKeyPressed('S'))
+	{
+		if (!dbS)
+		{
+			m_pAeroplane->m_bStop = !m_pAeroplane->m_bStop;
+			dbS = true;
+		}
+	}
+	else
+	{
+		dbS = false;
 	}
 
 }

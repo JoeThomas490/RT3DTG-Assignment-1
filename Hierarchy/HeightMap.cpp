@@ -202,6 +202,9 @@ void HeightMap::Draw(float frameCount)
 
 	Application::s_pApp->DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, m_pHeightMapBuffer, sizeof(Vertex_Pos3fColour4ubNormal3fTex2f),
 		NULL, 0, m_HeightMapVtxCount, NULL, m_pSamplerState, &m_shader, XMFLOAT4(1.0f,1.0f,1.0f,1.0f));
+
+	/*m_pApp->DrawWithShader(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pSubset->pVertexBuffer, pSubset->vtxStride, pSubset->pIndexBuffer, pSubset->firstItem,
+		pSubset->numItems, pSubset->pTextureView, pSubset->pSamplerState, pSubset->pShader, pSubset->colour);*/
 }
 
 bool HeightMap::ReloadShader(void)

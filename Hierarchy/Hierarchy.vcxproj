@@ -92,6 +92,7 @@
     <ClCompile Include="AnimationLoader.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HierarchialComponent.cpp" />
     <ClCompile Include="HierarchialParent.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="AnimationLoader.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CubeMap.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HierarchialComponent.h" />
     <ClInclude Include="HierarchialParent.h" />

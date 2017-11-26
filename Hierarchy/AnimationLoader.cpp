@@ -22,11 +22,11 @@ Animation AnimationLoader::LoadXML(const char * fileName)
 	for (TiXmlNode* animationNode = headNode->FirstChild("animation"); animationNode != NULL; animationNode = animationNode->NextSibling())
 	{
 		string componentName = GetAnimationComponentName(animationNode->ToElement());
-		if (component.GetNodeName() == "")
+		if (*component.GetNodeName() == "")
 		{
 			component.SetNodeName(componentName);
 		}
-		else if (componentName != component.GetNodeName())
+		else if (componentName != *component.GetNodeName())
 		{
 			animation.m_vAnimationComponents.push_back(component);
 			component.m_animationData.clear();

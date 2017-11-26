@@ -24,10 +24,9 @@ public:
 	void ReleaseResources();
 
 	void Update(bool bPlayerControl);
-	void Draw(XMFLOAT3 camPos);
+	void Draw(XMFLOAT3 camPos, float mFrameCount);
 
-	//bool LoadShader();
-	//void DeleteShader();
+	bool m_bStop;
 
 private:
 	void UpdateMatrices();
@@ -35,9 +34,6 @@ private:
 
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
-
-	//void UpdateShader(XMFLOAT3 camPos);
-
 private:
 	static bool s_bResourcesReady;
 

@@ -82,8 +82,8 @@ void Robot::Update(bool mDebug)
 	UpdateHierarchy(mDebug);
 }
 
-void Robot::Draw(XMFLOAT3 camPos)
+void Robot::Draw(XMFLOAT3 camPos, float mFrameCount)
 {
-	//UpdateShader(camPos);
+	UpdateShader(camPos, mFrameCount);
 	DrawHierarchy();
 }

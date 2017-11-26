@@ -141,7 +141,7 @@ END_NAMES()
 //////////////////////////////////////////////////////////////////////
 
 BEGIN_NAMES(D3D_SHADER_VARIABLE_TYPE)
-    NAME(D3D_SVT_VOID)
+	NAME(D3D_SVT_VOID)
 	NAME(D3D_SVT_BOOL)
 	NAME(D3D_SVT_INT)
 	NAME(D3D_SVT_FLOAT)
@@ -316,9 +316,9 @@ bool LoadTextureFromFile(
 		D3D11_SAMPLER_DESC samplerDesc;
 
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.MipLODBias = 0.f;
 		samplerDesc.MaxAnisotropy = 1;
 		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
@@ -374,21 +374,23 @@ enum ThingType
 	TT_FLOAT4,
 	TT_FLOAT4x4,
 	TT_INT,
+	TT_TEXTURECUBE,
 };
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
 BEGIN_NAMES(ThingType)
-	NAME(TT_NONE)
-	NAME(TT_TEXTURE2D)
-	NAME(TT_SAMPLER_STATE)
-	NAME(TT_FLOAT)
-	NAME(TT_FLOAT2)
-	NAME(TT_FLOAT3)
-	NAME(TT_FLOAT4)
-	NAME(TT_FLOAT4x4)
-	NAME(TT_INT)
+NAME(TT_NONE)
+NAME(TT_TEXTURE2D)
+NAME(TT_SAMPLER_STATE)
+NAME(TT_FLOAT)
+NAME(TT_FLOAT2)
+NAME(TT_FLOAT3)
+NAME(TT_FLOAT4)
+NAME(TT_FLOAT4x4)
+NAME(TT_INT)
+NAME(TT_TEXTURECUBE)
 END_NAMES()
 
 //////////////////////////////////////////////////////////////////////

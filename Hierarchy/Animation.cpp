@@ -86,7 +86,7 @@ AnimationComponent * Animation::GetAnimationComponentByName(char * componentName
 	for (int i = 0; i < m_vAnimationComponents.size(); i++)
 	{
 		//If the names match each other
-		if (m_vAnimationComponents[i].GetNodeName() == componentName)
+		if (*m_vAnimationComponents[i].GetNodeName() == componentName)
 		{
 			//Return a pointer to that component
 			return &m_vAnimationComponents[i];

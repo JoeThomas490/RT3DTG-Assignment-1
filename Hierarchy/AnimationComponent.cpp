@@ -61,30 +61,28 @@ void AnimationComponent::CalculateTranslation(float mTime)
 
 void AnimationComponent::CalculateRotation(float mTime)
 {
-	float eulerX, eulerY, eulerZ;
+	float eulerX1, eulerY1, eulerZ1;
+	float eulerX2, eulerY2, eulerZ2;
 
 
-	AnimationData* data = GetDataByType(AnimationData::ROTATE_X);
-	eulerX = data->GetValue(data->GetIndex(mTime));
+	AnimationData* data = &m_animationData[3];
+	int index = data->GetIndex(mTime);
+	eulerX1 = data->GetValue(index);
+	eulerX2 = data->GetValue(index + 1);
 
-	data = GetDataByType(AnimationData::ROTATE_Y);
-	eulerY = data->GetValue(data->GetIndex(mTime));
+	data = &m_animationData[4];
+	index = data->GetIndex(mTime);
+	eulerY1 = data->GetValue(index);
+	eulerY2 = data->GetValue(index + 1);
 
-	data = GetDataByType(AnimationData::ROTATE_Z);
-	eulerZ = data->GetValue(data->GetIndex(mTime));
+	data = &m_animationData[5];
+	index = data->GetIndex(mTime);
+	eulerZ1 = data->GetValue(index);
+	eulerZ2 = data->GetValue(index + 1);
 
-	XMVECTOR quart1 = CalculateQuaternion(eulerX, eulerY, eulerZ);
+	XMVECTOR quart1 = CalculateQuaternion(eulerX1, eulerY1, eulerZ1);
 
-	data = GetDataByType(AnimationData::ROTATE_X);
-	eulerX = data->GetValue(data->GetIndex(mTime) + 1);
-
-	data = GetDataByType(AnimationData::ROTATE_Y);
-	eulerY = data->GetValue(data->GetIndex(mTime) + 1);
-
-	data = GetDataByType(AnimationData::ROTATE_Z);
-	eulerZ = data->GetValue(data->GetIndex(mTime) + 1);
-
-	XMVECTOR quart2 = CalculateQuaternion(eulerX, eulerY, eulerZ);
+	XMVECTOR quart2 = CalculateQuaternion(eulerX2, eulerY2, eulerZ2);
 
 	XMVECTOR quart = XMQuaternionSlerp(quart1, quart2, data->GetT(mTime));
 	XMStoreFloat4(&m_v4CurrentRotation, quart);
