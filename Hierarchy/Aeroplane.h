@@ -11,21 +11,22 @@
 //					HierarchialComponents. Contains logic controlling player input for the plane
 //					and handling the camera view when toggled on.
 // Notes:			
-// Todo:			Add comments for readability
+// Todo:			
 //*********************************************************************************************
 
 __declspec(align(16)) class Aeroplane : public HierarchialParent
 {
 public:
+
 	Aeroplane(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
 	~Aeroplane() = default;
-
-	void LoadResources();
-	void ReleaseResources();
 
 	void Update(bool bPlayerControl);
 	void Draw(XMFLOAT3 camPos, float mFrameCount);
 
+
+
+	//Whether the plane should move or not (debug feature)
 	bool m_bStop;
 
 private:
@@ -34,29 +35,31 @@ private:
 
 	void UpdatePlaneMovement();
 	void ResetMovementToZero();
+
 private:
 	static bool s_bResourcesReady;
 
 	XMVECTOR m_vForwardVector;
-	XMVECTOR m_vCamWorldPos;
+	XMVECTOR m_vCamWorldPos; //Position for camera
 
-	XMMATRIX m_mCamWorldMatrix;
+	XMMATRIX m_mCamWorldMatrix; //World matrix for camera
 
 	XMFLOAT4 m_v4CamRot; // Local rotation angles
 	XMFLOAT4 m_v4CamOff; // Local offset
 
-	float m_fSpeed;
+	float m_fSpeed; //Movement speed
 
-	bool m_bGunCam;
+	bool m_bGunCam; //Whether the gun camera is active or not
 
-	//Application::Shader m_shader;
-
-	//ID3D11Buffer* m_pMyAppCBuffer; // our custom buffer resource.
-	//int m_psMyAppCBufferSlot; // custom buffer resource binding in PS, discovered by reflection.
-	//int m_vsMyAppCBufferSlot; // custom buffer resource binding in VS, discovered by reflection.
-	//int m_cameraPosOffset;
+	//Pointers to each component of the plane
+	HierarchialComponent* m_pPlane;
+	HierarchialComponent* m_pProp;
+	HierarchialComponent* m_pGun;
+	HierarchialComponent* m_pTurret;
 public:
+	//Get focus position for camera i.e the position of the plane
 	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
+	//Get current camera position
 	XMFLOAT4 GetCameraPosition(void)
 	{
 		XMFLOAT4 v4Pos;
@@ -64,9 +67,10 @@ public:
 		return v4Pos;
 	}
 
+	//Get world matrix for the gun component (used for bullet positioning and rotation)
 	XMMATRIX GetGunWorldMatrix() { return GetHiararchyComponentFromTag("gun")->GetWorldMatrix(); };
-	XMFLOAT4 GetGunRotation() { return GetHiararchyComponentFromTag("turret")->GetLocalRotation(); };
-
+	
+	//Get the current forward vector of the plane
 	XMFLOAT4 GetForwardVector()
 	{
 		XMFLOAT4 v4Forward;
@@ -74,10 +78,13 @@ public:
 		return v4Forward;
 	}
 
+	//Set the gun camera bool
 	void SetGunCamera(bool value) { m_bGunCam = value; }
 
-	float GetMovementSpeed() { return m_fSpeed; };
 
+	//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
+	//Operator overloads for new and delete so they make sure the object is alligned to a 16 byte boundary
 	void* operator new(size_t i)
 	{
 		return _mm_malloc(i, 16);

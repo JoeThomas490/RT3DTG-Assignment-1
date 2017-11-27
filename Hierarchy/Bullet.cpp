@@ -21,7 +21,7 @@ Bullet::Bullet()
 	m_bIsReadyToUpdate = false;
 }
 
-void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector, float fPlaneSpeed)
+void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector)
 {
 
 	//Set the initial offset
@@ -46,9 +46,6 @@ void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForward
 	mGunForwardVector = XMVector3Normalize(mGunForwardVector);
 
 	XMStoreFloat4(&m_v4ForwardVector, mGunForwardVector);
-
-	//Set movement speed
-	m_fMovementSpeed = fPlaneSpeed;
 
 	//Set the bullet to start off invisible
 	m_bIsVisible = true;

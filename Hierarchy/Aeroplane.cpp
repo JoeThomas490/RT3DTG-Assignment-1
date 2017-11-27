@@ -1,123 +1,129 @@
 #include "Aeroplane.h"
 
-bool Aeroplane::s_bResourcesReady = false;
-
 Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 {
+	//Call constructor for parent calss
 	HierarchialParent();
+
+	//Initialise member variables
 	m_fSpeed = 0.0f;
 	m_bGunCam = false;
 	m_bStop = false;
+	
+	//Set vector membors to zero
 	m_vCamWorldPos = XMVectorZero();
 	m_vForwardVector = XMVectorZero();
 
-	//m_pMyAppCBuffer = NULL;
+	//---------------------------------------------------------------------------------------------------
+	//Add components to hierarchy by loading the mesh, settings it's parent and giving the component a name
+	m_pPlane = AddHierarchyComponent(new HierarchialComponent("", MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
+	m_pProp = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop")), "prop");
+	m_pTurret = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/turret.x", "turret")), "turret");
+	m_pGun = AddHierarchyComponent(new HierarchialComponent("turret", MeshManager::GetInstance().LoadResources("Resources/Plane/gun.x", "gun")), "gun");
 
+	//---------------------------------------------------------------------------------------------------
+	//Set initial positions and rotations for each component
+	m_pPlane->SetLocalPosition(fX, fY, fZ);
+	m_pPlane->SetLocalRotation(0.0f, fRotY, 0.0f);
 
-	AddHierarchyComponent(new HierarchialComponent("", MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
-	AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop")), "prop");
-	AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/turret.x", "turret")), "turret");
-	AddHierarchyComponent(new HierarchialComponent("turret", MeshManager::GetInstance().LoadResources("Resources/Plane/gun.x", "gun")), "gun");
+	m_pProp->SetLocalPosition(0.0f, 0.0f, 1.9f);
 
-	GetHiararchyComponentFromTag("plane")->SetLocalPosition(fX, fY, fZ);
-	GetHiararchyComponentFromTag("plane")->SetLocalRotation(0.0f, fRotY, 0.0f);
+	m_pTurret->SetLocalPosition(0.0f, 1.05f, -1.3f);
 
-	GetHiararchyComponentFromTag("prop")->SetLocalPosition(0.0f, 0.0f, 1.9f);
+	m_pGun->SetLocalPosition(0.0f, 0.5f, 0.0f);
 
-	GetHiararchyComponentFromTag("turret")->SetLocalPosition(0.0f, 1.05f, -1.3f);
-
-	GetHiararchyComponentFromTag("gun")->SetLocalPosition(0.0f, 0.5f, 0.0f);
-
-	GetHiararchyComponentFromTag("plane")->SetColor(0.050f, 0.231f, 0.101f, 1.0f);
-	GetHiararchyComponentFromTag("prop")->SetColor(0.862f, 0.858f, 0.015f, 1.0f);
-	GetHiararchyComponentFromTag("turret")->SetColor(0.345, 0.207f, 0.098f, 1.0f);
-	GetHiararchyComponentFromTag("gun")->SetColor(0.819f, 0.8190f, 0.717f, 1.0f);
-
+	//---------------------------------------------------------------------------------------------------
+	//Set the colours for each component
+	m_pPlane->SetColor(0.050f, 0.231f, 0.101f, 1.0f);
+	m_pProp->SetColor(0.862f, 0.858f, 0.015f, 1.0f);
+	m_pTurret->SetColor(0.345, 0.207f, 0.098f, 1.0f);
+	m_pGun->SetColor(0.819f, 0.8190f, 0.717f, 1.0f);
+	
+	//Initialise camera offsets and rotation
 	m_v4CamOff = XMFLOAT4(0.0f, 4.5f, -15.0f, 0.0f);
 	m_v4CamRot = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-
-
-	LoadShader();
-}
-
-
-void Aeroplane::LoadResources()
-{
-}
-
-void Aeroplane::ReleaseResources()
-{
 }
 
 void Aeroplane::Update(bool bPlayerControl)
 {
+	//If the plane is under player control
 	if (bPlayerControl)
 	{
+		//Get input and update plane movement
 		UpdatePlaneMovement();
+
+		//Reset rotations to zero
 		ResetMovementToZero();
 
 
-	} // End of if player control
+	}
 
-	  // Apply a forward thrust and limit to a maximum speed of 1
+	// Apply a forward thrust and limit to a maximum speed of 1
 	m_fSpeed += 0.001f;
-
 	if (m_fSpeed > 1)
 		m_fSpeed = 1;
 
 	// Rotate propeller and turret
-	HierarchialComponent* mProp = GetHiararchyComponentFromTag("prop");
-	mProp->SetRotationZ(mProp->GetLocalRotation().z + 100 * m_fSpeed);
+	m_pProp->SetRotationZ(m_pProp->GetLocalRotation().z + 100 * m_fSpeed);
 
-	HierarchialComponent* mTurret = GetHiararchyComponentFromTag("turret");
-
-	// Tilt gun up and down as turret rotates
-	HierarchialComponent* mGun = GetHiararchyComponentFromTag("gun");
-
+	//If the gun camera isn't enabled
 	if (!m_bGunCam)
 	{
-		mGun->SetLocalRotation(0, 0, 0);
-		mTurret->SetLocalRotation(0, 0, 0);
+		//Reset the gun and turrets rotation to zero
+		m_pGun->SetLocalRotation(0, 0, 0);
+		m_pTurret->SetLocalRotation(0, 0, 0);
 	}
+	//If we're in gun camera mode
 	else
 	{
-		mTurret->SetRotationY(mTurret->GetLocalRotation().y + 0.1f);
-		mGun->SetRotationX(sin((float)XMConvertToRadians(mTurret->GetLocalRotation().y * 4.0f)) * 10.0f - 10.0f);
+		// Tilt gun up and down as turret rotates
+		m_pGun->SetRotationX(sin((float)XMConvertToRadians(m_pTurret->GetLocalRotation().y * 4.0f)) * 10.0f - 10.0f);
+		m_pTurret->SetRotationY(m_pTurret->GetLocalRotation().y + 0.1f);
 	}
 
-	UpdateMatrices();
-
-	// Move Forward
 	XMFLOAT4 planePosition;
-	XMVECTOR vCurrPos = XMLoadFloat4(&GetHiararchyComponentFromTag("plane")->GetLocalPosition());
+	//Get current plane position
+	XMVECTOR vCurrPos = XMLoadFloat4(&m_pPlane->GetLocalPosition());
+	//If we're not in stop mode
 	if (!m_bStop)
+		//Add the forward vector * speed onto our current position
 		vCurrPos += m_vForwardVector * m_fSpeed;
+	//Store this position back in a XMFLOAT4
 	XMStoreFloat4(&planePosition, vCurrPos);
 
-	GetHiararchyComponentFromTag("plane")->SetLocalPosition(planePosition);
+	//Set the position of the plane
+	m_pPlane->SetLocalPosition(planePosition);
+
+	//Update each component's matrices
+	UpdateMatrices();
 }
 
 void Aeroplane::Draw(XMFLOAT3 camPos, float mFrameCount)
 {
+	//Update the shader by passing it the camera position (for specular shading) and 
+	//frame count (for modifying lightness)
 	UpdateShader(camPos, mFrameCount);
+
+	//Draw the hierarchy for this object
 	DrawHierarchy();
 }
 
 void Aeroplane::UpdateMatrices()
 {
-	XMMATRIX mPlaneCameraRot, mForwardMatrix;
-
+	//Update each component in the hierarchy
 	UpdateHierarchy(false);
+	//Update our camera matrix
 	UpdateCameraMatrix();
-
-	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), GetHiararchyComponentFromTag("plane")->GetWorldMatrix());
+	
+	//Calculate the forward vector
+	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_pPlane->GetWorldMatrix());
 }
 
 //TODO Cleanup by creating a camera component and adding to hierarchy
 void Aeroplane::UpdateCameraMatrix()
 {
 	XMMATRIX mPlaneCameraRot;
-	mPlaneCameraRot = XMMatrixRotationY(XMConvertToRadians(GetHiararchyComponentFromTag("plane")->GetLocalRotation().y));
+	mPlaneCameraRot = XMMatrixRotationY(XMConvertToRadians(m_pPlane->GetLocalRotation().y));
 
 	XMMATRIX mRotX, mRotY, mRotZ, mTrans;
 
@@ -130,7 +136,7 @@ void Aeroplane::UpdateCameraMatrix()
 	//Calculate camWorld Matrix
 	m_mCamWorldMatrix = mRotX * mRotY * mRotZ * mTrans;
 
-	m_mCamWorldMatrix *= (!m_bGunCam) ? mPlaneCameraRot * XMMatrixTranslation(GetHiararchyComponentFromTag("plane")->GetLocalPosition().x, GetHiararchyComponentFromTag("plane")->GetLocalPosition().y, GetHiararchyComponentFromTag("plane")->GetLocalPosition().z) : GetHiararchyComponentFromTag("gun")->GetWorldMatrix();
+	m_mCamWorldMatrix *= (!m_bGunCam) ? mPlaneCameraRot * XMMatrixTranslation(m_pPlane->GetLocalPosition().x, m_pPlane->GetLocalPosition().y, m_pPlane->GetLocalPosition().z) : m_pGun->GetWorldMatrix();
 
 	XMVECTOR scale, rotation, position;
 	XMMatrixDecompose(&scale, &rotation, &position, m_mCamWorldMatrix);
@@ -139,7 +145,9 @@ void Aeroplane::UpdateCameraMatrix()
 
 void Aeroplane::UpdatePlaneMovement()
 {
-	float rotX = GetHiararchyComponentFromTag("plane")->GetLocalRotation().x;
+	//Get the current x rotation of the plane
+	float rotX = m_pPlane->GetLocalRotation().x;
+
 	// Step 1: Make the plane pitch upwards when you press "Q" and return to level when released
 	// Maximum pitch = 60 degrees
 	if (Application::s_pApp->IsKeyPressed('Q'))
@@ -169,10 +177,13 @@ void Aeroplane::UpdatePlaneMovement()
 			}
 		}
 	}
-	GetHiararchyComponentFromTag("plane")->SetRotationX(rotX);
+	
+	//Set the new x rotation
+	m_pPlane->SetRotationX(rotX);
 
-	float rotY = GetHiararchyComponentFromTag("plane")->GetLocalRotation().y;
-	float rotZ = GetHiararchyComponentFromTag("plane")->GetLocalRotation().z;
+	//Get the plane's current y and z rotation
+	float rotY = m_pPlane->GetLocalRotation().y;
+	float rotZ = m_pPlane->GetLocalRotation().z;
 	// Step 3: Make the plane yaw and roll left when you press "O" and return to level when released
 	// Maximum roll = 20 degrees
 	if (Application::s_pApp->IsKeyPressed('O'))
@@ -200,19 +211,22 @@ void Aeroplane::UpdatePlaneMovement()
 		}
 	}
 
-	GetHiararchyComponentFromTag("plane")->SetRotationY(rotY);
-	GetHiararchyComponentFromTag("plane")->SetRotationZ(rotZ);
+	m_pPlane->SetRotationY(rotY);
+	m_pPlane->SetRotationZ(rotZ);
 }
 
 void Aeroplane::ResetMovementToZero()
 {
 
-	float rotX = GetHiararchyComponentFromTag("plane")->GetLocalRotation().x;
-	float rotZ = GetHiararchyComponentFromTag("plane")->GetLocalRotation().z;
+	float rotX = m_pPlane->GetLocalRotation().x;
+	float rotZ = m_pPlane->GetLocalRotation().z;
+
+	//If neither left or right is being pressed
 	if (!Application::s_pApp->IsKeyPressed('P') && !Application::s_pApp->IsKeyPressed('O'))
 	{
 		if (rotZ > 0)
 		{
+			//Update the z rotation so it becomes closer to zero
 			rotZ -= 4.0f;
 			if (rotZ < 0)
 			{
@@ -229,6 +243,7 @@ void Aeroplane::ResetMovementToZero()
 		}
 	}
 
+	//If neither up or down is being pressed
 	if (!Application::s_pApp->IsKeyPressed('A') && !Application::s_pApp->IsKeyPressed('Q'))
 	{
 		if (rotX > 0)
@@ -249,6 +264,6 @@ void Aeroplane::ResetMovementToZero()
 		}
 	}
 
-	GetHiararchyComponentFromTag("plane")->SetRotationX(rotX);
-	GetHiararchyComponentFromTag("plane")->SetRotationZ(rotZ);
+	m_pPlane->SetRotationX(rotX);
+	m_pPlane->SetRotationZ(rotZ);
 }

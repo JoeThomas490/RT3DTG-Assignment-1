@@ -2,61 +2,51 @@
 
 const float ANIMATION_TICK = 0.0133f;
 
-
 Animation::Animation()
 {
+	//Initialise member variables
 	m_animTimer = 0;
 	m_fMaxTime = 0;
-	m_fBlendTime = 0.3f;
-
+	m_iFrameCounter = 0;
 	m_bIsLoopable = true;
 
-	m_iFrameCounter = 0;
+	//Set blend time to a fixed value
+	//TODO Make this settable per animation
+	m_fBlendTime = 0.3f;
 }
 
 void Animation::Update(bool mDebug)
 {
+	//Get the max time of the animation
+	//TODO Make sure this happens once at the start instead of every frame
+	GetMaxTime();
 
-	if(!mDebug)
-	{
-		//Increment animation timer
-		m_animTimer += ANIMATION_TICK;
-	}
-	else
-	{
-		//Do debug frame counter here 
-		m_iFrameCounter++;
-		if (m_iFrameCounter > 60)
-		{
-			m_animTimer += ANIMATION_TICK * 2;
-			m_iFrameCounter = 0;
-		}
-	}
+	//Update the animation timer
+	UpdateTimer(mDebug);
 
-
-
+	//If the animation isn't loopable
 	if (!m_bIsLoopable)
 	{
-		if (m_animTimer > GetMaxTime() - 0.1f)
+		//When the animation timer reaches the max time
+		if (m_animTimer > m_fMaxTime - 0.1f)
 		{
-			m_animTimer = GetMaxTime() - 0.1f;
+			//Keep the animation timer at this time
+			m_animTimer = m_fMaxTime  - 0.1f;
 		}
 	}
 	else
-
+	{
 		//If the timer has gone past the max time
-		if (m_animTimer > GetMaxTime())
+		if (m_animTimer > m_fMaxTime)
 		{
 			//Reset the timer
 			m_animTimer = 0;
 		}
+	}
 
+		
+	//Update each component within the animation
 	UpdateComponents();
-}
-
-void Animation::ResetTimer()
-{
-	m_animTimer = 0;
 }
 
 void Animation::SetTime(float mTime, float mMaxTime)
@@ -77,6 +67,30 @@ void Animation::UpdateComponents()
 	{
 		//Update the component, passing it the current time
 		component.Update(m_animTimer);
+	}
+}
+
+void Animation::UpdateTimer(bool mDebug)
+{
+	//If we're not in debug mode
+	if (!mDebug)
+	{
+		//Increment animation timer like normals
+		m_animTimer += ANIMATION_TICK;
+	}
+	else
+	{
+		//If we're in debug mode
+		//Incremement the frame counter 
+		m_iFrameCounter++;
+		//After 60 frames
+		if (m_iFrameCounter > 60)
+		{
+			//Increment the animation timer 
+			m_animTimer += ANIMATION_TICK * 2;
+			//Reset the frame counter
+			m_iFrameCounter = 0;
+		}
 	}
 }
 
@@ -102,20 +116,28 @@ float Animation::GetMaxTime()
 {
 	float maxTime = 0;
 
+	//Loop through all the components
 	for (auto& component : m_vAnimationComponents)
 	{
+		//Loop through all the data within the component
 		for (auto& data : component.m_animationData)
 		{
 			float thisMaxTime, a;
+			//Get the latest time in the animation data
 			data.GetTimeValuePair(data.GetAnimationCount() - 1, thisMaxTime, a);
+			//If this new time is greater than our max time
 			if (maxTime < thisMaxTime)
 			{
+				//Set our max time to this new one
 				maxTime = thisMaxTime;
 			}
 		}
 	}
 
+	//Set our member varaible to this max time for later use
 	m_fMaxTime = maxTime;
+
+	//Return the max time
 	return maxTime;
 }
 

@@ -17,7 +17,7 @@ public:
 	
 	~HierarchialParent() = default;
 
-	void AddHierarchyComponent(HierarchialComponent* mComponent, char* tag);
+	HierarchialComponent* AddHierarchyComponent(HierarchialComponent* mComponent, char* tag);
 
 	HierarchialComponent* GetHiararchyComponentFromTag(char* tag);
 

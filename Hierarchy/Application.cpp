@@ -308,7 +308,7 @@ void Application::HandleSpawnBullets()
 			}
 			//Pass position and rotation
 
-			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector, m_pAeroplane->GetMovementSpeed());
+			m_arrBullets[freeIndex].ResetBullet(mGunWorldMatrix, mPlaneForwardVector);
 		}
 	}
 	else

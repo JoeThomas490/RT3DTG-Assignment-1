@@ -1,4 +1,9 @@
-﻿  CubeMap.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\cubemap.cpp(29): warning C4101: 'mCubeMapSRV': unreferenced local variable
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\cubemap.cpp(97): warning C4715: 'CubeMap::ReloadShader': not all control paths return a value
+﻿  HierarchialParent.cpp
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(52): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(190): warning C4130: '!=': logical operation on address of string constant
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(198): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(235): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(236): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(326): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(150): warning C4715: 'HierarchialParent::LoadShader': not all control paths return a value
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

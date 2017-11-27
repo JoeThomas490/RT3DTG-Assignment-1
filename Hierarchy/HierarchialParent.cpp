@@ -14,6 +14,8 @@ HierarchialParent::HierarchialParent()
 	m_iFrameCounter = 0;
 
 	m_pMyAppCBuffer = NULL;
+
+	LoadShader();
 }
 
 HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
@@ -29,7 +31,7 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 
 }
 
-void HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, char * tag)
+HierarchialComponent* HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, char * tag)
 {
 	//Add the component into the map with it's associated tag
 	m_mHierarchyComponents.emplace(tag, mComponent);
@@ -37,6 +39,8 @@ void HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent,
 	//Add the tag to a vector to hold the order of insertion
 	//TODO Think of another way to handle this as having a map and a vector is a bit overkill
 	m_vHierarchyOrder.push_back(tag);
+
+	return mComponent;
 }
 
 HierarchialComponent * HierarchialParent::GetHiararchyComponentFromTag(char * tag)
@@ -295,12 +299,12 @@ void HierarchialParent::UpdateShader(XMFLOAT3 camPos, float mFrameCount)
 	}
 }
 
-XMVECTOR HierarchialParent::CalculateQuaternion(XMFLOAT4 mRot)
+XMVECTOR HierarchialParent::CalculateQuaternion(XMFLOAT4 rot)
 {
 	//Convert stored angle into radians
-	double radX = XMConvertToRadians(mRot.x);
-	double radY = XMConvertToRadians(mRot.y);
-	double radZ = XMConvertToRadians(mRot.z);
+	double radX = XMConvertToRadians(rot.x);
+	double radY = XMConvertToRadians(rot.y);
+	double radZ = XMConvertToRadians(rot.z	);
 
 	//Calculate cos components
 	double c1 = cos(radY / 2.0);

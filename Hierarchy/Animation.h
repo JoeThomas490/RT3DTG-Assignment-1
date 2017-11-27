@@ -10,7 +10,13 @@
 //					of AnimationComponents. Each animation has it's own update timer
 //					
 // Notes:			
-// Todo:			
+// Todo:			-Optimisation needs to be done.
+//					-Start using a timer and delta time for updating local timer instead of 
+//					 just a constant value
+//					-Make blendTime settable per animation as it's hardcoded for now
+//					-Make sure GetMaxTime() is only called once at the start instead of every
+//					 frame
+//					-
 //*********************************************************************************************
 
 class Animation
@@ -21,10 +27,9 @@ public:
 
 	//To be called every frame for the animation to be updated
 	void Update(bool mDebug);
-
-	void ResetTimer();
-
+	
 	void SetTime(float mTime, float mMaxTime);
+	float GetMaxTime();
 
 	//Get an animation component based on it's name (name of node)
 	AnimationComponent* GetAnimationComponentByName(char* componentName);
@@ -42,12 +47,11 @@ public:
 	float GetBlendTime() { return m_fBlendTime; };
 
 	float GetTimer() { return m_animTimer; };
-	float GetMaxTime();
+	void ResetTimer() { m_animTimer = 0; };
 
 private:
-
 	void UpdateComponents();
-
+	void UpdateTimer(bool mDebug);
 
 private:
 
@@ -60,6 +64,7 @@ private:
 	//Maximun time of animation
 	float m_fMaxTime;
 
+	//Time in which animation blends
 	float m_fBlendTime;
 
 	//Whether the animation is playing or not
@@ -68,6 +73,7 @@ private:
 	//Whether the animation should loop or not
 	bool m_bIsLoopable;
 
+	//Frame counter used for debug mode
 	int m_iFrameCounter;
 };
 
