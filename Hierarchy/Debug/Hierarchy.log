@@ -1,25 +1,7 @@
-﻿  Aeroplane.cpp
+﻿  Application.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(56): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(42): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(39): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.cpp(86): warning C4238: nonstandard extension used: class rvalue used as lvalue
-  Application.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(56): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(42): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(48): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(70): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(71): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  HierarchialComponent.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialcomponent.cpp(111): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialcomponent.cpp(137): warning C4018: '<': signed/unsigned mismatch
-  HierarchialParent.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(56): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(235): warning C4238: nonstandard extension used: class rvalue used as lvalue
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(272): warning C4238: nonstandard extension used: class rvalue used as lvalue
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(273): warning C4238: nonstandard extension used: class rvalue used as lvalue
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(363): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Robot.cpp
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(56): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-  Generating Code...
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(187): warning C4715: 'HierarchialParent::LoadShader': not all control paths return a value
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(45): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe

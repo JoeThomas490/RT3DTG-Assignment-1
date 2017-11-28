@@ -40,9 +40,6 @@ bool Application::HandleStart()
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 	m_pAeroplane->LoadShader();
 
-	Robot::LoadResources();
-
-
 	for (int i = 0; i < 5; i++)
 	{
 		m_pRobots.push_back(new Robot(cos(i * 3.14f) * 10.0f, 10.0f, sin(i * 3.14f) * 10.0f, i * 25.0f));
