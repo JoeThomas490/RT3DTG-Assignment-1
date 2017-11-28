@@ -14,8 +14,10 @@ MeshManager::~MeshManager()
 
 CommonMesh * MeshManager::LoadResources(const string& mFileName, string tag)
 {
+	//Convert string filename to c string
 	const char* fileName = mFileName.c_str();
-	//If it can't be found in the map
+
+	//If it can't be found in the map then it's a new mesh
 	if (m_mMeshes.find(tag) == m_mMeshes.end())
 	{
 		CommonMesh* mesh = CommonMesh::LoadFromXFile(Application::s_pApp, fileName);

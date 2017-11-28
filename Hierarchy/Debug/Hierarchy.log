@@ -1,7 +1,8 @@
-﻿  Application.cpp
+﻿  HierarchialParent.cpp
 c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\animationcomponent.h(56): warning C4324: 'AnimationComponent': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\aeroplane.h(42): warning C4324: 'Aeroplane': structure was padded due to alignment specifier
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(45): warning C4316: 'Robot': object allocated on the heap may not be aligned 16
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\application.cpp(68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(226): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(263): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(264): warning C4238: nonstandard extension used: class rvalue used as lvalue
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(354): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\joe\documents\uni work\3rd year\rt3dg\assignment 1\assignment_1\hierarchy\hierarchialparent.cpp(178): warning C4715: 'HierarchialParent::LoadShader': not all control paths return a value
   Hierarchy.vcxproj -> C:\Users\jOE\Documents\UNI WORK\3RD YEAR\RT3DG\Assignment 1\Assignment_1\Debug\Hierarchy.exe
