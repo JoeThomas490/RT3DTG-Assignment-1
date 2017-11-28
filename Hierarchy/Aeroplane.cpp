@@ -3,7 +3,7 @@
 Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 {
 	//Call constructor for parent calss
-	HierarchialParent();
+	HierarchialParent::HierarchialParent();
 
 	//Initialise member variables
 	m_fSpeed = 0.0f;

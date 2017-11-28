@@ -16,12 +16,7 @@ public:
 
 	void Update(bool mDebug);
 	void Draw(XMFLOAT3 camPos, float mFrameCount);
-
-	static void LoadResources();
-
 private:
-
-	void AddComponents();
 
 private:
 
