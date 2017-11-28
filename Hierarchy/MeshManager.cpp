@@ -12,8 +12,9 @@ MeshManager::~MeshManager()
 	}
 }
 
-CommonMesh * MeshManager::LoadResources(char* fileName, string tag)
+CommonMesh * MeshManager::LoadResources(const string& mFileName, string tag)
 {
+	const char* fileName = mFileName.c_str();
 	//If it can't be found in the map
 	if (m_mMeshes.find(tag) == m_mMeshes.end())
 	{

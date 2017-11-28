@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 
 #include "Application.h"
@@ -17,6 +18,7 @@ public:
 	HierarchialComponent();
 	HierarchialComponent(char* parentNode);
 	HierarchialComponent(char* parentNode, CommonMesh* mesh);
+	HierarchialComponent(const std::string& parentNode, CommonMesh* mesh);
 
 	~HierarchialComponent() = default;
 
@@ -53,7 +55,7 @@ private:
 
 	bool m_bIsDrawable;
 
-	char* m_cParentNode;
+	std::string m_cParentNode;
 
 private:
 	XMVECTOR CalculateQuaternion(float fX, float fY, float fZ);
@@ -66,7 +68,7 @@ public:
 	XMFLOAT4 GetLocalPosition() { return m_v4Pos; };
 	XMFLOAT4 GetLocalRotation() { return m_v4Rot; };
 
-	char* GetParentNode() { return m_cParentNode; };
+	std::string GetParentNode() { return m_cParentNode; };
 
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
 

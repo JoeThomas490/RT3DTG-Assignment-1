@@ -1,40 +1,53 @@
 #include "AnimationLoader.h"
 
-
 AnimationLoader::AnimationLoader()
 {
 }
 
-
 Animation AnimationLoader::LoadXML(const char * fileName)
 {
-	m_currentXMLDoc = LoadXMLDocument(fileName);
+	TiXmlDocument mCurrentXmlDoc = LoadXMLDocument(fileName);
 
 	//Get first node "library_animations"
-	TiXmlNode* headNode = m_currentXMLDoc.FirstChild();
+	TiXmlNode* headNode = mCurrentXmlDoc.FirstChild();
 
+	//Create a new animation
 	Animation animation;
 
+	//Create a new animation component
 	AnimationComponent component;
+
+	//Set the node name of this component to empty
 	component.SetNodeName("");
 
-	//Get first "animation" node
+	//Loop through each animation node 
 	for (TiXmlNode* animationNode = headNode->FirstChild("animation"); animationNode != NULL; animationNode = animationNode->NextSibling())
 	{
+		//Get the component name out of the document
 		string componentName = GetAnimationComponentName(animationNode->ToElement());
+
+		//If the components's name is empty (i.e the first component)
 		if (*component.GetNodeName() == "")
 		{
+			//Set the name of our local component
 			component.SetNodeName(componentName);
 		}
+		//If the component's name is different to the one being read (i.e a new component)
 		else if (componentName != *component.GetNodeName())
 		{
+			//Push this component into our animation's component array
 			animation.m_vAnimationComponents.push_back(component);
+			//Clear the animation data from our current component
 			component.m_animationData.clear();
+			//Set the name of our component to the one being read
 			component.SetNodeName(componentName);
 		}
+
+		//Parse the animation tag and populate our component with the correct data
 		ParseAnimationTag(animationNode, &component);
 	}
 
+	//Push the last component into our animation's component array
 	animation.m_vAnimationComponents.push_back(component);
 
 	return animation;
@@ -47,73 +60,105 @@ TiXmlDocument AnimationLoader::LoadXMLDocument(const char * fileName)
 	return doc;
 }
 
-void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent* componentData)
+void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent* animComponent)
 {
 	AnimationData data;
-	//Get the animation type e.g component-"root" & TRANSLATE_X
-	ParseAnimationType(animationNode->ToElement(), data);
 
+	//Get the animation type e.g component-"root" & TRANSLATE_X
+	//and populate our animation data with it
+	GetAnimationType(animationNode->ToElement(), data);
+
+	//If our data's animation type is valid then continue
 	if (data.GetAnimationType() != AnimationData::OTHER)
 	{
-		//Get source node
+		//Get source node that has float array (input-array)
 		Node* sourceNode = animationNode->FirstChild();
 
+		//Parse this float array collecting the time values
 		std::vector<double> timeValues = ParseFloatArray(sourceNode, data);
 
+		//Get the sibiling float array node (output-array)
 		sourceNode = sourceNode->NextSibling();
 
+		//Parse this float array collecting the position values
 		std::vector<double> positionValues = ParseFloatArray(sourceNode, data);
 
 		//If we're not reading a translate animation
 		if (data.GetAnimationType() != AnimationData::TRANSLATE_X)
 		{
+			//ADD ROTATION DATA
+
+			//Loop through our values and add it into the data
 			for (int i = 0; i < timeValues.size(); i++)
 			{
 				data.AddAnimationElement(timeValues[i], positionValues[i]);
 			}
 
+			//If there is more than one value
 			if (timeValues.size() > 1)
+			{
+				//Add the first value of the float array back onto the end with some time added on
+				//This creates a smooth transition for looping animations from end to start
 				data.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[0]);
+			}
 
-			componentData->m_animationData.push_back(data);
+			//Add the completed animation data object to our animation component
+			animComponent->m_animationData.push_back(data);
 		}
 		else
 		{
+			//ADD TRANSLATION DATA
+
+			//As it's a translation float-array all x,y and z components are all in one 
+			//so we create all three objects at once
 			AnimationData xTranslateData, yTranslateData, zTranslateData;
+
+			//Set the correct animation types
 			xTranslateData.SetAnimationType(AnimationData::TRANSLATE_X);
 			yTranslateData.SetAnimationType(AnimationData::TRANSLATE_Y);
 			zTranslateData.SetAnimationType(AnimationData::TRANSLATE_Z);
 
 			for (int i = 0; i < timeValues.size(); i++)
 			{
+				//Add the data from the float array into the correct data. The order in the collada file
+				//goes xVal, yVal, zVal, xVal, yVal ...
+				//Each value is divided by 10 as well due to the scaling difference between Maya and DX
 				xTranslateData.AddAnimationElement(timeValues[i], positionValues[0 + (i * 3)] / 10.0f);
 				yTranslateData.AddAnimationElement(timeValues[i], positionValues[1 + (i * 3)] / 10.0f);
 				zTranslateData.AddAnimationElement(timeValues[i], positionValues[2 + (i * 3)] / 10.0f);
 			}
 
+
 			if (timeValues.size() > 1)
 			{
+				//Add the first value of the float array back onto the end with some time added on
+				//This creates a smooth transition for looping animations from end to start
 				xTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[0] / 10.0f);
 				yTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[1] / 10.0f);
 				zTranslateData.AddAnimationElement(timeValues[timeValues.size() - 1] + 0.1f, positionValues[2] / 10.0f);
 			}
 			
 
-			componentData->m_animationData.push_back(xTranslateData);
-			componentData->m_animationData.push_back(yTranslateData);
-			componentData->m_animationData.push_back(zTranslateData);
+			//Add the completed animation data objects to our animation component
+			animComponent->m_animationData.push_back(xTranslateData);
+			animComponent->m_animationData.push_back(yTranslateData);
+			animComponent->m_animationData.push_back(zTranslateData);
 		}
 	}
 }
 
-void AnimationLoader::ParseAnimationType(Element * animationElement, AnimationData& data)
+void AnimationLoader::GetAnimationType(Element * animationElement, AnimationData& data)
 {
 	//Get id and value from animation tag e.g "root.translate"
 	Attribute* animationTypeAttribute = animationElement->FirstAttribute();
+
+	//Get the string value of this attribute
 	string animType = animationTypeAttribute->Value();
+
+	//Split this string using a '.'
 	std::vector<string> animTypeVec = Split(animType, '.');
 
-	//And get the type of animation (translate etc.)
+	//Get the type of animation (translate etc.) and set our data's type to it
 	data.SetAnimationType(AnimationTypeFromString(animTypeVec[1]));
 }
 
@@ -156,24 +201,31 @@ std::vector<double> AnimationLoader::ParseFloatArray(Node * sourceNode, Animatio
 
 std::vector<string> AnimationLoader::Split(const string &txt, char ch)
 {
+	//Find position in string that contains specified character
 	unsigned int pos = txt.find(ch);
-	unsigned int initialPos = 0;
+	unsigned int startPos = 0;
 
 	std::vector<string> vals;
 	string t;
 
-	// Decompose statement
+	//Loop while our pos value is valid
 	while (pos != std::string::npos) {
-		t = txt.substr(initialPos, pos - initialPos);
+
+		//Get the substring from the initial position to found pos
+		t = txt.substr(startPos, pos - startPos);
+		//Add string
 		vals.push_back(t);
 
-		initialPos = pos + 1;
+		//Update our start position
+		startPos = pos + 1;
 
-		pos = txt.find(ch, initialPos);
+		//Try and find the specified character again. If it can't be found
+		//find() will return string::npos
+		pos = txt.find(ch, startPos);
 	}
 
-	// Add the last one
-	vals.push_back(txt.substr(initialPos, txt.size() - initialPos));
+	// Add the last string
+	vals.push_back(txt.substr(startPos, txt.size() - startPos));
 
 	return vals;
 }

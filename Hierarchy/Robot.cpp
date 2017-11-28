@@ -9,7 +9,9 @@ Robot::Robot(float fX, float fY, float fZ, float fRotY)
 	HierarchialParent(XMFLOAT4(fX, fY, fZ, 0), XMFLOAT4(0, fRotY, 0, 0));
 
 
-	AddComponents();
+	LoadHierarchyFromFile("./Resources/Robot/hierarchy.txt", "Robot");
+	//AddComponents();
+
 	GetHiararchyComponentFromTag("root")->SetLocalRotation(0.0f, fRotY, 0.0f);
 
 	GetHiararchyComponentFromTag("body")->SetColor(0.666f, 0.572f, 0.572f, 1.0f);

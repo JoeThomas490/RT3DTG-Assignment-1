@@ -94,7 +94,7 @@ void Animation::UpdateTimer(bool mDebug)
 	}
 }
 
-AnimationComponent * Animation::GetAnimationComponentByName(char * componentName)
+AnimationComponent * Animation::GetAnimationComponentByName(const std::string& componentName)
 {
 	//Loop through every component
 	for (int i = 0; i < m_vAnimationComponents.size(); i++)

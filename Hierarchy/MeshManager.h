@@ -14,7 +14,7 @@ class MeshManager
 public:
 	~MeshManager();
 
-	CommonMesh* LoadResources(char* fileName, string tag);
+	CommonMesh* LoadResources(const string& fileName, string tag);
 	CommonMesh* GetMeshFromTag(string tag);
 
 	void DeleteResource(string tag);

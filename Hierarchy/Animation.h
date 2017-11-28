@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "AnimationComponent.h"
 
@@ -32,7 +33,7 @@ public:
 	float GetMaxTime();
 
 	//Get an animation component based on it's name (name of node)
-	AnimationComponent* GetAnimationComponentByName(char* componentName);
+	AnimationComponent* GetAnimationComponentByName(const std::string& componentName);
 
 public:
 

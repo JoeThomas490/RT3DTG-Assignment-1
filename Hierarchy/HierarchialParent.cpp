@@ -31,7 +31,44 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 
 }
 
-HierarchialComponent* HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, char * tag)
+void HierarchialParent::LoadHierarchyFromFile(const char * mFileName, const char* mEntity)
+{
+	std::ifstream inputStream;
+	inputStream.open(mFileName);
+
+	std::string line;
+
+	while (!inputStream.eof())
+	{
+		std::getline(inputStream, line);
+		std::string componentName, parentName, floatArray;
+
+		componentName = line.substr(1, line.length() - 2);
+
+		std::getline(inputStream, line);
+		parentName = line.substr(1, line.length() - 2);
+
+		std::getline(inputStream, line);
+		floatArray = line;
+		std::vector<double> positions = StringToDouble(Split(floatArray, ','));
+
+		if (parentName == "")
+		{
+			AddHierarchyComponent(new HierarchialComponent(""), componentName);
+		}
+		else
+		{
+			string filepath = "./Resources/" + (std::string)mEntity + "/" + componentName + ".x";
+			string meshTag = (std::string)mEntity + "_" + componentName;
+			AddHierarchyComponent(new HierarchialComponent(parentName, MeshManager::GetInstance().LoadResources(filepath, meshTag)), componentName);
+		}
+	}
+
+	inputStream.close();
+
+}
+
+HierarchialComponent* HierarchialParent::AddHierarchyComponent(HierarchialComponent * mComponent, const string& tag)
 {
 	//Add the component into the map with it's associated tag
 	m_mHierarchyComponents.emplace(tag, mComponent);
@@ -68,7 +105,7 @@ void HierarchialParent::UpdateHierarchy(bool mDebug)
 
 void HierarchialParent::DrawHierarchy()
 {
-	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+	for (std::map<std::string, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		it->second->Draw();
 	}
@@ -77,15 +114,6 @@ void HierarchialParent::DrawHierarchy()
 XMFLOAT4 HierarchialParent::GetParentPosition()
 {
 	return m_v4LocalPos;
-
-	/*for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
-	{
-		if (it->second->GetParentNode() == "")
-		{
-			return it->second->GetLocalPosition();
-		}
-	}*/
-	//return XMFLOAT4(0,0,0,0);
 }
 
 void HierarchialParent::SetActiveAnimation(int index)
@@ -95,7 +123,7 @@ void HierarchialParent::SetActiveAnimation(int index)
 
 void HierarchialParent::SetShaderForAll(Application::Shader * pShader)
 {
-	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+	for (std::map<std::string, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		if (it->second->GetIsDrawable())
 		{
@@ -171,7 +199,7 @@ void HierarchialParent::SetBlendingAnimation(Animation * pBlend)
 
 void HierarchialParent::CalculateLocalMatrices()
 {
-	for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+	for (std::map<std::string, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 	{
 		it->second->UpdateLocalMatrix();
 	}
@@ -189,7 +217,7 @@ void HierarchialParent::CalculateWorldMatrices()
 		HierarchialComponent* hc = m_mHierarchyComponents.find(tag)->second;
 		if (hc->GetParentNode() != "")
 		{
-			char* parentNode = hc->GetParentNode();
+			std::string parentNode = hc->GetParentNode();
 			XMMATRIX mWorldMatrix = hc->GetLocalMatrix() * (m_mHierarchyComponents.at(parentNode)->GetWorldMatrix());
 			hc->SetWorldMatrix(&mWorldMatrix);
 		}
@@ -220,7 +248,7 @@ void HierarchialParent::UpdateAnimations(bool mDebug)
 		}
 
 
-		for (std::map<char*, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
+		for (std::map<std::string, HierarchialComponent*>::iterator it = m_mHierarchyComponents.begin(); it != m_mHierarchyComponents.end(); it++)
 		{
 			AnimationComponent* ac = m_pActiveAnimation->GetAnimationComponentByName(it->first);
 
@@ -304,7 +332,7 @@ XMVECTOR HierarchialParent::CalculateQuaternion(XMFLOAT4 rot)
 	//Convert stored angle into radians
 	double radX = XMConvertToRadians(rot.x);
 	double radY = XMConvertToRadians(rot.y);
-	double radZ = XMConvertToRadians(rot.z	);
+	double radZ = XMConvertToRadians(rot.z);
 
 	//Calculate cos components
 	double c1 = cos(radY / 2.0);
@@ -324,4 +352,54 @@ XMVECTOR HierarchialParent::CalculateQuaternion(XMFLOAT4 rot)
 
 	//Return as an XMVECTOR
 	return XMVectorSet(x, y, z, w);
+}
+
+std::vector<std::string> HierarchialParent::Split(const std::string & txt, char ch)
+{
+	//Find position in string that contains specified character
+	unsigned int pos = txt.find(ch);
+	unsigned int startPos = 0;
+
+	std::vector<std::string> vals;
+	std::string t;
+
+	//Loop while our pos value is valid
+	while (pos != std::string::npos) {
+
+		//Get the substring from the initial position to found pos
+		t = txt.substr(startPos, pos - startPos);
+		//Add string
+		vals.push_back(t);
+
+		//Update our start position
+		startPos = pos + 1;
+
+		//Try and find the specified character again. If it can't be found
+		//find() will return string::npos
+		pos = txt.find(ch, startPos);
+	}
+
+	// Add the last string
+	vals.push_back(txt.substr(startPos, txt.size() - startPos));
+
+	return vals;
+}
+
+std::vector<double> HierarchialParent::StringToDouble(const std::vector<std::string>& txt)
+{
+	std::vector<double> temp;
+
+	for (auto& str : txt)
+	{
+		if (str[0] == ' ')
+		{
+			temp.push_back(std::stod(str.substr(1, str.length())) / 10.0);
+		}
+		else
+		{
+			temp.push_back(std::stod(str) / 10.0);
+		}
+	}
+
+	return temp;
 }

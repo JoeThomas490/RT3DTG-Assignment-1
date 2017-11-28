@@ -19,7 +19,7 @@ __declspec(align(16)) class Aeroplane : public HierarchialParent
 public:
 
 	Aeroplane(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
-	~Aeroplane() = default;
+	virtual ~Aeroplane() = default;
 
 	void Update(bool bPlayerControl);
 	void Draw(XMFLOAT3 camPos, float mFrameCount);

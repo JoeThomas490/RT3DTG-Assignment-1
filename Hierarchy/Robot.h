@@ -12,7 +12,7 @@ __declspec(align(16))class Robot : public HierarchialParent
 public:
 	Robot();
 	Robot(float fX, float fY, float fZ, float fRotY);
-	~Robot() = default;
+	virtual ~Robot() = default;
 
 	void Update(bool mDebug);
 	void Draw(XMFLOAT3 camPos, float mFrameCount);

@@ -47,6 +47,23 @@ HierarchialComponent::HierarchialComponent(char * parentNode, CommonMesh * mesh)
 	m_bIsDrawable = true;
 }
 
+HierarchialComponent::HierarchialComponent(const std::string & parentNode, CommonMesh * mesh)
+{
+	m_mLocalMatrix = XMMatrixIdentity();
+	m_mWorldMatrix = XMMatrixIdentity();
+
+	m_v4Rot = XMFLOAT4(0, 0, 0, 0);
+	m_v4RotQuart = XMFLOAT4(0, 0, 0, 0);
+	m_v4Pos = XMFLOAT4(0, 0, 0, 0);
+	m_v4Offset = XMFLOAT4(0, 0, 0, 0);
+
+	m_cParentNode = parentNode.c_str();
+
+	m_mMesh = mesh;
+
+	m_bIsDrawable = true;
+}
+
 XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 {
 	

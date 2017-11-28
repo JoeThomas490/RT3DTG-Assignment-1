@@ -1,23 +1,20 @@
 #include "AnimationData.h"
 
-
-
 AnimationData::AnimationData()
 {
 	fromInd = 0;
 	toInd = 1;
 }
 
-
-AnimationData::~AnimationData()
-{
-}
-
 void AnimationData::AddAnimationElement(float mTime, float mValue)
 {
+	//Add time to vector
 	m_vTimes.push_back(mTime);
+
+	//Add value to vector
 	m_vValues.push_back(mValue);
 
+	//Update the data count 
 	m_iCount = m_vTimes.size();
 }
 
@@ -34,34 +31,42 @@ void AnimationData::GetTimeValuePair(int index, float & time, float & value)
 
 float AnimationData::Interpolate(float mTime)
 {
-	GetIndex(mTime);
+	//Todo Check if there's less than one 
 
-	float t = GetT(mTime);
-
+	//If there's only one value in the animation data
 	if (m_iCount == 1)
 	{
+		//Just return the first value
 		return m_vValues[0];
-		//return Lerp(GetT(mTime), 0, m_vValues[0]);
 	}
 
-	float value = Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
-	return value;
+	//Get from and to index's
+	GetIndex(mTime);
+
+	//Get T for lerp
+	float t = GetT(mTime);
+
+	//Lerp the two values from the data and return it
+	return Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
 }
 
 int AnimationData::GetIndex(float mTime)
 {
 	int index = 0;
 
+	//Loop through all the times
 	for (auto& time : m_vTimes)
 	{
+		//If our current time is greater than this time
 		if (mTime > time)
 		{
+			//Update the from and to index's for lerping
 			fromInd = index;
 			toInd = index + 1;
 		}
+
 		index++;
 	}
-
 
 	return fromInd;
 }
@@ -86,11 +91,6 @@ float AnimationData::GetT(float mTime)
 	}
 	
 	return 0;
-}
-
-void AnimationData::AddOffset(int index, float val)
-{
-	m_vValues[index] += val;
 }
 
 float AnimationData::Lerp(float t, float a, float b)
