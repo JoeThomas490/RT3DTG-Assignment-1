@@ -28,7 +28,7 @@ class AnimationLoader
 public:
 
 	AnimationLoader();
-	~AnimationLoader() = default;
+	~AnimationLoader();
 
 	//Main function to be called when loading an xml file
 	Animation LoadXML(const char* fileName);
@@ -48,12 +48,6 @@ private:
 	//Parse a float array and collect values in a vector
 	std::vector<double> ParseFloatArray(Node* node, AnimationData& data);
 	
-	//Split a string into an array by a specific character
-	std::vector<string> Split(const string &txt, char ch);
-
-	//Convert a vector of strings into a vector of doubles
-	std::vector<double> StringToDouble(const std::vector<string> &txt);
-
 	//Get the enum type AnimationType from a string
 	AnimationData::AnimationType AnimationTypeFromString(const string &txt);
 };

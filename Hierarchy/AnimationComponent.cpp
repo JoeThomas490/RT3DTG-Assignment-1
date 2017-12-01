@@ -1,5 +1,9 @@
 #include "AnimationComponent.h"
 
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
+
 AnimationComponent::AnimationComponent()
 {
 	//Initialise position and rotation to zero
@@ -7,37 +11,27 @@ AnimationComponent::AnimationComponent()
 	m_v4CurrentRotation = XMFLOAT4(0, 0, 0, 0);
 }
 
-AnimationData * AnimationComponent::GetDataByType(AnimationData::AnimationType animationType)
+AnimationComponent::~AnimationComponent()
 {
-	//Loop through each element in animation data array
-	for (int i = 0; i < m_animationData.size(); i++)
-	{
-		//If the animation type matches the one passed in 
-		if (m_animationData[i].GetAnimationType() == animationType)
-		{
-			//Then return the correct animation data
-			return &m_animationData[i];
-		}
-	}
-	
-	//If it can't be found then return a nullptr
-	return nullptr;
 }
+
+//*********************************************************************************************
+//************                           Update				                   ****************
+//*********************************************************************************************
 
 void AnimationComponent::Update(float mTime)
 {
-	InterpolateData(mTime);
-}
-
-void AnimationComponent::InterpolateData(float mTime)
-{
 	//Lerp and calculate the translation components
-	CalculateTranslation(mTime);
+	InterpolateTranslationData(mTime);
 	//Slerp and calculate the rotation components
-	CalculateRotation(mTime);
+	InterpolateRotationData(mTime);
 }
 
-void AnimationComponent::CalculateTranslation(float mTime)
+//*********************************************************************************************
+//************                           Interpolate Functions                 ****************
+//*********************************************************************************************
+
+void AnimationComponent::InterpolateTranslationData(float mTime)
 {
 	//Loop through each element in the data array
 	for (auto& data : m_animationData)
@@ -45,7 +39,7 @@ void AnimationComponent::CalculateTranslation(float mTime)
 		//Get the animation type
 		AnimationData::AnimationType animType = data.GetAnimationType();
 
-		
+
 		//If the animation type is a translation
 		if (animType == AnimationData::TRANSLATE_X || animType == AnimationData::TRANSLATE_Y || animType == AnimationData::TRANSLATE_Z)
 		{
@@ -71,7 +65,7 @@ void AnimationComponent::CalculateTranslation(float mTime)
 	}
 }
 
-void AnimationComponent::CalculateRotation(float mTime)
+void AnimationComponent::InterpolateRotationData(float mTime)
 {
 	//Get x rotation data out of animation data array
 	AnimationData* data = &m_animationData[3];
@@ -104,41 +98,14 @@ void AnimationComponent::CalculateRotation(float mTime)
 	float eulerZ2 = data->GetValue(index + 1);
 
 	//Get the quaternions from the euler angles
-	XMVECTOR quart1 = CalculateQuaternion(eulerX1, eulerY1, eulerZ1);
-	XMVECTOR quart2 = CalculateQuaternion(eulerX2, eulerY2, eulerZ2);
+	XMVECTOR quart1 = Utils::Quaternion::CalculateQuaternion(eulerX1, eulerY1, eulerZ1);
+	XMVECTOR quart2 = Utils::Quaternion::CalculateQuaternion(eulerX2, eulerY2, eulerZ2);
 
 	//Slerp between each quaternion and get T for lerp from data using current time
 	XMVECTOR quart = XMQuaternionSlerp(quart1, quart2, data->GetT(mTime));
 
 	//Store end result into current rotation
 	XMStoreFloat4(&m_v4CurrentRotation, quart);
-}
-
-XMVECTOR AnimationComponent::CalculateQuaternion(float fX, float fY, float fZ)
-{
-	//Convert stored angle into radians
-	double radX = XMConvertToRadians(fX);
-	double radY = XMConvertToRadians(fY);
-	double radZ = XMConvertToRadians(fZ);
-
-	//Calculate cos components
-	double c1 = cos(radY / 2.0);
-	double c2 = cos(radZ / 2.0);
-	double c3 = cos(radX / 2.0);
-
-	//Calculate sin components
-	double s1 = sin(radY / 2.0);
-	double s2 = sin(radZ / 2.0);
-	double s3 = sin(radX / 2.0);
-
-	//Calculate quaternion value using components
-	double w = (c1 * c2 * c3) - (s1 * s2 * s3);
-	double x = (s1 * s2 * c3) + (c1 * c2 * s3);
-	double y = (s1 * c2 * c3) + (c1 * s2 * s3);
-	double z = (c1 * s2 * c3) - (s1 * c2 * s3);
-
-	//Return as an XMVECTOR
-	return XMVectorSet(x, y, z, w);
 }
 
 

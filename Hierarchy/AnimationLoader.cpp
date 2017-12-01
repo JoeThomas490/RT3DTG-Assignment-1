@@ -1,8 +1,20 @@
 #include "AnimationLoader.h"
 
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
+
 AnimationLoader::AnimationLoader()
 {
 }
+
+AnimationLoader::~AnimationLoader()
+{
+}
+
+//*********************************************************************************************
+//************                           Public Load Function                  ****************
+//*********************************************************************************************
 
 Animation AnimationLoader::LoadXML(const char * fileName)
 {
@@ -53,12 +65,20 @@ Animation AnimationLoader::LoadXML(const char * fileName)
 	return animation;
 }
 
+//*********************************************************************************************
+//************                           Load Document                         ****************
+//*********************************************************************************************
+
 TiXmlDocument AnimationLoader::LoadXMLDocument(const char * fileName)
 {
 	TiXmlDocument doc = TiXmlDocument(fileName);
 	doc.LoadFile(fileName);
 	return doc;
 }
+
+//*********************************************************************************************
+//************                           Parse XML                             ****************
+//*********************************************************************************************
 
 void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent* animComponent)
 {
@@ -147,30 +167,6 @@ void AnimationLoader::ParseAnimationTag(Node* animationNode, AnimationComponent*
 	}
 }
 
-void AnimationLoader::GetAnimationType(Element * animationElement, AnimationData& data)
-{
-	//Get id and value from animation tag e.g "root.translate"
-	Attribute* animationTypeAttribute = animationElement->FirstAttribute();
-
-	//Get the string value of this attribute
-	string animType = animationTypeAttribute->Value();
-
-	//Split this string using a '.'
-	std::vector<string> animTypeVec = Split(animType, '.');
-
-	//Get the type of animation (translate etc.) and set our data's type to it
-	data.SetAnimationType(AnimationTypeFromString(animTypeVec[1]));
-}
-
-string AnimationLoader::GetAnimationComponentName(Element * animationElement)
-{
-	Attribute* animationTypeAttribute = animationElement->FirstAttribute();
-	string animType = animationTypeAttribute->Value();
-	std::vector<string> animTypeVec = Split(animType, '.');
-
-	return animTypeVec[0];
-}
-
 std::vector<double> AnimationLoader::ParseFloatArray(Node * sourceNode, AnimationData& data)
 {
 	//Get input array node
@@ -184,8 +180,8 @@ std::vector<double> AnimationLoader::ParseFloatArray(Node * sourceNode, Animatio
 	string arrayCount = arrayElement->Attribute("count");
 
 	//Create vector of time values by splitting value inside tag (IMPORTANT BITS)
-	std::vector<string> splitVal = Split(arrayElement->GetText(), ' ');
-	std::vector<double> values = StringToDouble(splitVal);
+	std::vector<string> splitVal = Utils::StringUtils::Split(arrayElement->GetText(), ' ');
+	std::vector<double> values = Utils::StringUtils::StringToDouble(splitVal);
 
 	//Get accessor node
 	Node* accessorNode = arrayNode->NextSibling()->FirstChild();
@@ -199,47 +195,32 @@ std::vector<double> AnimationLoader::ParseFloatArray(Node * sourceNode, Animatio
 	return values;
 }
 
-std::vector<string> AnimationLoader::Split(const string &txt, char ch)
+//*********************************************************************************************
+//************                           Get Specific Data                     ****************
+//*********************************************************************************************
+
+void AnimationLoader::GetAnimationType(Element * animationElement, AnimationData& data)
 {
-	//Find position in string that contains specified character
-	unsigned int pos = txt.find(ch);
-	unsigned int startPos = 0;
+	//Get id and value from animation tag e.g "root.translate"
+	Attribute* animationTypeAttribute = animationElement->FirstAttribute();
 
-	std::vector<string> vals;
-	string t;
+	//Get the string value of this attribute
+	string animType = animationTypeAttribute->Value();
 
-	//Loop while our pos value is valid
-	while (pos != std::string::npos) {
+	//Split this string using a '.'
+	std::vector<string> animTypeVec = Utils::StringUtils::Split(animType, '.');
 
-		//Get the substring from the initial position to found pos
-		t = txt.substr(startPos, pos - startPos);
-		//Add string
-		vals.push_back(t);
-
-		//Update our start position
-		startPos = pos + 1;
-
-		//Try and find the specified character again. If it can't be found
-		//find() will return string::npos
-		pos = txt.find(ch, startPos);
-	}
-
-	// Add the last string
-	vals.push_back(txt.substr(startPos, txt.size() - startPos));
-
-	return vals;
+	//Get the type of animation (translate etc.) and set our data's type to it
+	data.SetAnimationType(AnimationTypeFromString(animTypeVec[1]));
 }
 
-std::vector<double> AnimationLoader::StringToDouble(const std::vector<string>& txt)
+string AnimationLoader::GetAnimationComponentName(Element * animationElement)
 {
-	std::vector<double> temp;
+	Attribute* animationTypeAttribute = animationElement->FirstAttribute();
+	string animType = animationTypeAttribute->Value();
+	std::vector<string> animTypeVec = Utils::StringUtils::Split(animType, '.');
 
-	for (auto& str : txt)
-	{
-		temp.push_back(std::stod(str));
-	}
-
-	return temp;
+	return animTypeVec[0];
 }
 
 AnimationData::AnimationType AnimationLoader::AnimationTypeFromString(const string & txt)

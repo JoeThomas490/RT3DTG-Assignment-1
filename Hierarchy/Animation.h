@@ -24,7 +24,7 @@ class Animation
 {
 public:
 	Animation();
-	~Animation() = default;
+	~Animation();
 
 	//To be called every frame for the animation to be updated
 	void Update(bool mDebug);
@@ -41,16 +41,24 @@ public:
 	std::vector<AnimationComponent> m_vAnimationComponents;
 
 public:
+
+
+	//Getter and setter for whether the animation is loopable or not
 	void SetIsLoopable(bool mLoop) { m_bIsLoopable = mLoop; };
 	bool GetIsLoopable() { return m_bIsLoopable; };
 
+	//Getter and setter for blend time
 	void SetBlendTime(float mBlend) { m_fBlendTime = mBlend; };
 	float GetBlendTime() { return m_fBlendTime; };
 
+	//Get the current time of this animation
 	float GetTimer() { return m_animTimer; };
+
+	//Reset the animation timer back to 0
 	void ResetTimer() { m_animTimer = 0; };
 
 private:
+
 	void UpdateComponents();
 	void UpdateTimer(bool mDebug);
 

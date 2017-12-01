@@ -1,5 +1,25 @@
 #include "Aeroplane.h"
 
+
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
+
+Aeroplane::Aeroplane()
+{
+	//Call constructor for parent calss
+	HierarchialParent::HierarchialParent();
+	
+	//Initialise member variables
+	m_fSpeed = 0.0f;
+	m_bGunCam = false;
+	m_bStop = false;
+
+	//Set vector membors to zero
+	m_vCamWorldPos = XMVectorZero();
+	m_vForwardVector = XMVectorZero();
+}
+
 Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 {
 	//Call constructor for parent calss
@@ -14,14 +34,9 @@ Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 	m_vCamWorldPos = XMVectorZero();
 	m_vForwardVector = XMVectorZero();
 
-	//---------------------------------------------------------------------------------------------------
-	//Add components to hierarchy by loading the mesh, settings it's parent and giving the component a name
-	m_pPlane = AddHierarchyComponent(new HierarchialComponent("", MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
-	m_pProp = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop")), "prop");
-	m_pTurret = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/turret.x", "turret")), "turret");
-	m_pGun = AddHierarchyComponent(new HierarchialComponent("turret", MeshManager::GetInstance().LoadResources("Resources/Plane/gun.x", "gun")), "gun");
+	InitialiseComponents();
+	InitialiseColours();
 
-	//---------------------------------------------------------------------------------------------------
 	//Set initial positions and rotations for each component
 	m_pPlane->SetLocalPosition(fX, fY, fZ);
 	m_pPlane->SetLocalRotation(0.0f, fRotY, 0.0f);
@@ -32,17 +47,42 @@ Aeroplane::Aeroplane(float fX, float fY, float fZ, float fRotY)
 
 	m_pGun->SetLocalPosition(0.0f, 0.5f, 0.0f);
 
-	//---------------------------------------------------------------------------------------------------
+	//Initialise camera offsets and rotation
+	m_v4CamOff = XMFLOAT4(0.0f, 4.5f, -15.0f, 0.0f);
+	m_v4CamRot = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+}
+
+Aeroplane::~Aeroplane()
+{
+}
+
+//*********************************************************************************************
+//************                           Initialisation                        ****************
+//*********************************************************************************************
+
+
+void Aeroplane::InitialiseComponents()
+{
+	//Add components to hierarchy by loading the mesh, settings it's parent and giving the component a name
+	m_pPlane = AddHierarchyComponent(new HierarchialComponent("", MeshManager::GetInstance().LoadResources("Resources/Plane/plane.x", "plane")), "plane");
+	m_pProp = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/prop.x", "prop")), "prop");
+	m_pTurret = AddHierarchyComponent(new HierarchialComponent("plane", MeshManager::GetInstance().LoadResources("Resources/Plane/turret.x", "turret")), "turret");
+	m_pGun = AddHierarchyComponent(new HierarchialComponent("turret", MeshManager::GetInstance().LoadResources("Resources/Plane/gun.x", "gun")), "gun");
+}
+
+void Aeroplane::InitialiseColours()
+{
+	//TODO Allow this to be done though a file instead
 	//Set the colours for each component
 	m_pPlane->SetColor(0.050f, 0.231f, 0.101f, 1.0f);
 	m_pProp->SetColor(0.862f, 0.858f, 0.015f, 1.0f);
 	m_pTurret->SetColor(0.345, 0.207f, 0.098f, 1.0f);
 	m_pGun->SetColor(0.819f, 0.8190f, 0.717f, 1.0f);
-	
-	//Initialise camera offsets and rotation
-	m_v4CamOff = XMFLOAT4(0.0f, 4.5f, -15.0f, 0.0f);
-	m_v4CamRot = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 }
+
+//*********************************************************************************************
+//************                           Update Functions                      ****************
+//*********************************************************************************************
 
 void Aeroplane::Update(bool bPlayerControl)
 {
@@ -54,8 +94,6 @@ void Aeroplane::Update(bool bPlayerControl)
 
 		//Reset rotations to zero
 		ResetMovementToZero();
-
-
 	}
 
 	// Apply a forward thrust and limit to a maximum speed of 1
@@ -98,28 +136,17 @@ void Aeroplane::Update(bool bPlayerControl)
 	UpdateMatrices();
 }
 
-void Aeroplane::Draw(XMFLOAT3 camPos, float mFrameCount)
-{
-	//Update the shader by passing it the camera position (for specular shading) and 
-	//frame count (for modifying lightness)
-	UpdateShader(camPos, mFrameCount);
-
-	//Draw the hierarchy for this object
-	DrawHierarchy();
-}
-
 void Aeroplane::UpdateMatrices()
 {
 	//Update each component in the hierarchy
 	UpdateHierarchy(false);
 	//Update our camera matrix
 	UpdateCameraMatrix();
-	
+
 	//Calculate the forward vector
 	m_vForwardVector = XMVector4Transform(XMVectorSet(0, 0, 1, 0), m_pPlane->GetWorldMatrix());
 }
 
-//TODO Cleanup by creating a camera component and adding to hierarchy
 void Aeroplane::UpdateCameraMatrix()
 {
 	XMMATRIX mPlaneCameraRot;
@@ -142,6 +169,25 @@ void Aeroplane::UpdateCameraMatrix()
 	XMMatrixDecompose(&scale, &rotation, &position, m_mCamWorldMatrix);
 	m_vCamWorldPos = position;
 }
+
+
+//*********************************************************************************************
+//************                           Rendering                             ****************
+//*********************************************************************************************
+
+void Aeroplane::Draw(XMFLOAT3 camPos, float mFrameCount)
+{
+	//Update the shader by passing it the camera position (for specular shading) and 
+	//frame count (for modifying lightness)
+	UpdateShader(camPos, mFrameCount);
+
+	//Draw the hierarchy for this object
+	DrawHierarchy();
+}
+
+//*********************************************************************************************
+//************                           Player Input / Movement               ****************
+//*********************************************************************************************
 
 void Aeroplane::UpdatePlaneMovement()
 {
@@ -267,3 +313,7 @@ void Aeroplane::ResetMovementToZero()
 	m_pPlane->SetRotationX(rotX);
 	m_pPlane->SetRotationZ(rotZ);
 }
+
+//*********************************************************************************************
+//************                           END                                   ****************
+//*********************************************************************************************

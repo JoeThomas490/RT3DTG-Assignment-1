@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include "Utils.h"
 
 //*********************************************************************************************
 // File:			AnimationData.h
@@ -15,9 +15,10 @@
 class AnimationData
 {
 public:
-
+	
+	//Default constructor / destructor
 	AnimationData();
-	~AnimationData() = default;
+	~AnimationData();
 
 	//Add an element to each vecto
 	void AddAnimationElement(float mTime, float mValue);
@@ -47,7 +48,7 @@ public:
 	AnimationType GetAnimationType() { return m_animationType; };
 
 	//Get amount of values in animation
-	int GetAnimationCount() { return m_iCount; };
+	int GetKeyframeCount() { return m_iKeyframeCount; };
 
 	//Interpolate value at a certain time
 	float Interpolate(float mTime);
@@ -60,9 +61,7 @@ public:
 
 private:
 
-	float Lerp(float t, float a, float b);
-
-
+	//Type of animation data e.g Translate_X or Rotate_Y
 	AnimationType m_animationType;
 
 	//Vector of keyframe times
@@ -71,8 +70,10 @@ private:
 	//Vector of values
 	std::vector<float> m_vValues;
 
-	int m_iCount;
+	//Number of keyframes in the animation
+	int m_iKeyframeCount;
 
+	//Index of values to lerp from and to
 	int fromInd, toInd;
 
 };

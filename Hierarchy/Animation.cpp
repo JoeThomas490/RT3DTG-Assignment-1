@@ -2,6 +2,11 @@
 
 const float ANIMATION_TICK = 0.0133f;
 
+
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
+
 Animation::Animation()
 {
 	//Initialise member variables
@@ -14,6 +19,14 @@ Animation::Animation()
 	//TODO Make this settable per animation
 	m_fBlendTime = 0.3f;
 }
+
+Animation::~Animation()
+{
+}
+
+//*********************************************************************************************
+//************                           Update functions                      ****************
+//*********************************************************************************************
 
 void Animation::Update(bool mDebug)
 {
@@ -47,17 +60,6 @@ void Animation::Update(bool mDebug)
 		
 	//Update each component within the animation
 	UpdateComponents();
-}
-
-void Animation::SetTime(float mTime, float mMaxTime)
-{
-	float percent = mTime / mMaxTime;
-
-	if (percent > 1)
-	{
-		m_animTimer = m_fMaxTime * percent;
-	}
-	m_animTimer = mTime;
 }
 
 void Animation::UpdateComponents()
@@ -94,6 +96,21 @@ void Animation::UpdateTimer(bool mDebug)
 	}
 }
 
+//*********************************************************************************************
+//************                           Getters/Setters                       ****************
+//*********************************************************************************************
+
+void Animation::SetTime(float mTime, float mMaxTime)
+{
+	float percent = mTime / mMaxTime;
+
+	if (percent > 1)
+	{
+		m_animTimer = m_fMaxTime * percent;
+	}
+	m_animTimer = mTime;
+}
+
 AnimationComponent * Animation::GetAnimationComponentByName(const std::string& componentName)
 {
 	//Loop through every component
@@ -124,7 +141,7 @@ float Animation::GetMaxTime()
 		{
 			float thisMaxTime, a;
 			//Get the latest time in the animation data
-			data.GetTimeValuePair(data.GetAnimationCount() - 1, thisMaxTime, a);
+			data.GetTimeValuePair(data.GetKeyframeCount() - 1, thisMaxTime, a);
 			//If this new time is greater than our max time
 			if (maxTime < thisMaxTime)
 			{
@@ -141,4 +158,7 @@ float Animation::GetMaxTime()
 	return maxTime;
 }
 
+//*********************************************************************************************
+//************                           END                                   ****************
+//*********************************************************************************************
 

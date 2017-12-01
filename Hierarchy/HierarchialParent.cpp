@@ -29,6 +29,10 @@ HierarchialParent::HierarchialParent(XMFLOAT4 startPos, XMFLOAT4 startRot)
 	m_fBlendTimer = 0;
 	m_iFrameCounter = 0;
 
+	m_pMyAppCBuffer = NULL;
+
+
+	LoadShader();
 }
 
 void HierarchialParent::LoadHierarchyFromFile(const char * mFileName, const char* mEntity)

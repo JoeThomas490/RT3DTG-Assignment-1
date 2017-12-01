@@ -56,10 +56,6 @@ private:
 	bool m_bIsDrawable;
 
 	std::string m_cParentNode;
-
-private:
-	XMVECTOR CalculateQuaternion(float fX, float fY, float fZ);
-
 public:
 
 	XMMATRIX GetLocalMatrix() { return m_mLocalMatrix; };
@@ -73,7 +69,7 @@ public:
 	void SetLocalPosition(XMFLOAT4 mPos) { m_v4Pos = mPos; };
 
 	void SetLocalRotationQuart(XMFLOAT4 mQuart) { m_v4RotQuart = mQuart; };
-	void SetLocalRotationEuler(XMFLOAT4 mRot) { XMVECTOR mQuart = CalculateQuaternion(mRot.x, mRot.y, mRot.z); XMStoreFloat4(&m_v4Rot, mQuart); };
+	void SetLocalRotationEuler(XMFLOAT4 mRot) { XMVECTOR mQuart = Utils::Quaternion::CalculateQuaternion(mRot.x, mRot.y, mRot.z); XMStoreFloat4(&m_v4Rot, mQuart); };
 
 	void SetLocalOffset(XMFLOAT4 mPos) { m_v4Offset = mPos; };
 

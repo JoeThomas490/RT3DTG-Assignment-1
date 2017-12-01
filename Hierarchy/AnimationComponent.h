@@ -11,17 +11,16 @@
 //					e.g robot_pelvis
 //							
 // Notes:			
-// Todo:			-Remove CalculcateQuaternion and put in a util class
+// Todo:			
 //*********************************************************************************************
 
 __declspec(align(16)) class AnimationComponent
 {
 public:
 
-	AnimationComponent();
-	~AnimationComponent() = default;
 
-	AnimationData* GetDataByType(AnimationData::AnimationType animationType);
+	AnimationComponent();
+	~AnimationComponent();
 
 	void Update(float mTime);
 
@@ -30,13 +29,10 @@ public:
 
 private:
 
-	void InterpolateData(float mTime);
-
-	void CalculateTranslation(float mTime);
-	void CalculateRotation(float mTime);
-
-	//Calculate a quaternion vector
-	XMVECTOR CalculateQuaternion(float x, float y, float z);
+	//Interpolate all animation data for the given time 
+	//and place in current position/rotation
+	void InterpolateTranslationData(float mTime);
+	void InterpolateRotationData(float mTime);
 
 	//Current position of animation pose
 	XMFLOAT4 m_v4CurrentPos;
@@ -48,6 +44,7 @@ private:
 
 public:
 
+	//Get/Set the node name associated with this component
 	void SetNodeName(std::string nodeName) { m_nodeName = nodeName; };
 	std::string* GetNodeName() { return &m_nodeName; };
 

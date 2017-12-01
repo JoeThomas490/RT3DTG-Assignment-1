@@ -69,8 +69,7 @@ XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 	
 	XMVECTOR mQuart1 = XMLoadFloat4(&m_v4RotQuart);
 	
-
-	XMVECTOR mQuart2 = CalculateQuaternion(m_v4Rot.x, m_v4Rot.y, m_v4Rot.z);
+	XMVECTOR mQuart2 = Utils::Quaternion::CalculateQuaternion(m_v4Rot.x, m_v4Rot.y, m_v4Rot.z);
 
 	XMMATRIX mRot = XMMatrixRotationQuaternion(mQuart1) * XMMatrixRotationQuaternion(mQuart2);
 
@@ -82,33 +81,6 @@ XMMATRIX HierarchialComponent::UpdateLocalMatrix()
 	m_mLocalMatrix = mRot * mTrans;
 
 	return m_mLocalMatrix;
-}
-
-XMVECTOR HierarchialComponent::CalculateQuaternion(float fX, float fY, float fZ)
-{
-	//Convert stored angle into radians
-	double radX = XMConvertToRadians(fX);
-	double radY = XMConvertToRadians(fY);
-	double radZ = XMConvertToRadians(fZ);
-	
-	//Calculate cos components
-	double c1 = cos(radY / 2.0);
-	double c2 = cos(radZ / 2.0);
-	double c3 = cos(radX / 2.0);
-
-	//Calculate sin components
-	double s1 = sin(radY / 2.0);
-	double s2 = sin(radZ / 2.0);
-	double s3 = sin(radX / 2.0);
-
-	//Calculate quaternion value using components
-	double w = (c1 * c2 * c3) - (s1 * s2 * s3);
-	double x = (s1 * s2 * c3) + (c1 * c2 * s3);
-	double y = (s1 * c2 * c3) + (c1 * s2 * s3);
-	double z = (c1 * s2 * c3) - (s1 * c2 * s3);
-
-	//Return as an XMVECTOR
-	return XMVectorSet(x, y, z, w);
 }
 
 void HierarchialComponent::SetWorldMatrix(XMMATRIX* mWorldMatrix)

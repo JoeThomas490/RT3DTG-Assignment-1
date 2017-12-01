@@ -1,2 +1,4 @@
 tinyxml/
 *.x
+*.vcxproj
+*.vcxproj.filters

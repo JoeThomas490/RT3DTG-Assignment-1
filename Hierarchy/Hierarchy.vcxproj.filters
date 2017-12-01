@@ -46,6 +46,7 @@
       <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -87,6 +88,7 @@
       <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TinyXML">

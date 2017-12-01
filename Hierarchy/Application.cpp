@@ -40,10 +40,13 @@ bool Application::HandleStart()
 	m_pAeroplane = new Aeroplane(0.0f, 6.5f, 10.0f, 105.0f);
 	m_pAeroplane->LoadShader();
 
-	for (int i = 0; i < 5; i++)
+	/*for (int i = 0; i < 5; i++)
 	{
 		m_pRobots.push_back(new Robot(cos(i * 3.14f) * 10.0f, 10.0f, sin(i * 3.14f) * 10.0f, i * 25.0f));
-	}
+	}*/
+
+	m_pRobots.push_back(new Robot(10, 2, 10, 0));
+	m_pRobots[0]->LoadShader();
 
 
 	Bullet::LoadResources();
@@ -61,7 +64,7 @@ bool Application::HandleStart()
 	LoadXML();
 
 
-	int index = 0;
+	/*int index = 0;
 	for (int i = 0; i < 360; i += 360 / 5)
 	{
 		m_pRobots[index]->SetLocalPosition(cos(XMConvertToRadians(i)) * 100.0f, 2.0f, sin(XMConvertToRadians(i)) * 25.0f);
@@ -69,7 +72,7 @@ bool Application::HandleStart()
 
 		m_pRobots[index]->LoadShader();
 		index++;
-	}
+	}*/
 
 
 	m_pSkyBox = new CubeMap();
@@ -155,8 +158,8 @@ void Application::HandleRender()
 		break;
 	case CAMERA_ROBOT:
 		m_pAeroplane->SetGunCamera(false);
-		vCamera = XMFLOAT3(sin(12.1f) * m_cameraZ, m_cameraZ / 4, cos(12.1f) * m_cameraZ);
-		vLookat = XMFLOAT3(0.0f, 5.0f, -20.0f);
+		vCamera = XMFLOAT3(10, 4, -10);
+		vLookat = XMFLOAT3(m_pRobots[0]->GetParentPosition().x, m_pRobots[0]->GetParentPosition().y, m_pRobots[0]->GetParentPosition().z);
 		break;
 	}
 
@@ -317,7 +320,23 @@ void Application::HandleSpawnBullets()
 
 void Application::HandleCameraUpdate()
 {
-	m_rotationAngle += .01f;
+	static bool dbR = false;
+	static bool dbRot = false;
+	if (this->IsKeyPressed('R'))
+	{
+		if (!dbR)
+		{
+			dbR = true;
+			dbRot = !dbRot;
+		}
+	}
+	else
+	{
+		dbR = false;
+	}
+
+
+	if(!dbRot) m_rotationAngle += .01f;
 
 	if (m_cameraState == CAMERA_MAP)
 	{

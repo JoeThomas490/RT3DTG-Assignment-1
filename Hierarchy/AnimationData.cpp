@@ -1,10 +1,22 @@
 #include "AnimationData.h"
 
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
+
 AnimationData::AnimationData()
 {
 	fromInd = 0;
 	toInd = 1;
 }
+
+AnimationData::~AnimationData()
+{
+}
+
+//*********************************************************************************************
+//************                           Add Element to data                   ****************
+//*********************************************************************************************
 
 void AnimationData::AddAnimationElement(float mTime, float mValue)
 {
@@ -15,8 +27,12 @@ void AnimationData::AddAnimationElement(float mTime, float mValue)
 	m_vValues.push_back(mValue);
 
 	//Update the data count 
-	m_iCount = m_vTimes.size();
+	m_iKeyframeCount = m_vTimes.size();
 }
+
+//*********************************************************************************************
+//************                           Getters                               ****************
+//*********************************************************************************************
 
 float AnimationData::GetValue(int index)
 {
@@ -34,7 +50,7 @@ float AnimationData::Interpolate(float mTime)
 	//Todo Check if there's less than one 
 
 	//If there's only one value in the animation data
-	if (m_iCount == 1)
+	if (m_iKeyframeCount == 1)
 	{
 		//Just return the first value
 		return m_vValues[0];
@@ -47,7 +63,7 @@ float AnimationData::Interpolate(float mTime)
 	float t = GetT(mTime);
 
 	//Lerp the two values from the data and return it
-	return Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
+	return Utils::MathsUtils::Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
 }
 
 int AnimationData::GetIndex(float mTime)
@@ -73,7 +89,7 @@ int AnimationData::GetIndex(float mTime)
 
 float AnimationData::GetT(float mTime)
 {
-	if (m_iCount > 1)
+	if (m_iKeyframeCount > 1)
 	{
 		float fromTime = m_vTimes[fromInd];
 		float toTime = m_vTimes[toInd];
@@ -93,7 +109,3 @@ float AnimationData::GetT(float mTime)
 	return 0;
 }
 
-float AnimationData::Lerp(float t, float a, float b)
-{
-	return ((1 - t) * a) + (t * b);
-}

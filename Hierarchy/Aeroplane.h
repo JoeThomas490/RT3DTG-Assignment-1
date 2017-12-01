@@ -11,25 +11,30 @@
 //					HierarchialComponents. Contains logic controlling player input for the plane
 //					and handling the camera view when toggled on.
 // Notes:			
-// Todo:			
+// Todo:			- Cleanup UpdateCamera creating a camera component and adding to hierarchy
 //*********************************************************************************************
 
 __declspec(align(16)) class Aeroplane : public HierarchialParent
 {
 public:
-
+	
+	Aeroplane();
 	Aeroplane(float fX = 0.0f, float fY = 0.0f, float fZ = 0.0f, float fRotY = 0.0f);
-	virtual ~Aeroplane() = default;
+
+	virtual ~Aeroplane();
 
 	void Update(bool bPlayerControl);
 	void Draw(XMFLOAT3 camPos, float mFrameCount);
-
-
 
 	//Whether the plane should move or not (debug feature)
 	bool m_bStop;
 
 private:
+
+	void InitialiseComponents();
+	void InitialiseColours();
+
+
 	void UpdateMatrices();
 	void UpdateCameraMatrix();
 
@@ -37,9 +42,8 @@ private:
 	void ResetMovementToZero();
 
 private:
-	static bool s_bResourcesReady;
 
-	XMVECTOR m_vForwardVector;
+	XMVECTOR m_vForwardVector; //Forward vector of the plane
 	XMVECTOR m_vCamWorldPos; //Position for camera
 
 	XMMATRIX m_mCamWorldMatrix; //World matrix for camera
@@ -57,6 +61,11 @@ private:
 	HierarchialComponent* m_pGun;
 	HierarchialComponent* m_pTurret;
 public:
+
+	//*********************************************************************************************
+	//************                           GETTERS/SETTERS                       ****************
+	//*********************************************************************************************
+
 	//Get focus position for camera i.e the position of the plane
 	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
 	//Get current camera position
@@ -82,8 +91,9 @@ public:
 	void SetGunCamera(bool value) { m_bGunCam = value; }
 
 
-	//---------------------------------------------------------------------------------------------------
-	//---------------------------------------------------------------------------------------------------
+	//*********************************************************************************************
+	//************                           OPERATOR OVERLOADS                    ****************
+	//*********************************************************************************************
 	//Operator overloads for new and delete so they make sure the object is alligned to a 16 byte boundary
 	void* operator new(size_t i)
 	{
