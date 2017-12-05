@@ -1,13 +1,14 @@
 #pragma once
+#include <string>
+
 
 #include "Application.h"
 
+
 //*********************************************************************************************
 // File:			HierarchialComponent.h
-// Description:		Class to hold data for each component in an animation hiararchy, such as
-//					local position, rotation etc.
+// Description:		Class to hold data for each component in an animation hiararchy
 // Notes:
-// Todo:			-Add scaling to component class
 //*********************************************************************************************
 
 __declspec(align(16)) class HierarchialComponent
@@ -15,12 +16,14 @@ __declspec(align(16)) class HierarchialComponent
 public:
 
 	HierarchialComponent();
-	HierarchialComponent(const std::string& parentNode);
+	HierarchialComponent(char* parentNode);
+	HierarchialComponent(char* parentNode, CommonMesh* mesh);
 	HierarchialComponent(const std::string& parentNode, CommonMesh* mesh);
 
 	~HierarchialComponent() = default;
 
 	void SetWorldMatrix(XMMATRIX* mWorldMatrix);
+
 
 	void SetLocalRotation(float fX, float fY, float fZ);
 	void SetLocalPosition(float fX, float fY, float fZ);
@@ -42,8 +45,9 @@ private:
 
 	XMFLOAT4 m_v4Rot;
 	XMFLOAT4 m_v4RotQuart;
-
 	XMFLOAT4 m_v4Pos;
+
+	XMFLOAT4 m_v4Offset;
 
 	XMFLOAT4 m_vForwardVector;
 
@@ -67,6 +71,8 @@ public:
 	void SetLocalRotationQuart(XMFLOAT4 mQuart) { m_v4RotQuart = mQuart; };
 	void SetLocalRotationEuler(XMFLOAT4 mRot) { XMVECTOR mQuart = Utils::Quaternion::CalculateQuaternion(mRot.x, mRot.y, mRot.z); XMStoreFloat4(&m_v4Rot, mQuart); };
 
+	void SetLocalOffset(XMFLOAT4 mPos) { m_v4Offset = mPos; };
+
 	void SetPositionX(float f) { m_v4Pos.x = f; };
 	void SetPositionY(float f) { m_v4Pos.y = f; };
 	void SetPositionZ(float f) { m_v4Pos.z = f; };
@@ -80,8 +86,9 @@ public:
 		m_bIsDrawable = true; 
 	};
 
+	CommonMesh* GetMesh() { return m_mMesh; };
+
 	bool GetIsDrawable() { return m_bIsDrawable; };
-	void SetIsDrawable(bool drawable) { m_bIsDrawable = drawable; };
 
 	void* operator new(size_t i)
 	{

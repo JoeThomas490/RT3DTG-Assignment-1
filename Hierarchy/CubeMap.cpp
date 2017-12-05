@@ -89,6 +89,8 @@ bool CubeMap::ReloadShader()
 
 	//Create the shader macro
 	char maxNumLightsValue[100];
+	_snprintf_s(maxNumLightsValue, sizeof maxNumLightsValue, _TRUNCATE, "%d", CommonApp::MAX_NUM_LIGHTS);
+
 	D3D_SHADER_MACRO aMacros[] = {
 		{
 			"MAX_NUM_LIGHTS",
