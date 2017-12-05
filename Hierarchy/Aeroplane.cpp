@@ -90,10 +90,10 @@ void Aeroplane::Update(bool bPlayerControl)
 	if (bPlayerControl)
 	{
 		//Get input and update plane movement
-		UpdatePlaneMovement();
+		HandlePlaneInput();
 
 		//Reset rotations to zero
-		ResetMovementToZero();
+		HandlePlaneReset();
 	}
 
 	// Apply a forward thrust and limit to a maximum speed of 1
@@ -189,7 +189,7 @@ void Aeroplane::Draw(XMFLOAT3 camPos, float mFrameCount)
 //************                           Player Input / Movement               ****************
 //*********************************************************************************************
 
-void Aeroplane::UpdatePlaneMovement()
+void Aeroplane::HandlePlaneInput()
 {
 	//Get the current x rotation of the plane
 	float rotX = m_pPlane->GetLocalRotation().x;
@@ -261,7 +261,7 @@ void Aeroplane::UpdatePlaneMovement()
 	m_pPlane->SetRotationZ(rotZ);
 }
 
-void Aeroplane::ResetMovementToZero()
+void Aeroplane::HandlePlaneReset()
 {
 
 	float rotX = m_pPlane->GetLocalRotation().x;

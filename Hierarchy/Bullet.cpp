@@ -1,10 +1,11 @@
 #include "Bullet.h"
 
 //Initialise static class variables
-
 CommonMesh* Bullet::s_pBulletMesh = nullptr;
 
-bool Bullet::s_bResourcesReady = false;
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
 
 Bullet::Bullet()
 {
@@ -17,10 +18,37 @@ Bullet::Bullet()
 	m_vBulletOffset = XMVectorSet(0.0f, 0.2f, 0.8f, 0.0f);
 
 	m_fMovementSpeed = 0;
-
-	m_bIsReadyToUpdate = false;
 }
 
+Bullet::~Bullet()
+{
+}
+
+//*********************************************************************************************
+//************                           Handling Resources                    ****************
+//*********************************************************************************************
+
+void Bullet::LoadResources()
+{
+	//Load bullet mesh from X file
+	s_pBulletMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Bullet/bullet.x");
+}
+
+void Bullet::ReleaseResources()
+{
+	//If our bullet mesh pointer isn't null, delete it 
+	if (s_pBulletMesh != nullptr)
+	{
+		delete s_pBulletMesh;
+		s_pBulletMesh = nullptr;
+	}
+}
+
+//*********************************************************************************************
+//************                           Spawn Bullet			               ****************
+//*********************************************************************************************
+
+//Reset the bullet at the gun's position
 void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForwardVector)
 {
 
@@ -49,61 +77,39 @@ void Bullet::ResetBullet(const XMMATRIX& mGunWorldMatrix, XMFLOAT4 mPlaneForward
 
 	//Set the bullet to start off invisible
 	m_bIsVisible = true;
-
-	m_bIsReadyToUpdate = false;
 }
 
-void Bullet::LoadResources()
-{
-	s_pBulletMesh = CommonMesh::LoadFromXFile(Application::s_pApp, "Resources/Bullet/bullet.x");
-}
+//*********************************************************************************************
+//************                           Update Functions                      ****************
+//*********************************************************************************************
 
-void Bullet::ReleaseResources()
-{
-	if (s_pBulletMesh != nullptr)
-	{
-		delete s_pBulletMesh;
-		s_pBulletMesh = nullptr;
-	}
-}
-
+//Main update function
 void Bullet::Update()
 {
+	//Only update the bullet if it's visible
 	if (m_bIsVisible)
 	{
+		//Increment the lifetime of bullet
 		m_fLifeTime++;
+
+		//If our bullet has been alive for more than 300 frames, then make it invisible
 		if (m_fLifeTime > 300)
 		{
 			m_fLifeTime = 0;
 			m_bIsVisible = false;
 		}
 
-		//if (m_bIsReadyToUpdate)
-		{
-			m_v4Pos.x += (m_v4ForwardVector.x * 1.2f);
-			m_v4Pos.y += (m_v4ForwardVector.y * 1.2f);
-			m_v4Pos.z += (m_v4ForwardVector.z * 1.2f);
+		//Update our position by adding on our forward vector
+		m_v4Pos.x += (m_v4ForwardVector.x * 1.2f);
+		m_v4Pos.y += (m_v4ForwardVector.y * 1.2f);
+		m_v4Pos.z += (m_v4ForwardVector.z * 1.2f);
 
-			UpdateMatrices();
-
-		}									  
-		/*else
-		{
-			m_bIsReadyToUpdate = true;
-		}*/
-
+		//Update the world matrices for the 
+		UpdateMatrices();
 	}
 }
 
-void Bullet::Draw()
-{
-	if (m_bIsVisible)
-	{
-		Application::s_pApp->SetWorldMatrix(m_mWorldMatrix);
-		s_pBulletMesh->Draw();
-	}
-}
-
+//Update the world matrices of the bullet
 void Bullet::UpdateMatrices()
 {
 	XMMATRIX mTrans, mScale, mRot;
@@ -114,3 +120,19 @@ void Bullet::UpdateMatrices()
 
 	m_mWorldMatrix = mRot * mScale * mTrans;
 }
+
+//*********************************************************************************************
+//************                           Draw				                   ****************
+//*********************************************************************************************
+
+//Draw the bullet
+void Bullet::Draw()
+{
+	if (m_bIsVisible)
+	{
+		Application::s_pApp->SetWorldMatrix(m_mWorldMatrix);
+		s_pBulletMesh->Draw();
+	}
+}
+
+

@@ -31,15 +31,19 @@ public:
 
 private:
 
+	//Add the components to the hierarchy parent and get meshes
 	void InitialiseComponents();
+	//Set the colours of each component seperately at start
 	void InitialiseColours();
 
-
+	//Call parent's update hierarchy and update camera matrices
 	void UpdateMatrices();
 	void UpdateCameraMatrix();
 
-	void UpdatePlaneMovement();
-	void ResetMovementToZero();
+	//Handle player input and rotate plane accordingly
+	void HandlePlaneInput();
+	//Rotate plane back to original position when keys not pressed
+	void HandlePlaneReset();
 
 private:
 
@@ -61,10 +65,6 @@ private:
 	HierarchialComponent* m_pGun;
 	HierarchialComponent* m_pTurret;
 public:
-
-	//*********************************************************************************************
-	//************                           GETTERS/SETTERS                       ****************
-	//*********************************************************************************************
 
 	//Get focus position for camera i.e the position of the plane
 	XMFLOAT4 GetFocusPosition(void) { return GetHiararchyComponentFromTag("plane")->GetLocalPosition(); }
