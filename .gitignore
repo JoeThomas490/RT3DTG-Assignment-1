@@ -1,9 +1,5 @@
 tinyxml/
 *.x
-.vcxproj
-.vcxproj.filters
-
-[Dd]ebug/
-[Rr]elease/
-
+*.vcxproj
+*.vcxproj.filters
 *.suo

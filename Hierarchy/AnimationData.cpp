@@ -63,7 +63,7 @@ float AnimationData::Interpolate(float mTime)
 	float t = GetT(mTime);
 
 	//Lerp the two values from the data and return it
-	return Utils::MathsUtils::Lerp(t, m_vValues[fromInd], m_vValues[toInd]);
+	return Utils::MathsUtils::Lerp(m_vValues[fromInd], m_vValues[toInd], t);
 }
 
 int AnimationData::GetIndex(float mTime)
