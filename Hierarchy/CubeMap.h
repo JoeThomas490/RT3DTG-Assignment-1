@@ -2,47 +2,71 @@
 
 #include "Application.h"
 
-#include "D3DX11tex.h"
-#include "d3dx11effect.h"
+#include <D3DX11tex.h>
+
+
+//*********************************************************************************************
+// File:			CubeMap.h
+// Description:		Class holding logic for a CubeMap skybox. Creates a sphere mesh and applies a 
+//					shader to create the effect of a skybox. Also handles matrix and drawing.
+// Notes:			
+// Todo:			-Create a TextureManager and make this generic so it can take any cubemap texture
+//					
+//*********************************************************************************************
 
 __declspec(align(16)) class CubeMap
 {
 public:
+
 	CubeMap();
-
-	void LoadResources();
-
-	bool ReloadShader();
-	void DeleteShader();
-
-	void Update(const XMFLOAT3& camPos);
-	void Draw(float mFrameCount);
-
 	~CubeMap();
 
-	CommonMesh* m_mesh;
+	//Create depth stencil for our shader
+	void CreateDepthStencil();
 
+	//Load texture for cubemap
+	void LoadResources();
+
+	//Load shader for and set corresponding buffers
+	bool ReloadShader();
+	//Delete shader
+	void DeleteShader();
+
+	//Update position of skybox using camera position
+	void Update(const XMFLOAT3& camPos);
+	
+	//Draw the cubemap, passing the frame count for shader
+	void Draw(float mFrameCount);
 
 private:
-	Application::Shader m_mShader;
 
-
-	ID3D11Buffer* m_pMyAppCBuffer; // our custom buffer resource.
-	int m_psMyAppCBufferSlot; // custom buffer resource binding in PS, discovered by reflection.
-	int m_vsMyAppCBufferSlot; // custom buffer resource binding in VS, discovered by reflection.
-
-	float m_frameCount;
-
-	int m_frameCountOffset;
-	int m_psTexture0;
-
-
+	//World matrix for the cubemap
 	XMMATRIX m_mWorldMatrix;
 
-	ID3D11Texture2D* m_pTextures[1];
-	ID3D11ShaderResourceView* smrv;
-	ID3D11SamplerState* m_pSamplerState;
+	//Pointer to the mesh of the sphere
+	CommonMesh* m_mesh;
 
+	//Shader used for cubemap
+	Application::Shader m_mShader;
+
+	//Constant buffer "MyApp" in shader
+	ID3D11Buffer* m_pMyAppCBuffer; // our custom buffer resource.
+
+	//Offset for PS MyApp Constant buffer
+	int m_psMyAppCBufferSlot;
+
+	//Offset for VS MyApp Constant buffer
+	int m_vsMyAppCBufferSlot;
+
+	//Offset for frame count in constant buffer
+	int m_frameCountOffset;
+
+	//Offset in shader for texture
+	int m_psTexture0;
+	
+	ID3D11ShaderResourceView* m_pShaderResourceView;
+
+	ID3D11SamplerState* m_pSamplerState;
 	ID3D11DepthStencilState* DSLessEqual;
 	ID3D11RasterizerState* RSCullNone;
 

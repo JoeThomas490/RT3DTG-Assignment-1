@@ -65,8 +65,6 @@ public:
 	bool GetIsVisible() { return m_bIsVisible; };
 	void SetIsVisibile(bool b) { m_bIsVisible = b; };
 
-	bool IsReadyToUpdate() { return m_bIsReadyToUpdate; };
-
 	XMFLOAT4 GetPosition() { return m_v4Pos; };
 
 

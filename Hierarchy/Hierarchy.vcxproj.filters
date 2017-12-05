@@ -47,6 +47,7 @@
     </ClCompile>
     <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -89,6 +90,7 @@
     </ClInclude>
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TinyXML">

@@ -5,13 +5,14 @@
 #include "CommonMesh.h"
 
 #include <map>
-#include <string>
+#include <vector>
 
 typedef std::string string;
 
 class MeshManager
 {
 public:
+
 	~MeshManager();
 
 	CommonMesh* LoadResources(const string& fileName, string tag);
@@ -21,10 +22,10 @@ public:
 
 private:
 
-	std::map<string, CommonMesh*> m_mMeshes;
+	std::map<string, int> m_mMeshLookup;
+	std::vector<CommonMesh*> m_vMeshes;
 
 	MeshManager();
-
 
 public:
 

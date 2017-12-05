@@ -7,6 +7,8 @@
 
 #include "MeshManager.h"
 
+//ToDo Add colour to hierarchy.txt and also load that from file
+
 __declspec(align(16))class Robot : public HierarchialParent
 {
 public:

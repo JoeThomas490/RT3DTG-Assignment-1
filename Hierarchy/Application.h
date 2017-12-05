@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <string>
+#include <map>
 #include <vector>
 
 #include <stdio.h>
@@ -15,7 +16,6 @@
 #include "CommonMesh.h"
 
 #include "Utils.h"
-
 
 #include "tinyxml\tinyxml.h"
 

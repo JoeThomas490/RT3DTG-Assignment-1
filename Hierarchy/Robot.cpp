@@ -13,7 +13,6 @@ Robot::Robot(float fX, float fY, float fZ, float fRotY)
 
 	GetHiararchyComponentFromTag("root")->SetLocalRotation(0.0f, fRotY, 0.0f);
 
-	//ToDo Add colour to hierarchy.txt and also load that from file
 	GetHiararchyComponentFromTag("body")->SetColor(0.666f, 0.572f, 0.572f, 1.0f);
 	GetHiararchyComponentFromTag("neck")->SetColor(0.933f, 0.905f, 0.905f, 1.0f);
 	GetHiararchyComponentFromTag("pelvis")->SetColor(0.666f, 0.572f, 0.572f, 1.0f);

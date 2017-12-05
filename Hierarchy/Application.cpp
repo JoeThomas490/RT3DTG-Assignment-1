@@ -370,7 +370,7 @@ void Application::LoadXML()
 	AnimationLoader loader;
 	for (auto& robot : m_pRobots)
 	{
-		//TODO Create a animation manager class so same anim isn't loaded over
+		//Todo:			-Create a animation manager class so same anim isn't loaded over
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotDieAnimDAE.xml"));
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotIdleAnimDAE.xml"));
 		robot->AddAnimation(loader.LoadXML("Resources/Robot/Animations/RobotAttackAnimDAE.xml"));

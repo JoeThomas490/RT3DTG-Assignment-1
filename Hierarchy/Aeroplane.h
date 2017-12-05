@@ -64,6 +64,7 @@ private:
 	HierarchialComponent* m_pProp;
 	HierarchialComponent* m_pGun;
 	HierarchialComponent* m_pTurret;
+
 public:
 
 	//Get focus position for camera i.e the position of the plane

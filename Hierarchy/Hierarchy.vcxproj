@@ -98,6 +98,7 @@
     <ClCompile Include="HierarchialParent.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="tinyxml\tinystr.cpp" />
     <ClCompile Include="tinyxml\tinyxml.cpp" />
     <ClCompile Include="tinyxml\tinyxmlerror.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="HierarchialParent.h" />
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="Robot.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="tinyxml\tinystr.h" />
     <ClInclude Include="tinyxml\tinyxml.h" />
     <ClInclude Include="Utils.h" />

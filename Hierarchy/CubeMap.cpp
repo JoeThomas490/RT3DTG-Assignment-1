@@ -1,32 +1,61 @@
 #include "CubeMap.h"
 
-
+//*********************************************************************************************
+//************                           Constructor/Destructor                ****************
+//*********************************************************************************************
 
 CubeMap::CubeMap()
 {
+	//Create a new sphere mesh using the common mesh class
 	m_mesh = CommonMesh::NewSphereMesh(Application::s_pApp, 10, 8, 16);
-	m_mWorldMatrix = XMMatrixRotationQuaternion(XMVectorSet(0, 0, 0, 0)) * XMMatrixTranslationFromVector(XMVectorSet(0, 0, 0, 0));
 
-	m_frameCount = 0;
+	//Initialise the world matrix to identity
+	m_mWorldMatrix = XMMatrixIdentity();
+	
+	//Set the consant buffer pointer to null
+	m_pMyAppCBuffer = NULL;
 
+	//Create the depth stencil state for our shader
+	CreateDepthStencil();
+
+	//Load textures
+	LoadResources();
+
+	//Load shader
+	ReloadShader();
+}
+
+CubeMap::~CubeMap()
+{
+	DeleteShader();
+
+	m_pShaderResourceView->Release();
+
+	DSLessEqual->Release();
+	RSCullNone->Release();
+}
+
+//*********************************************************************************************
+//************                          Initialisation                         ****************
+//*********************************************************************************************
+
+void CubeMap::CreateDepthStencil()
+{
 	D3D11_DEPTH_STENCIL_DESC dssDesc;
 	ZeroMemory(&dssDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-	dssDesc.DepthEnable = true;
+	dssDesc.DepthEnable = false;
 	dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dssDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 	Application::s_pApp->GetDevice()->CreateDepthStencilState(&dssDesc, &DSLessEqual);
-
-	m_pMyAppCBuffer = NULL;
-
-	LoadResources();
 }
 
-
+//*********************************************************************************************
+//************                         Load Textures/Shader                    ****************
+//*********************************************************************************************
 
 void CubeMap::LoadResources()
 {
-	ID3D11ShaderResourceView* mCubeMapSRV;
 	ID3D11Device* pDevice = Application::s_pApp->GetDevice();
 
 	D3DX11_IMAGE_LOAD_INFO loadSMInfo;
@@ -44,9 +73,7 @@ void CubeMap::LoadResources()
 	SMViewDesc.TextureCube.MipLevels = SMTextureDesc.MipLevels;
 	SMViewDesc.TextureCube.MostDetailedMip = 0;
 
-	pDevice->CreateShaderResourceView(SMTexture, &SMViewDesc, &smrv);
-
-	ReloadShader();
+	pDevice->CreateShaderResourceView(SMTexture, &SMViewDesc, &m_pShaderResourceView);
 }
 
 bool CubeMap::ReloadShader()
@@ -57,11 +84,11 @@ bool CubeMap::ReloadShader()
 
 	ShaderDescription vs, ps;
 
+	//Get the current ID3D11 device
 	ID3D11Device* pDevice = Application::s_pApp->GetDevice();
 
+	//Create the shader macro
 	char maxNumLightsValue[100];
-	_snprintf_s(maxNumLightsValue, sizeof maxNumLightsValue, _TRUNCATE, "%d", CommonApp::MAX_NUM_LIGHTS);
-
 	D3D_SHADER_MACRO aMacros[] = {
 		{
 			"MAX_NUM_LIGHTS",
@@ -82,8 +109,9 @@ bool CubeMap::ReloadShader()
 
 	ps.FindTexture("gCubeMap", &m_psTexture0);
 	ps.FindFloat(m_psMyAppCBufferSlot, "g_frameCount", &m_frameCountOffset);
-	//ps.FindFloat(m_psMyAppCBufferSlot, "g_cameraPosition", &m_cameraPosOffset);
+
 	vs.FindCBuffer("MyApp", &m_vsMyAppCBufferSlot);
+
 	// Create a cbuffer, using the shader description to find out how
 	// large it needs to be.
 	m_pMyAppCBuffer = CreateBuffer(pDevice, ps.GetCBufferSizeBytes(m_psMyAppCBufferSlot), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, NULL);
@@ -103,13 +131,21 @@ void CubeMap::DeleteShader()
 	m_mShader.Reset();
 }
 
+//*********************************************************************************************
+//************                          Update/Draw                            ****************
+//*********************************************************************************************
+
 void CubeMap::Update(const XMFLOAT3& camPos)
 {
+	//Reset the world matrix
 	m_mWorldMatrix = XMMatrixIdentity();
 
+	//Create a scaling matrix of 250 units
 	XMMATRIX mScale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
+	//Translate to the cameras position (so the mesh is always centred)
 	XMMATRIX mTranslation = XMMatrixTranslation(camPos.x, camPos.y, camPos.z);
 
+	//Create the final world matrix
 	m_mWorldMatrix = mScale * mTranslation;
 }
 
@@ -118,7 +154,7 @@ void CubeMap::Draw(float mFrameCount)
 	ID3D11DeviceContext* pContext = Application::s_pApp->GetDeviceContext();
 
 	if (m_psTexture0 >= 0)
-		pContext->PSSetShaderResources(m_psTexture0, 1, &smrv);
+		pContext->PSSetShaderResources(m_psTexture0, 1, &m_pShaderResourceView);
 
 	Application::s_pApp->SetWorldMatrix(m_mWorldMatrix);
 
@@ -148,12 +184,6 @@ void CubeMap::Draw(float mFrameCount)
 	m_mesh->Draw();
 }
 
-CubeMap::~CubeMap()
-{
-	DeleteShader();
-
-	smrv->Release();
-
-	DSLessEqual->Release();
-	RSCullNone->Release();
-}
+//*********************************************************************************************
+//************                          END                                    ****************
+//*********************************************************************************************
